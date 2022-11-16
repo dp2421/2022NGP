@@ -495,12 +495,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     static int is_game_fail = false;
     static int is_game_success = false;
 
-    static Interaction_Object rever[2];
-    static Interaction_Object button[2];
+    static Interaction_Object rever[3];
+    static Interaction_Object button[12];
     static Interaction_Object portal;
 
 
-    static Player player(8600, 420, frog_idle);
+    static Player player(300, 670, frog_idle);
 
 
     static Monster monster[MONSTER_AMOUNT]{
@@ -530,41 +530,76 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         LoadImage();
 
         //레버 초기화
-        rever[0].x = 400;
-        rever[0].y = 650;
+        rever[0].x = 9525;
+        rever[0].y = 700;
         rever[0].draw_image = rever_nomal;
-        rever[1].x = 600;
-        rever[1].y = 650;
+
+        rever[1].x = 9525;
+        rever[1].y = 400;
         rever[1].draw_image = rever_nomal;
+
+        rever[2].x = 9525;
+        rever[2].y = 150;
+        rever[2].draw_image = rever_nomal;
+
         rever[0].SetCollsionBox();
         rever[1].SetCollsionBox();
+        rever[2].SetCollsionBox();
+
+
         rever[0].type = INTER_OBJ::REVER;
         rever[1].type = INTER_OBJ::REVER;
+        rever[2].type = INTER_OBJ::REVER;
+
 
 
         //레버 초기화
-       button[0].x = 500;
-       button[0].y = 650;
+       button[0].x = 4925;
+       button[0].y = 670;
        button[0].draw_image = button_normal;
-       button[1].x = 700;
-       button[1].y = 650;
+
+       button[1].x = 4925;
+       button[1].y = 420;
        button[1].draw_image = button_normal;
+
+       button[2].x = 4925;
+       button[2].y = 170;
+       button[2].draw_image = button_normal;
+
+       button[3].x = 8425;
+       button[3].y = 220;
+       button[3].draw_image = button_normal;
+       
+       button[4].x = 8425;
+       button[4].y = 420;
+       button[4].draw_image = button_normal;
+
+       button[5].x = 8425;
+       button[5].y = 670;
+       button[5].draw_image = button_normal;
+
+
        button[0].SetCollsionBox();
        button[1].SetCollsionBox();
+       button[2].SetCollsionBox();
+       button[3].SetCollsionBox();
+       button[4].SetCollsionBox();
+       button[5].SetCollsionBox();
+
        button[0].type = INTER_OBJ::BUTTON;
        button[1].type = INTER_OBJ::BUTTON;
+       button[2].type = INTER_OBJ::BUTTON;
+       button[3].type = INTER_OBJ::BUTTON;
+       button[4].type = INTER_OBJ::BUTTON;
+       button[5].type = INTER_OBJ::BUTTON;
 
-
-       portal.x = 800;
-       portal.y = 650;
+       portal.x = 9950;
+       portal.y = 390;
        portal.draw_image = button_normal;
        portal.SetCollsionBox();
        portal.type = INTER_OBJ::PORTAL;
 
-
-
-
-        player.ChangeState(STATE::IDLE);
+      player.ChangeState(STATE::IDLE);
 
         for (int i = 0; i < MONSTER_AMOUNT; ++i) {
             monster[i].ChangeState(STATE::IDLE);
@@ -679,7 +714,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 
-            for (int i = 0; i < 2; ++i) {
+            for (int i = 0; i < 12; ++i) {
                 if (CollisionHelper(button[i].collisionBox, player.collisionBox)) {
 
                     if (button[i].collisionBox.top > player.collisionBox.bottom - 10 && player.velY >= 0)
@@ -720,7 +755,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
 
-            for (int i = 0; i < 2; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 rever[i].Update();
             }
 
@@ -746,7 +781,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         case 'x':
         case 'X':
-            for (int i = 0; i < 2; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 if (CollisionHelper(rever[i].collisionBox, player.collisionBox)) {
                     rever[i].Collsion();
                 }
@@ -817,11 +852,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 3; ++i) {
             rever[i].draw_image.Draw(memdc1, rever[i].x -25, rever[i].y, 50, 50);
         }
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 6; ++i) {
             button[i].draw_image.Draw(memdc1, button[i].x - 25, button[i].y, 50, 25);
         }
 
