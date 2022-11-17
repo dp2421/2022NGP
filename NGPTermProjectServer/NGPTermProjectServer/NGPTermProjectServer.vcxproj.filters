@@ -39,6 +39,9 @@
     <ClCompile Include="SESSION.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Protocol.h">
@@ -72,6 +75,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
