@@ -1,10 +1,7 @@
-#include <stdio.h>
-#include <MSWSock.h>
-#include <WS2tcpip.h>
+#include "stdafx.h"
+#include "global.h"
 
-#include "Protocol.h"
-
-#define SERVERPORT 9000
+#include "include.h"
 
 HANDLE InputEvent;
 CRITICAL_SECTION cs;
@@ -36,7 +33,7 @@ void err_display(const char* msg)
 	LocalFree(lpMsgBuf);
 }
 
-// 소켓 함수 오류 출력
+// 소켓 함수 오류 출력`
 void err_display(int errcode)
 {
 	LPVOID lpMsgBuf;
@@ -48,111 +45,6 @@ void err_display(int errcode)
 	printf("[오류] %s\n", (char*)lpMsgBuf);
 	LocalFree(lpMsgBuf);
 }
-
-class Vec2
-{
-	float x, y;
-};
-
-enum PlayerState
-{
-	Idle,
-	Move,
-	Attack,
-	Dead,
-	End
-};
-
-enum TileType
-{
-	Wall,
-	Magma,
-	Plate,
-	Lever,
-	Door,
-	Potal,
-	End
-};
-
-class Object
-{
-public:
-	Vec2 vec;
-	Vec2 size;
-public:
-	virtual void Update(float deltaTime) = 0;
-	virtual bool isCollision(Object* rhs);
-};
-
-class Player : Object
-{
-public:
-	PlayerState state;
-	bool isJump;
-	bool isGround;
-
-	int HP;
-	Vec2 velocity;
-public:
-	virtual void Update(float deltaTime) override;
-	virtual bool isCollision(Object* rhs);
-
-	void ProccesInput(int key);
-
-	void Move();
-	void Jump();
-	void Interaction();
-};
-
-class Monster : Object
-{
-public:
-	int HP;
-	int direction;
-	int speed;
-public:
-	virtual void Update(float deltaTime) override;
-};
-
-class Bullet : Object
-{
-	int direction;
-	int speed;
-public:
-	virtual void Update(float deltaTime) override;
-	virtual bool isCollision(Object* rhs) override;
-};
-
-class Tile : Object
-{
-public:
-	TileType type;
-	bool isInteraction;
-
-	Object* linkedObject;
-public:
-	void Interaction();
-	virtual bool isCollision(Object* rhs);
-};
-
-class Obstacle : Object
-{
-public:
-	int Speed;
-	Vec2 velocity;
-public:
-	virtual void Update(float deltaTime) override;
-};
-
-class SESSION
-{
-	int ID;
-	SOCKET socket;
-	Player player;
-
-	void DoSend(void* packet);
-	void DoRevc();
-};
 
 void SendLoginPacket(int id)
 {
