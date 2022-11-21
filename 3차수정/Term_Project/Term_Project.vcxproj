@@ -139,14 +139,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Interaction_Object.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="monster.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Interaction_Object.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
