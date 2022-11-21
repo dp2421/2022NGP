@@ -1,8 +1,10 @@
 #pragma once
 
-#define SERVERPORT 9000
-#define MAPHEIGHT 20
-#define MAPWIDTH 200
+constexpr auto SERVERPORT = 9000;
+constexpr auto MAPHEIGHT = 20;
+constexpr auto MAPWIDTH = 200;
+
+constexpr auto BUFFERSIZE = 4096;
 
 // Packet ID
 constexpr char Client2ServerLogin = 0;
