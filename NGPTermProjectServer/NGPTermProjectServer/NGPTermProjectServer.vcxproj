@@ -136,7 +136,6 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="SESSION.cpp" />
     <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
