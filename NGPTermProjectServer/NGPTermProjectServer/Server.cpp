@@ -9,9 +9,21 @@ SESSION clients[3];
 
 deque<Object*> objects;
 
+queue<Client2ServerKeyActionPacket> messageQueue;
+
 void ProcessPacket()
 {
+	// 받은 모든 입력 처리
+	while (!messageQueue.empty())
+	{
+		auto message = messageQueue.front();
 
+		switch (message.key)
+		{
+		default:
+			break;
+		}
+	}
 }
 
 void InitServer(SOCKET& target)
@@ -34,8 +46,29 @@ void InitServer(SOCKET& target)
 }
 
 DWORD WINAPI InputThread(LPVOID arg)
-{
+{ 
+	int retval;
+	int index = *(int*)arg;
 
+	SOCKET& sock = clients[index].socket;
+
+	// 로그인 패킷 리시브
+	Client2ServerLoginPacket login;
+	retval = recv(sock, (char*)&login, sizeof(Client2ServerLoginPacket), MSG_WAITALL);
+	if (retval == SOCKET_ERROR) { err_display("recv()"); return; }
+
+	for(int i = 0; i <= index; ++i)
+		SendLoginPacket(index);
+
+	while (true)
+	{
+		// 키 입력 리시브
+		Client2ServerKeyActionPacket packet;
+		retval = recv(sock, (char*)&packet, sizeof(Client2ServerKeyActionPacket), MSG_WAITALL);
+		if (retval == SOCKET_ERROR) { err_display("recv()"); break; }
+
+		messageQueue.push(packet);
+	}
 }
 
 void StartCountDown()
@@ -71,6 +104,7 @@ void Update()
 			chrono::duration_cast<chrono::nanoseconds>(chrono::milliseconds(16));
 		while (std::chrono::high_resolution_clock::now() > limit) {}
 
+		// packet 처리
 		ProcessPacket();
 
 		//UPDATE
@@ -100,13 +134,14 @@ int main(int argc, char* argv[])
 		if (client_sock == INVALID_SOCKET) { err_display("accept()"); break; }
 		else
 		{
+			clients[i].socket = client_sock;
+				
 			hThread = CreateThread(NULL, 0, InputThread,
-				(LPVOID)client_sock, 0, NULL);
+				(LPVOID)i, 0, NULL);
 			if (hThread == NULL) { closesocket(client_sock); }
 			else 
 			{ 
 				CloseHandle(hThread);
-				clients[i].socket = client_sock;
 				++i;
 			}
 		}

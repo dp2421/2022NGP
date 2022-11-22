@@ -4,12 +4,11 @@ constexpr auto SERVERPORT = 9000;
 constexpr auto MAPHEIGHT = 20;
 constexpr auto MAPWIDTH = 200;
 
-constexpr auto BUFFERSIZE = 4096;
+constexpr auto BUFFERSIZE = 1024;
 
 // Packet ID
 constexpr char Client2ServerLogin = 0;
-constexpr char Client2ServerKeyDown = 1;
-constexpr char Client2ServerKeyUp = 2;
+constexpr char Client2ServerKeyAction = 1;
 
 constexpr char Server2ClientLogin = 3;
 constexpr char Server2ClientCountdown = 4;
@@ -27,32 +26,30 @@ constexpr char Server2ClientGameClear = 12;
 // 최초 로그인
 struct Client2ServerLoginPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 };
 
-// 플레이어 키 다운
-struct Client2ServerKeyDownPacket
+// 플레이어 키 입력
+struct Client2ServerKeyActionPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 	char	ID;
-	int		key;
+	char	key;
+	char	state;
 };
 
-// 플레이어 키 업
-struct Client2ServerKeyUpPacket
+struct InfoOfPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
-	char	ID;
-	int		key;
 };
 
 // 최초 로그인
 struct Server2ClientLoginPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 	char	ID;
 };
@@ -60,7 +57,7 @@ struct Server2ClientLoginPacket
 // 로비 카운트다운
 struct Server2ClientCountdownPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 	char	count;
 };
@@ -68,14 +65,14 @@ struct Server2ClientCountdownPacket
 // 로비 -> 인게임
 struct Server2ClientGameStartPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 };
 
 // 맵 전체 정보
 struct Server2ClientMapInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	short	width;
@@ -87,7 +84,7 @@ struct Server2ClientMapInfoPacket
 // 단일 타일 정보
 struct Server2ClientTileInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	short	x, y;
@@ -97,7 +94,7 @@ struct Server2ClientTileInfoPacket
 // 플레이어 정보
 struct Server2ClienPlayerInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	char	ID;
@@ -109,7 +106,7 @@ struct Server2ClienPlayerInfoPacket
 // 몬스터 정보
 struct Server2ClientMonsterInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	char	HP;
@@ -119,7 +116,7 @@ struct Server2ClientMonsterInfoPacket
 // 총알 정보
 struct Server2ClientBulletInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	float	x, y;
@@ -128,7 +125,7 @@ struct Server2ClientBulletInfoPacket
 // 장애물 정보
 struct Server2ClientObstacleInfoPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	char	obstacleType;
@@ -138,7 +135,7 @@ struct Server2ClientObstacleInfoPacket
 // 게임 클리어, 경과 시간 = 점수
 struct Server2ClientGameClearPacket
 {
-	unsigned char size;
+	unsigned short size;
 	char	type;
 
 	int		second;

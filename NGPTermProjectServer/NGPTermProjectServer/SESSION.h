@@ -7,6 +7,9 @@ class SESSION
 public:
 	int ID;
 	SOCKET socket;
+	sockaddr_in sockAddr;
+	char addr[INET_ADDRSTRLEN];
+
 	Player player;
 
 public:
@@ -36,7 +39,6 @@ void SendGameStartPacket()
 	Server2ClientGameStartPacket p;
 	p.size = sizeof(Server2ClientGameStartPacket);
 	p.type = Server2ClientGameStart;
-
 }
 
 void SendMapInfoPacket(int id)
