@@ -9,6 +9,7 @@ public:
 	SOCKET socket;
 	Player player;
 
+public:
 	void DoSend(void* packet);
 	void DoRevc();
 };

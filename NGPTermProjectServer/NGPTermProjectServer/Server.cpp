@@ -7,23 +7,9 @@ HANDLE InputEvent;
 CRITICAL_SECTION cs;
 SESSION clients[3];
 
+deque<Object*> objects;
 
 void ProcessPacket()
-{
-
-}
-
-void MovementLever()
-{
-
-}
-
-bool StartCountdown()
-{
-
-}
-
-float DeltaTime()
 {
 
 }
@@ -54,11 +40,11 @@ DWORD WINAPI InputThread(LPVOID arg)
 
 void StartCountDown()
 {
-	Timer startTimer;
 	int timebuff = 0;
+	auto countdown = std::chrono::high_resolution_clock::now();
 	while (true)
 	{
-		int process = countTime - startTimer.GetDeltaTimeMilli();
+		int process = countTime - chrono::duration_cast<chrono::milliseconds>(countdown - std::chrono::high_resolution_clock::now()).count();
 		if (process % 1000 != timebuff)
 		{
 			timebuff = process;
@@ -69,9 +55,26 @@ void StartCountDown()
 	SendGameStartPacket();
 }
 
+void InitializeGame()
+{
+	// InitalizeGame
+}
+
 void Update()
 {
+	Timer timer;
+	while (true)
+	{
+		timer.Update();
 
+		auto limit = std::chrono::high_resolution_clock::now() +
+			chrono::duration_cast<chrono::nanoseconds>(chrono::milliseconds(16));
+		while (std::chrono::high_resolution_clock::now() > limit) {}
+
+		ProcessPacket();
+
+		//UPDATE
+	}
 }
 
 int main(int argc, char* argv[])
@@ -111,6 +114,7 @@ int main(int argc, char* argv[])
 
 	StartCountDown();
 
+	InitializeGame();
 	Update();
 
 	closesocket(listen_sock);
