@@ -1,4 +1,4 @@
-#include <atlimage.h>
+//#include <atlimage.h>
 
 // Player
 static CImage player;

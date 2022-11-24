@@ -1,4 +1,4 @@
-#include <windows.h>
+//#include <windows.h>
 #define BLOCK_SIZE 50
 
 #define WALL  1 

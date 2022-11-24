@@ -1,3 +1,4 @@
+
 namespace PLAYER
 {
 	enum P_State {
