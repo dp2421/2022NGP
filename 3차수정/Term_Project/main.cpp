@@ -8,10 +8,17 @@ LPCTSTR lpszClass = L"Window Class Name";
 LPCTSTR lpszWindowName = L"Term Project";
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
+
 // 시간을 구하기 위한 변수들
 LARGE_INTEGER g_tSecond;
 LARGE_INTEGER g_tTime;
 float         g_fDeltaTime;
+
+
+// 서버 연결 변수
+#define SERVERPORT 9000
+#define SERVERIP "127.0.0.1"
+//SOCKET sock;
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
@@ -47,7 +54,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
         TranslateMessage(&Message);
         DispatchMessage(&Message);
     }
+
     return Message.wParam;
+
+
 }
 
 void LoadImage();
@@ -596,3 +606,45 @@ bool CollisionHelper(RECT r1, RECT r2)
     return true;
 }
 
+void InitClient()
+{
+    //int retval;
+
+    //WSADATA wsa;
+    //if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+    //    return;
+
+    //sock = socket(AF_INET, SOCK_STREAM, 0);
+
+    //if (sock == INVALID_SOCKET)
+    //    err_quit("socket() ");
+
+    //struct sockaddr_in serveraddr;
+    //memset(&serveraddr, 0, sizeof(serveraddr));
+    //serveraddr.sin_family = AF_INET;
+    //inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
+    //serveraddr.sin_port = htons(SERVERPORT);
+    //retval = connect(sock, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
+    //if (retval == SOCKET_ERROR) err_quit("connect()");
+}
+
+void SendConnect()
+{
+
+}
+void StartCount()
+{
+
+}
+void WaitStart()
+{
+
+}
+void RecvReady()
+{
+
+}
+void GameStart()
+{
+
+}
