@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Protocol.h"
 #include "Object.h"
 #include "Player.h"
 #include "Monster.h"

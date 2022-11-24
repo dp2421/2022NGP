@@ -8,5 +8,5 @@ public:
 	Vec2 size;
 public:
 	virtual void Update(float deltaTime) = 0;
-	virtual bool isCollision(Object* rhs);
+	virtual bool isCollision(Object* rhs) { return false; }
 };

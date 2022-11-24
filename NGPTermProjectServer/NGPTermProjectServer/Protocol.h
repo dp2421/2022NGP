@@ -5,6 +5,7 @@ constexpr auto MAPHEIGHT = 20;
 constexpr auto MAPWIDTH = 200;
 
 constexpr auto BUFFERSIZE = 1024;
+constexpr auto MAXBULLET = 100;
 
 // Packet ID
 constexpr char Client2ServerLogin = 0;
@@ -20,6 +21,8 @@ constexpr char Server2ClientMonsterInfo = 9;
 constexpr char Server2ClientBulletInfo = 10;
 constexpr char Server2ClientObstacleInfo = 11;
 constexpr char Server2ClientGameClear = 12;
+
+// 좌 우 스페이스 A, X
 
 #pragma pack (push, 1)
 
@@ -119,7 +122,8 @@ struct Server2ClientBulletInfoPacket
 	unsigned short size;
 	char	type;
 
-	float	x, y;
+	char	bulletSize;
+	float	x[MAXBULLET], y[MAXBULLET];
 };
 
 // 장애물 정보
