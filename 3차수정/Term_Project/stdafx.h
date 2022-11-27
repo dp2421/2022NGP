@@ -18,10 +18,13 @@
 #include "Define.h"
 #include "Obstacle.h"
 #include "Global.h"
+#include "Protocol.h"
+#include "Player.h"
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 using namespace std;
 
+static Player p_player(300, 670, frog_idle);
 static void err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;

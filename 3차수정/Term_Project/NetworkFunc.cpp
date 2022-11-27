@@ -1,4 +1,7 @@
 #include "stdafx.h"
+// 서버 연결 변수
+#define SERVERPORT 9000
+#define SERVERIP "127.0.0.1"
 SOCKET sock;
 void InitClient()
 {
@@ -20,6 +23,30 @@ void InitClient()
     serveraddr.sin_port = htons(SERVERPORT);
     retval = connect(sock, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("connect()");
+
+    cout << "Server Connct" << endl;
+
+    // 로그인 보내기
+    Client2ServerLoginPacket login;
+    retval = send(sock, (char*)&login, sizeof(Client2ServerLoginPacket), 0);
+    if (retval == SOCKET_ERROR) {
+        err_display("send()");
+        return;
+    }
+    retval = send(sock, (const char*)login.type, sizeof(Client2ServerLoginPacket), 0);
+    if (retval == SOCKET_ERROR) {
+        err_display("send()");
+        return;
+    }
+
+    // 키 입력 보내기
+    Client2ServerKeyActionPacket keyinput{ sizeof(Client2ServerKeyActionPacket), 1, keyinput.ID,'1' ,p_player.state };
+    retval = send(sock, (char*)&keyinput, sizeof(Client2ServerKeyActionPacket), 0);
+    if (retval == SOCKET_ERROR) {
+        err_display("send()");
+        return;
+    }
+
 }
 
 void SendConnect()
@@ -32,7 +59,7 @@ void StartCount()
 }
 void WaitStart()
 {
-
+    // 로딩중 띄워주면 됨
 }
 void RecvReady()
 {
@@ -57,15 +84,14 @@ void InitObstacleInfo()
 }
 void InputKey()
 {
-
 }
 void SendKey()
 {
-
+    send(sock, player.dir, sizeof(int), 0);
 }
 void RecvPlayerPos()
 {
-
+    recv(sock, buf, sizeof(float), 0);
 }
 void RecvPlayerInfo()
 {
