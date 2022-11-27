@@ -18,8 +18,10 @@
 #include "Define.h"
 #include "Obstacle.h"
 #include "Global.h"
-#include "Protocol.h"
+#include "../../NGPTermProjectServer/NGPTermProjectServer/Protocol.h"
 #include "Player.h"
+
+int ID;
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 using namespace std;
