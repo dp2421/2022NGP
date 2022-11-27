@@ -17,9 +17,9 @@ Player::~Player()
 void Player::Update(float deltaTime)
 {
 	this->pos.x += this->velocity.x * deltaTime;
-	if (false == this->isGround)
+	if (!this->isGround)
 	{
-		this->velocity.y -= PLAYER_GRAVITY;
+		this->velocity.y += PLAYER_GRAVITY;
 		this->pos.y += this->velocity.y * deltaTime;
 	}
 }
@@ -39,6 +39,10 @@ void Player::ProccesInput(int key, bool pressed)
 		{
 			this->state &= ~(int)PlayerState::Idle;
 			this->state |= dir;
+			if ((this->state & reverse) == reverse)
+			{
+				this->state &= ~reverse;
+			}
 
 			SetHorizontalVelocity(dir);
 		}
@@ -57,12 +61,19 @@ void Player::ProccesInput(int key, bool pressed)
 	}
 		break;
 	case VK_SPACE: // 점프
-		this->state |= (int)PlayerState::Jump;
+			this->state |= (int)PlayerState::Jump;
 		break;
 		// 공격
 	case 'a':
 	case 'A':
-		this->state |= (int)PlayerState::Attack;
+		if (pressed)
+		{
+			this->state |= (int)PlayerState::Attack;
+		}
+		else
+		{
+			this->state &= ~(int)PlayerState::Attack;
+		}
 		break;
 		// 상호작용
 	case 'x':
@@ -97,4 +108,11 @@ void Player::SetHorizontalVelocity(int state)
 	{
 		this->velocity.x = playerSpeed;
 	}
+}
+
+bool Player::CollisionTile()
+{
+	//
+
+	return false;
 }

@@ -3,9 +3,6 @@
 
 HANDLE InputEvent;
 CRITICAL_SECTION cs;
-SESSION clients[3];
-
-deque<Object*> objects;
 
 queue<Client2ServerKeyActionPacket> messageQueue;
 
@@ -60,7 +57,7 @@ void ProcessPacket()
 	{
 		auto message = messageQueue.front();
 
-		clients[message.ID].player.ProccesInput(message.key, message.state);
+		GameManager::GetInstance().clients[message.ID].player.ProccesInput(message.key, message.state);
 
 		EnterCriticalSection(&cs);
 		messageQueue.pop();
@@ -70,7 +67,7 @@ void ProcessPacket()
 
 void SendPacket()
 {
-	for (auto& cl : clients)
+	for (auto& cl : GameManager::GetInstance().clients)
 	{
 		// 플레이어 정보
 		cl.SendPlayerInfoPacket();
@@ -109,7 +106,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 	int retval;
 	int index = *(int*)arg;
 
-	SOCKET& sock = clients[index].socket;
+	SOCKET& sock = GameManager::GetInstance().clients[index].socket;
 
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;
@@ -117,7 +114,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 	if (retval == SOCKET_ERROR) { err_display("recv()"); return 0; }
 
 	for(int i = 0; i <= index; ++i)
-		clients[index].SendLoginPacket();
+		GameManager::GetInstance().clients[index].SendLoginPacket();
 
 	while (true)
 	{
@@ -144,12 +141,12 @@ void StartCountDown()
 		if (process % 1000 != timebuff)
 		{
 			timebuff = process;
-			for(auto& cl : clients)
+			for(auto& cl : GameManager::GetInstance().clients)
 				cl.SendCountdownPacket(timebuff + 1);
 		}
 	}
 
-	for (auto& cl : clients)
+	for (auto& cl : GameManager::GetInstance().clients)
 		cl.SendGameStartPacket();
 }
 
@@ -172,8 +169,19 @@ void Update()
 
 		// packet 처리
 		ProcessPacket();
-
-		//UPDATE
+		
+		for (auto& cl : GameManager::GetInstance().clients)
+		{
+			cl.player.Update(timer.GetDelteTime());
+		}
+		for (auto& obj : GameManager::GetInstance().monsters)
+		{
+			obj->Update(timer.GetDelteTime());
+		}
+		for (auto& obj : GameManager::GetInstance().bullets)
+		{
+			obj->Update(timer.GetDelteTime());
+		}
 
 		SendPacket();
 	}
@@ -202,7 +210,7 @@ int main(int argc, char* argv[])
 		if (client_sock == INVALID_SOCKET) { err_display("accept()"); break; }
 		else
 		{
-			clients[i].socket = client_sock;
+			GameManager::GetInstance().clients[i].socket = client_sock;
 				
 			hThread = CreateThread(NULL, 0, InputThread,
 				static_cast<LPVOID>(&i), 0, NULL);

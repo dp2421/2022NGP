@@ -30,4 +30,8 @@ constexpr int startCountdownTime = 5000;
 constexpr float playerSpeed = 300;
 constexpr float  PLAYER_GRAVITY = 0.9f;
 
+constexpr int BlockSize = 50;
+
+constexpr int BulletMaxDistance = 10000;
+
 using namespace std;

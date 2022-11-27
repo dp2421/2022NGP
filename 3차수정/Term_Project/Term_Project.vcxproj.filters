@@ -45,7 +45,7 @@
     <ClInclude Include="Interaction_Object.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Protocol.h">
+    <ClInclude Include="..\..\NGPTermProjectServer\NGPTermProjectServer\Protocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

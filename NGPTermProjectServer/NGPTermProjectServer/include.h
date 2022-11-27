@@ -9,3 +9,4 @@
 #include "Tile.h"
 #include "SESSION.h"
 #include "Timer.h"
+#include "GameManager.h"

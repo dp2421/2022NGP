@@ -9,6 +9,10 @@ public:
 	int speed;
 
 public:
+	Bullet();
+	~Bullet();
+
 	virtual void Update(float deltaTime) override;
-	virtual bool isCollision(Object* rhs) override;
+
+	void Shot();
 };
