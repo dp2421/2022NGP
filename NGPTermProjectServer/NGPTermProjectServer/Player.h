@@ -1,22 +1,25 @@
 #pragma once
 #include "Object.h"
 
-class Player : Object
+class Player : public Object
 {
 public:
-	PlayerState state;
+	int state;
 	bool isJump;
 	bool isGround;
 
 	int HP;
 	Vec2 velocity;
 public:
+	Player();
+	~Player();
+
 	virtual void Update(float deltaTime) override;
-	virtual bool isCollision(Object* rhs);
 
-	void ProccesInput(int key);
+	void ProccesInput(int key, bool pressed);
 
-	void Move();
 	void Jump();
+	void Attack();
 	void Interaction();
+	void SetHorizontalVelocity(int state);
 };

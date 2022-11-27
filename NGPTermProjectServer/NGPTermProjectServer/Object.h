@@ -4,9 +4,12 @@
 class Object
 {
 public:
-	Vec2 vec;
+	Vec2 pos;
 	Vec2 size;
 public:
+	Object();
+	~Object();
+
 	virtual void Update(float deltaTime) = 0;
-	virtual bool isCollision(Object* rhs) { return false; }
+	bool isCollision(Object* rhs);
 };

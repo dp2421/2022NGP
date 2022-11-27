@@ -44,16 +44,6 @@ void SESSION::SendMapInfoPacket(char* map)
 	memcpy(p.mapInfo, map, sizeof(map));
 }
 
-void SESSION::SendGameStartPacket()
-{
-
-}
-
-void SESSION::SendMapInfoPacket()
-{
-
-}
-
 void SESSION::SendTileInfoPacket()
 {
 

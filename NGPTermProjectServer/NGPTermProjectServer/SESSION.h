@@ -21,8 +21,6 @@ public:
 	void SendCountdownPacket(char cnt);
 	void SendGameStartPacket();
 	void SendMapInfoPacket(char* map);
-	void SendGameStartPacket();
-	void SendMapInfoPacket();
 	void SendTileInfoPacket();
 	void SendPlayerInfoPacket();
 	void SendMonsterInfoPacket();
