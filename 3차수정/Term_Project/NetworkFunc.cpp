@@ -110,6 +110,7 @@ void ProcessPacket(int size, int type)
     case Server2ClientBulletInfo:
         break;
     case Server2ClientObstacleInfo:
+        InitObstacleInfo();
         break;
     case Server2ClientGameClear:
         break;
@@ -121,10 +122,22 @@ void ProcessPacket(int size, int type)
 void InitMapInfo(int size)
 {
     Server2ClientMapInfoPacket packet;
+    int retval;
+    char buf[BUFFERSIZE];
     int ret = RecvExpasion(sock, (char*)&packet, BUFFERSIZE, MSG_WAITALL);
     if (ret >= 0)
     {
-        
+        retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
+        retval = RecvExpasion(sock, buf, ret, 0);
+        if (ret == 0)
+        {
+            cout << "MapInfo Recv Success";
+            return;
+        }
+        else
+        {
+            // 购啊狼 贸府
+        }
     }
     else
     {
@@ -168,18 +181,42 @@ void InitObjectInfo()
 }
 void InitObstacleInfo()
 {
+    //Server2ClientObstacleInfoPacket packet;
+    //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 
+    Server2ClientMapInfoPacket packet;
+    int retval;
+    int ret = RecvExpasion(sock, (char*)&packet, BUFFERSIZE, MSG_WAITALL);
+    char buf[BUFFERSIZE];
+    if (ret >= 0)
+    {
+        retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
+        retval = RecvExpasion(sock, buf, ret, 0);
+
+        if (ret == 0)
+        {
+            cout << "Obstacle Recv Success";
+            return;
+        }
+        else
+        {
+            // 购啊狼 贸府
+        }
+    }
+    else
+    {
+        cout << "MapInfo Recv Fail";
+        return;
+    }
 }
 void InputKey()
 {
 }
 void SendKey()
 {
-    send(sock, player.dir, sizeof(int), 0);
 }
 void RecvPlayerPos()
 {
-    recv(sock, buf, sizeof(float), 0);
 }
 void RecvPlayerInfo()
 {
