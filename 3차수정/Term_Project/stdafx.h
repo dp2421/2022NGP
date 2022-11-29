@@ -21,7 +21,7 @@
 #include "../../NGPTermProjectServer/NGPTermProjectServer/Protocol.h"
 #include "Player.h"
 
-int ID;
+//int ID;
 
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 using namespace std;

@@ -4,6 +4,7 @@
 #define SERVERPORT 9000
 #define SERVERIP "127.0.0.1"
 SOCKET sock;
+void ProcessPacket(int size, int type);
 
 int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 {
@@ -82,43 +83,6 @@ void InitClient()
     else { CloseHandle(hThread); }
 }
 
-// 수신 패킷 처리
-void ProcessPacket(int size, int type)
-{
-    switch (type)
-    {
-    case Server2ClientCountdown:
-        // 카운트다운
-        StartCount();
-        break;
-    case Server2ClientGameStart:
-        // 게임 시작, 추가적인 패킷 없음
-        GameStart();
-        break;
-    case Server2ClientMapInfo:
-        // 맵 정보
-        InitMapInfo(size);
-        break;
-    case Server2ClientTileInfo: 
-        // 타일 정보
-        break;
-    case Server2ClientPlayerInfo:
-        // 플레이어 정보
-        break;
-    case Server2ClientMonsterInfo:
-        break;
-    case Server2ClientBulletInfo:
-        break;
-    case Server2ClientObstacleInfo:
-        InitObstacleInfo();
-        break;
-    case Server2ClientGameClear:
-        break;
-    default:
-        break;
-    }
-}
-
 void InitMapInfo(int size)
 {
     Server2ClientMapInfoPacket packet;
@@ -168,12 +132,12 @@ void RecvReady()
 }
 void GameStart()
 {
-    // winmain 함수, winproc 함수 어찌저찌해서 시작? 근데 로비를 없앤 이상 안 만들어도 될듯
 }
 
 void InitPlayerInfo()
 {
-
+    Server2ClienPlayerInfoPacket packet;
+    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 }
 void InitObjectInfo()
 {
@@ -211,12 +175,39 @@ void InitObstacleInfo()
 }
 void InputKey()
 {
+
 }
-void SendKey()
+void SendKey(int key)
 {
+    // 플레이어 받아오고 키도 따로 받아오는 방법으로 변경해야 할 듯.
+    Client2ServerKeyActionPacket packet;
+    packet.ID = packet.ID; // this->ID ...
+    packet.type = Client2ServerKeyAction;
+    //packet.state = ;
+    packet.size = sizeof(Client2ServerKeyActionPacket);
+    if (GetAsyncKeyState(VK_LEFT) & 0x8000) //왼쪽
+        packet.key = VK_LEFT;
+    if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //오른쪽
+        packet.key = VK_RIGHT;
+    if (GetAsyncKeyState(VK_UP) & 0x8000) //위
+        packet.key = VK_UP;
+    if (GetAsyncKeyState(VK_DOWN) & 0x8000) //아래
+        packet.key = VK_DOWN;
+    if (GetAsyncKeyState(0x41) & 0x8000)
+        packet.key = 0x41;
+    packet.state = player.state;
+
+    SendExpansion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 }
 void RecvPlayerPos()
 {
+    // 이게맞 ????? 나 
+    Server2ClienPlayerInfoPacket packet;
+    int buf;
+    RecvExpasion(sock,(char*)buf,sizeof(buf),0);
+    packet.x = buf;
+    RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
+    packet.y = buf;
 }
 void RecvPlayerInfo()
 {
@@ -237,4 +228,42 @@ void ArrowDraw()
 void Render()
 {
 
+}
+
+
+// 수신 패킷 처리
+void ProcessPacket(int size, int type)
+{
+    switch (type)
+    {
+    case Server2ClientCountdown:
+        // 카운트다운
+        StartCount();
+        break;
+    case Server2ClientGameStart:
+        // 게임 시작, 추가적인 패킷 없음
+        GameStart();
+        break;
+    case Server2ClientMapInfo:
+        // 맵 정보
+        InitMapInfo(size);
+        break;
+    case Server2ClientTileInfo:
+        // 타일 정보
+        break;
+    case Server2ClientPlayerInfo:
+        // 플레이어 정보
+        break;
+    case Server2ClientMonsterInfo:
+        break;
+    case Server2ClientBulletInfo:
+        break;
+    case Server2ClientObstacleInfo:
+        InitObstacleInfo();
+        break;
+    case Server2ClientGameClear:
+        break;
+    default:
+        break;
+    }
 }

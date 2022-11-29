@@ -15,10 +15,10 @@ LARGE_INTEGER g_tSecond;
 LARGE_INTEGER g_tTime;
 float         g_fDeltaTime;
 
-
-// 서버 연결 변수
-#define SERVERPORT 9000
-#define SERVERIP "127.0.0.1"
+//
+//// 서버 연결 변수
+//#define SERVERPORT 9000
+//#define SERVERIP "127.0.0.1"
 
 
 

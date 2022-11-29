@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Interaction_Object {
 public:
     int x;

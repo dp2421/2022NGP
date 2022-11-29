@@ -113,4 +113,5 @@ struct Server2ClientGameClearPacket
 	int		second;
 };
 
+
 #pragma pack (pop)
