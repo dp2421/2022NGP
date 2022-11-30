@@ -78,7 +78,7 @@ struct Server2ClientTileInfoPacket
 };
 
 // 플레이어 정보
-struct Server2ClienPlayerInfoPacket
+struct Server2ClientPlayerInfoPacket
 {
 	char	ID;
 	char	state;

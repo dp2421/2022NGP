@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "SESSION.h"
 
-void SESSION::DoSend(void* packet)
+void SESSION::DoSend(InfoOfPacket* info, void* packet)
 {
-
+	SendExpansion(this->socket, (char*)info, sizeof(info), 0);
+	if(packet != NULL)
+		SendExpansion(this->socket, (char*)packet, info->size, 0);
 }
 
 void SESSION::DoRevc()
@@ -14,34 +16,48 @@ void SESSION::DoRevc()
 void SESSION::SendLoginPacket()
 {
 	Server2ClientLoginPacket p;
-	p.size = sizeof(Server2ClientLoginPacket);
-	p.type = Server2ClientLogin;
+	InfoOfPacket info;
+
+	info.size = sizeof(Server2ClientLoginPacket);
+	info.type = Server2ClientLogin;
 	p.ID = this->ID;
+
+	this->DoSend(&info, &p);
 }
 
 void SESSION::SendCountdownPacket(char cnt)
 {
 	Server2ClientCountdownPacket p;
-	p.size = sizeof(Server2ClientCountdownPacket);
-	p.type = Server2ClientCountdown;
+	InfoOfPacket info;
+
+	info.size = sizeof(Server2ClientCountdownPacket);
+	info.type = Server2ClientCountdown;
 	p.count = cnt;
+
+	this->DoSend(&info, &p);
 }
 
 void SESSION::SendGameStartPacket()
 {
-	Server2ClientGameStartPacket p;
-	p.size = sizeof(Server2ClientGameStartPacket);
-	p.type = Server2ClientGameStart;
+	InfoOfPacket info;
+	info.size = sizeof(InfoOfPacket);
+	info.type = Server2ClientGameStart;
+
+	this->DoSend(&info, NULL);
 }
 
 void SESSION::SendMapInfoPacket(char* map)
 {
 	Server2ClientMapInfoPacket p;
-	p.size = sizeof(Server2ClientMapInfoPacket);
-	p.type = Server2ClientMapInfo;
+	InfoOfPacket info;
+
+	info.size = sizeof(Server2ClientMapInfoPacket);
+	info.type = Server2ClientMapInfo;
 	p.width = MAPWIDTH;
 	p.height = MAPHEIGHT;
 	memcpy(p.mapInfo, map, sizeof(map));
+
+	this->DoSend(&info, &p);
 }
 
 void SESSION::SendTileInfoPacket()
@@ -49,14 +65,34 @@ void SESSION::SendTileInfoPacket()
 
 }
 
-void SESSION::SendPlayerInfoPacket()
+void SESSION::SendPlayerInfoPacket(SESSION& player)
 {
+	Server2ClientPlayerInfoPacket p;
+	InfoOfPacket info;
 
+	info.size = sizeof(Server2ClientPlayerInfoPacket);
+	info.type = Server2ClientPlayerInfo;
+
+	p.ID = player.ID;
+	p.state = player.player.state;
+	p.HP = player.player.HP;
+	p.x = player.player.pos.x;
+	p.y = player.player.pos.y;
+
+	this->DoSend(&info, &p);
 }
 
 void SESSION::SendMonsterInfoPacket()
 {
+	Server2ClientMonsterInfoPacket p;
+	InfoOfPacket info;
 
+	info.size = sizeof(Server2ClientMonsterInfoPacket);
+	info.type = Server2ClientMonsterInfo;
+
+	p.HP = this->player.HP;
+	p.x = this->player.pos.x;
+	p.y = this->player.pos.y;
 }
 
 void SESSION::SendBulletInfoPakcet()
@@ -72,4 +108,79 @@ void SESSION::SendObstacleInfoPacket()
 void SESSION::SendGameClearPacket()
 {
 
+}
+
+int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
+{
+	int retval = recv(sock, (char*)&buf, len, flage);
+	if (retval == SOCKET_ERROR) {
+		err_display("send()");
+		return -1;
+	}
+	else return retval;
+}
+
+void SendExpansion(SOCKET sock, char* buf, int len, int flage)
+{
+	if (len > BUFFERSIZE)
+	{
+		while (len != 0)
+		{
+			int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
+			int retval = send(sock, (char*)&buf, sendSize, flage);
+			if (retval == SOCKET_ERROR) {
+				err_display("send()");
+			}
+
+			len -= BUFFERSIZE;
+		}
+	}
+	else
+	{
+		int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
+		int retval = send(sock, (char*)&buf, len, flage);
+		if (retval == SOCKET_ERROR) {
+			err_display("send()");
+		}
+	}
+}
+
+// 소켓 함수 오류 출력 후 종료
+void err_quit(const char* msg)
+{
+	LPVOID lpMsgBuf;
+	FormatMessageA(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, WSAGetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(char*)&lpMsgBuf, 0, NULL);
+	MessageBoxA(NULL, (const char*)lpMsgBuf, msg, MB_ICONERROR);
+	LocalFree(lpMsgBuf);
+	exit(1);
+}
+
+// 소켓 함수 오류 출력
+void err_display(const char* msg)
+{
+	LPVOID lpMsgBuf;
+	FormatMessageA(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, WSAGetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(char*)&lpMsgBuf, 0, NULL);
+	printf("[%s] %s\n", msg, (char*)lpMsgBuf);
+	LocalFree(lpMsgBuf);
+}
+
+// 소켓 함수 오류 출력`
+void err_display(int errcode)
+{
+	LPVOID lpMsgBuf;
+	FormatMessageA(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, errcode,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(char*)&lpMsgBuf, 0, NULL);
+	printf("[오류] %s\n", (char*)lpMsgBuf);
+	LocalFree(lpMsgBuf);
 }

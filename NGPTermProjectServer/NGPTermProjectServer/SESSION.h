@@ -14,7 +14,7 @@ public:
 	Player player;
 
 public:
-	void DoSend(void* packet);
+	void DoSend(InfoOfPacket* info, void* packet);
 	void DoRevc();
 
 	void SendLoginPacket();
@@ -22,9 +22,19 @@ public:
 	void SendGameStartPacket();
 	void SendMapInfoPacket(char* map);
 	void SendTileInfoPacket();
-	void SendPlayerInfoPacket();
+	void SendPlayerInfoPacket(SESSION& player);
 	void SendMonsterInfoPacket();
 	void SendBulletInfoPakcet();	
 	void SendObstacleInfoPacket();
 	void SendGameClearPacket();
 };
+
+int RecvExpasion(SOCKET sock, char* buf, int len, int flage);
+
+void SendExpansion(SOCKET sock, char* buf, int len, int flage);
+
+void err_quit(const char* msg);
+
+void err_display(const char* msg);
+
+void err_display(int errcode);

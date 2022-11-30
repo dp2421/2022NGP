@@ -10,3 +10,4 @@
 *.lastbuildstate
 *.suo
 *.db
+**/x64/

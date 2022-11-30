@@ -136,7 +136,7 @@ void GameStart()
 
 void InitPlayerInfo()
 {
-    Server2ClienPlayerInfoPacket packet;
+    Server2ClientPlayerInfoPacket packet;
     RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 }
 void InitObjectInfo()
@@ -195,14 +195,14 @@ void SendKey(int key)
         packet.key = VK_DOWN;
     if (GetAsyncKeyState(0x41) & 0x8000)
         packet.key = 0x41;
-    packet.state = player.state;
+    //packet.state = player.state;
 
     SendExpansion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 }
 void RecvPlayerPos()
 {
     // 이게맞 ????? 나 
-    Server2ClienPlayerInfoPacket packet;
+    Server2ClientPlayerInfoPacket packet;
     int buf;
     RecvExpasion(sock,(char*)buf,sizeof(buf),0);
     packet.x = buf;
