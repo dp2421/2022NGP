@@ -1,4 +1,5 @@
 #pragma once
+#include "Manager.h"
 class Monster {
 public:
     int x;
@@ -41,23 +42,23 @@ public:
         {
         case STATE::IDLE:
             image_count = 8;
-            draw_image = monster_idle;
+            draw_image = Manager::GetInstance().monster_idle;
             break;
         case STATE::MOVE:
             image_count = 12;
-            draw_image = frog_move;
+            draw_image = Manager::GetInstance().frog_move;
             break;
         case STATE::JUMP:
             image_count = 1;
-            draw_image = frog_jump;
+            draw_image = Manager::GetInstance().frog_jump;
             break;
         case STATE::FALL:
             image_count = 1;
-            draw_image = frog_fall;
+            draw_image = Manager::GetInstance().frog_fall;
             break;
         case STATE::ATTACK:
             image_count = 7;
-            draw_image = frog_attack;
+            draw_image = Manager::GetInstance().frog_attack;
             break;
         case STATE::DEAD:
             break;

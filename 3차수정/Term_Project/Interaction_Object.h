@@ -19,7 +19,7 @@ public:
 
     void SetImage()
     {
-        draw_image = button_normal;
+        draw_image = Manager::GetInstance().button_normal;
         isPulling = false;
     }
 };

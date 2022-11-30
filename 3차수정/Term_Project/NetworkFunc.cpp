@@ -180,7 +180,7 @@ void InputKey()
 void SendKey(int key)
 {
     // 플레이어 받아오고 키도 따로 받아오는 방법으로 변경해야 할 듯.
-    Client2ServerKeyActionPacket packet;
+    Client2ServerKeyActionPacket packet{};
     packet.ID = packet.ID; // this->ID ...
     packet.type = Client2ServerKeyAction;
     //packet.state = ;
@@ -203,7 +203,7 @@ void RecvPlayerPos()
 {
     // 이게맞 ????? 나 
     Server2ClientPlayerInfoPacket packet;
-    int buf;
+    int buf = 0;
     RecvExpasion(sock,(char*)buf,sizeof(buf),0);
     packet.x = buf;
     RecvExpasion(sock, (char*)buf, sizeof(buf), 0);

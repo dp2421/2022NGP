@@ -151,6 +151,7 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Interaction_Object.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />

@@ -1,4 +1,5 @@
 #pragma once
+#include "Manager.h"
 
 class Player {
 public:
@@ -37,27 +38,27 @@ public:
         {
         case STATE::IDLE:
             image_count = 11;
-            draw_image = frog_idle;
+            draw_image = Manager::GetInstance().frog_idle;
             break;
         case STATE::MOVE:
             image_count = 12;
-            draw_image = frog_move;
+            draw_image = Manager::GetInstance().frog_move;
             break;
         case STATE::JUMP:
             image_count = 1;
-            draw_image = frog_jump;
+            draw_image = Manager::GetInstance().frog_jump;
             break;
         case STATE::FALL:
             image_count = 1;
-            draw_image = frog_fall;
+            draw_image = Manager::GetInstance().frog_fall;
             break;
         case STATE::ATTACK:
             image_count = 7;
-            draw_image = frog_attack;
+            draw_image = Manager::GetInstance().frog_attack;
             break;
         case STATE::DEAD:
             image_count = 6;
-            draw_image = frog_attack;
+            draw_image = Manager::GetInstance().frog_attack;
             anim = 0;
             break;
         }

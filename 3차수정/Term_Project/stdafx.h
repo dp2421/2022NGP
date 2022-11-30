@@ -26,7 +26,7 @@
 #pragma comment(lib, "ws2_32") // ws2_32.lib ¸µÅ©
 using namespace std;
 
-static Player p_player(300, 670, frog_idle);
+static Player p_player(300, 670, Manager::GetInstance().frog_idle);
 static void err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;

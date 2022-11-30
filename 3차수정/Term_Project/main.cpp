@@ -1,4 +1,5 @@
 #pragma once
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #include "stdafx.h"
 #include "Player.h"
 #include "Monster.h"
@@ -108,28 +109,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     static Interaction_Object portal;
 
 
-    static Player player(300, 670, frog_idle);
+    static Player player(300, 420, Manager::GetInstance().frog_idle);
 
 
     static Monster monster[MONSTER_AMOUNT]{
     
-        Monster(630, 670, monster_idle, MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(700, 420, monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(400, 165, monster_idle, MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(970, 420, monster_idle,  MONSTER_TYPE::MONSTER_MOVE), Monster(1000, 670, monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(2300, 670, monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2400, 420, monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(2400, 165, monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2800, 165, monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(4300, 670, monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(4500, 165, monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(4750, 420, monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(5400, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(5550, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(5850, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(6150, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(6900, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7050, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7050, 165, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7050, 670, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7500, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7500, 170, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7700, 670, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7800, 625, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7850, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8100, 170, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8100, 625, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8300, 420, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8700, 370, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8800, 270, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8800, 720, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8950, 320, monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8900, 165, monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+        Monster(630, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(700, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(970, 420, Manager::GetInstance().monster_idle,  MONSTER_TYPE::MONSTER_MOVE), Monster(1000, 670, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(2300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2400, 420, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(2400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2800, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(4300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(4500, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(4750, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(5400, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(5550, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(5850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(6150, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(6900, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7050, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7050, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7050, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7500, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7500, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7700, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7800, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8100, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8100, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8300, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8700, 370, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8800, 270, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8800, 720, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8950, 320, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8900, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
     };
 
     switch (uMsg) {
@@ -140,15 +141,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         //레버 초기화
         rever[0].x = 9525;
         rever[0].y = 700;
-        rever[0].draw_image = rever_nomal;
+        rever[0].draw_image = Manager::GetInstance().rever_nomal;
 
         rever[1].x = 9525;
         rever[1].y = 400;
-        rever[1].draw_image = rever_nomal;
+        rever[1].draw_image = Manager::GetInstance().rever_nomal;
 
         rever[2].x = 9525;
         rever[2].y = 150;
-        rever[2].draw_image = rever_nomal;
+        rever[2].draw_image = Manager::GetInstance().rever_nomal;
 
         rever[0].SetCollsionBox();
         rever[1].SetCollsionBox();
@@ -162,29 +163,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
         //레버 초기화
-       button[0].x = 4925;
+       button[0].x = 492;
        button[0].y = 670;
-       button[0].draw_image = button_normal;
+       button[0].draw_image = Manager::GetInstance().button_normal;
 
-       button[1].x = 4925;
-       button[1].y = 420;
-       button[1].draw_image = button_normal;
+       button[1].x = 492;
+       button[1].y = 350;
+       button[1].draw_image = Manager::GetInstance().button_normal;
 
-       button[2].x = 4925;
+       button[2].x = 492;
        button[2].y = 170;
-       button[2].draw_image = button_normal;
+       button[2].draw_image = Manager::GetInstance().button_normal;
 
        button[3].x = 8425;
        button[3].y = 220;
-       button[3].draw_image = button_normal;
+       button[3].draw_image = Manager::GetInstance().button_normal;
        
        button[4].x = 8425;
        button[4].y = 420;
-       button[4].draw_image = button_normal;
+       button[4].draw_image = Manager::GetInstance().button_normal;
 
        button[5].x = 8425;
        button[5].y = 670;
-       button[5].draw_image = button_normal;
+       button[5].draw_image = Manager::GetInstance().button_normal;
 
 
        button[0].SetCollsionBox();
@@ -203,7 +204,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
        portal.x = 9950;
        portal.y = 390;
-       portal.draw_image = button_normal;
+       portal.draw_image = Manager::GetInstance().button_normal;
        portal.SetCollsionBox();
        portal.type = INTER_OBJ::PORTAL;
 
@@ -425,12 +426,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         // 1. 배경 그리기
 
         if (player.x >= 200) {
-            bg.Draw(memdc1, -Window_Size_X + scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-            bg.Draw(memdc1, scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+            Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+            Manager::GetInstance().bg.Draw(memdc1, scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
         }
         else {
-            bg.Draw(memdc1, -Window_Size_X + scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-            bg.Draw(memdc1, scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+            Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+            Manager::GetInstance().bg.Draw(memdc1, scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
         }
 
         // 2. 발판 그리기
@@ -439,12 +440,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
                     if (Map[i][j] == WALL)
                     {
-                        wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
+                        Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
 
                     if (Map[i][j] == MAGMA)
                     {
-                        magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
+                        Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
                 }
             }
@@ -483,7 +484,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         for (int i = 0; i < 10; ++i) {
             if (player.bullet[i].isAttack) {
                 //Rectangle(memdc1, player.bullet[i].collisionBox.left, player.bullet[i].collisionBox.top, player.bullet[i].collisionBox.right, player.bullet[i].collisionBox.bottom);
-                bullet.Draw(memdc1,player.bullet[i].x, player.bullet[i].y,32,16);
+                Manager::GetInstance().bullet.Draw(memdc1,player.bullet[i].x, player.bullet[i].y,32,16);
             }
         }
         //
@@ -492,15 +493,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         // 9. Heart 그리기
         for (int i = 0; i < player.life; ++i) {
             if (player.x > 200) {
-                My_heart.Draw(memdc1, 30 + 45 * i + player.x - 200, 20, 45, 46, 0, 0, 45, 46);
+                Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + player.x - 200, 20, 45, 46, 0, 0, 45, 46);
             }
             else {
-                My_heart.Draw(memdc1, 30 + 45 * i + 0, 20, 45, 46, 0, 0, 45, 46);
+                Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + 0, 20, 45, 46, 0, 0, 45, 46);
             }
         }
 
         // 10. 최종 Portal 그리기
-        portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
+        Manager::GetInstance().portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
 
 
 
@@ -560,41 +561,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void LoadImage()
 {
-    bg.Load(L"background.png");
-    bg_width = bg.GetWidth();
-    bg_height = bg.GetHeight();
+    Manager::GetInstance().bg.Load(L"background.png");
+    bg_width = Manager::GetInstance().bg.GetWidth();
+    bg_height = Manager::GetInstance().bg.GetHeight();
 
-    wall.Load(L"block_wall.png");
+    Manager::GetInstance().wall.Load(L"block_wall.png");
 
-    monster_idle.Load(L"pacman.png");
-    monster_dead.Load(L"monster_dead.png");
+    Manager::GetInstance().monster_idle.Load(L"pacman.png");
+    Manager::GetInstance().monster_dead.Load(L"monster_dead.png");
 
-    frog_idle.Load(L"frog_idle.png");
-    frog_move.Load(L"frog_move.png");
-    frog_jump.Load(L"frog_jump.png");
-    frog_fall.Load(L"frog_fall.png");
-    frog_attack.Load(L"frog_attack.png");
+    Manager::GetInstance().frog_idle.Load(L"frog_idle.png");
+    Manager::GetInstance().frog_move.Load(L"frog_move.png");
+    Manager::GetInstance().frog_jump.Load(L"frog_jump.png");
+    Manager::GetInstance().frog_fall.Load(L"frog_fall.png");
+    Manager::GetInstance().frog_attack.Load(L"frog_attack.png");
 
-    bullet.Load(L"bullet.png");
+    Manager::GetInstance().bullet.Load(L"bullet.png");
 
-    effect.Load(L"effect.png");
+    Manager::GetInstance().effect.Load(L"effect.png");
 
-    magma.Load(L"magma.jpg");
+    Manager::GetInstance().magma.Load(L"magma.jpg");
 
-    garo.Load(L"garo.png");
-    sero.Load(L"sero.png");
+    Manager::GetInstance().garo.Load(L"garo.png");
+    Manager::GetInstance().sero.Load(L"sero.png");
 
-    My_heart.Load(L"heart.png");
+    Manager::GetInstance().My_heart.Load(L"heart.png");
 
-    portal_img.Load(L"portal.png");
+    Manager::GetInstance().portal_img.Load(L"portal.png");
 
-    FailGame.Load(L"FailGame.png");
-    SuccessGame.Load(L"SuccessGame.png");
+    Manager::GetInstance().FailGame.Load(L"FailGame.png");
+    Manager::GetInstance().SuccessGame.Load(L"SuccessGame.png");
 
-    rever_nomal.Load(L"Rever1.png");
-    rever_pull.Load(L"Rever2.png");
-    button_normal.Load(L"Button1.png");
-    button_pull.Load(L"Button2.png");
+    Manager::GetInstance().rever_nomal.Load(L"Rever1.png");
+    Manager::GetInstance().rever_pull.Load(L"Rever2.png");
+
+    Manager::GetInstance().button_normal.Load(L"Button1.png");
+    Manager::GetInstance().button_pull.Load(L"Button2.png");
 }
 
 bool CollisionHelper(RECT r1, RECT r2)
