@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "GameManager.h"
+#include "Protocol.h"
 
 Player::Player()
 {
@@ -22,6 +24,7 @@ void Player::Update(float deltaTime)
 		this->velocity.y += PLAYER_GRAVITY;
 		this->pos.y += this->velocity.y * deltaTime;
 	}
+	CollisionTile();
 }
 
 void Player::ProccesInput(int key, bool pressed)
@@ -110,9 +113,43 @@ void Player::SetHorizontalVelocity(int state)
 	}
 }
 
-bool Player::CollisionTile()
+void Player::CollisionTile()
+{
+	auto& map = GameManager::GetInstance().Map;
+	RECT blockRect;
+	blockRect.left = 0;
+	blockRect.right = 50;
+	blockRect.top = 0;
+	blockRect.bottom = 50;
+	// 타일 충돌
+	for (int i = 0; i < MAPHEIGHT * MAPWIDTH; ++i)
+	{
+		auto& tile = map[i / 200][i % 200];
+		if (tile != 0)
+		{
+			if (this->isCollision(Vec2((i % 200) * BlockSize, (i / 200) * BlockSize), blockRect))
+			{
+				//if (w_rect[i].top > player.collisionBox.bottom - 10 && player.velY >= 0)
+				//{
+				//	if (player.state == STATE::JUMP || player.state == STATE::FALL) {
+				//		player.ChangeState(STATE::IDLE);
+				//	}
+				//	player.y = w_rect[i].top - 32;
+				//	player.velY = 0;
+				//	player.accY = 0;
+				//	player.isRanding = true;
+				//}
+			}
+		}
+	}
+}
+
+void Player::CollisionMonster()
 {
 	//
+}
 
-	return false;
+void Player::CollisionObstacle()
+{
+
 }

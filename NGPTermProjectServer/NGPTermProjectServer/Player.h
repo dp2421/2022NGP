@@ -22,5 +22,7 @@ public:
 	void Attack();
 	void Interaction();
 	void SetHorizontalVelocity(int state);
-	bool CollisionTile();
+	void CollisionTile();
+	void CollisionMonster();
+	void CollisionObstacle();
 };

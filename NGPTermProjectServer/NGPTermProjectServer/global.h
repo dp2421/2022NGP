@@ -3,6 +3,8 @@
 
 struct Vec2
 {
+	Vec2() { }
+	Vec2(float x, float y) : x(x), y(y) {}
 	float x = 0.f, y = 0.f;
 };
 
@@ -29,6 +31,8 @@ constexpr int startCountdownTime = 5000;
 
 constexpr float playerSpeed = 300;
 constexpr float  PLAYER_GRAVITY = 0.9f;
+
+constexpr float MonsterSpeed = 600;
 
 constexpr int BlockSize = 50;
 

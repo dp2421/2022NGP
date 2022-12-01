@@ -5,11 +5,12 @@ class Object
 {
 public:
 	Vec2 pos;
-	Vec2 size;
+	RECT size;
 public:
 	Object();
 	~Object();
 
 	virtual void Update(float deltaTime) = 0;
 	bool isCollision(Object* rhs);
+	bool isCollision(Vec2 pos, RECT size);
 };
