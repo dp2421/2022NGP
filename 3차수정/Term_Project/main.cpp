@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Interaction_Object.h"
+#include "NetworkFunc.h"
 
 HINSTANCE g_hInst;
 LPCTSTR lpszClass = L"Window Class Name";
@@ -51,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
         hInstance, NULL);
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
-
+    InitClient();
     while (GetMessage(&Message, 0, 0, 0)) {
         TranslateMessage(&Message);
         DispatchMessage(&Message);
@@ -163,17 +164,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
         //레버 초기화
-       button[0].x = 492;
-       button[0].y = 670;
-       button[0].draw_image = Manager::GetInstance().button_normal;
+        button[0].x = 2420;
+        button[0].y = 670;
+        button[0].draw_image = Manager::GetInstance().button_normal;
 
-       button[1].x = 492;
-       button[1].y = 350;
-       button[1].draw_image = Manager::GetInstance().button_normal;
+        button[1].x = 2420;
+        button[1].y = 420;
+        button[1].draw_image = Manager::GetInstance().button_normal;
 
-       button[2].x = 492;
-       button[2].y = 170;
-       button[2].draw_image = Manager::GetInstance().button_normal;
+        button[2].x = 2420;
+        button[2].y = 170;
+        button[2].draw_image = Manager::GetInstance().button_normal;
 
        button[3].x = 8425;
        button[3].y = 220;

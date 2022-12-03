@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 
 // 서버 연결 변수
@@ -134,18 +135,49 @@ void GameStart()
 {
 }
 
+void InitPlayerInfo()
+{
+    Server2ClientPlayerInfoPacket packet;
+    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+}
 void InitObjectInfo()
 {
 
 }
 void InitObstacleInfo()
 {
-    Server2ClientObstacleInfoPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+    //Server2ClientObstacleInfoPacket packet;
+    //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+
+    Server2ClientMapInfoPacket packet;
+    int retval;
+    int ret = RecvExpasion(sock, (char*)&packet, BUFFERSIZE, MSG_WAITALL);
+    char buf[BUFFERSIZE];
+    if (ret >= 0)
+    {
+        retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
+        retval = RecvExpasion(sock, buf, ret, 0);
+
+        if (ret == 0)
+        {
+            cout << "Obstacle Recv Success";
+            return;
+        }
+        else
+        {
+            // 뭔가의 처리
+        }
+    }
+    else
+    {
+        cout << "MapInfo Recv Fail";
+        return;
+    }
 }
-//void InputKey()
-//{
-//}
+void InputKey()
+{
+
+}
 void SendKey(int key)
 {
     // 플레이어 받아오고 키도 따로 받아오는 방법으로 변경해야 할 듯.
@@ -173,26 +205,18 @@ void RecvPlayerPos()
     // 이게맞 ????? 나 
     Server2ClientPlayerInfoPacket packet;
     int buf = 0;
-    RecvExpasion(sock,(char*)buf,sizeof(buf),0);
+    RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
     packet.x = buf;
     RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
     packet.y = buf;
 }
 void RecvPlayerInfo()
 {
-    Server2ClientPlayerInfoPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
-}
 
-void RecvTileInfo()
-{
-    Server2ClientTileInfoPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
 }
 void RecvBulletInfo()
 {
-    Server2ClientBulletInfoPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+
 }
 void MonsterDead()
 {

@@ -142,7 +142,10 @@
     <ClCompile Include="Interaction_Object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="monster.cpp" />
-    <ClCompile Include="NetworkFunc.cpp" />
+    <ClCompile Include="NetworkFunc.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +156,7 @@
     <ClInclude Include="Interaction_Object.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="NetworkFunc.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="State.h" />
