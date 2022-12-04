@@ -20,6 +20,7 @@
 #include "Global.h"
 #include "../../NGPTermProjectServer/NGPTermProjectServer/Protocol.h"
 #include "Player.h"
+#include "Socket.h"
 
 //int ID;
 
@@ -27,6 +28,7 @@
 using namespace std;
 
 static Player p_player(300, 670, Manager::GetInstance().frog_idle);
+Sockets socks;
 static void err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;

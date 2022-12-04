@@ -27,15 +27,11 @@ void SendExpansion(SOCKET sock, char* buf, int len, int flage)
 
 void Login()
 {
-    int retval;
+    socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
+    socks.m_loginPack.type = Client2ServerLogin;
+    SendExpansion(sock, (char*)&socks.m_loginPack, socks.m_loginPack.size, 0);
 
-    Client2ServerLoginPacket c2sLogin;
-    c2sLogin.size = sizeof(Client2ServerLoginPacket);
-    c2sLogin.type = Client2ServerLogin;
-    SendExpansion(sock, (char*)&c2sLogin, c2sLogin.size, 0);
-
-    Server2ClientLoginPacket s2cLogin;
-    RecvExpasion(sock, (char*)&s2cLogin, sizeof(Server2ClientLoginPacket), MSG_WAITALL);
+    RecvExpasion(sock, (char*)&socks.m_serverloginPack, sizeof(Server2ClientLoginPacket), MSG_WAITALL);
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)
@@ -48,10 +44,8 @@ DWORD WINAPI NetworkThread(LPVOID arg)
     // 서버에서 보내는 주기가 일정해서 계속 받아도 됨..아마
     while (true)
     {
-        InfoOfPacket packet;
-        RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
-
-        ProcessPacket(packet.size, packet.type);
+        RecvExpasion(sock, (char*)&socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
+        ProcessPacket(socks.m_infoPack.size, socks.m_infoPack.type);
     }
 }
 
@@ -118,10 +112,9 @@ void SendConnect()
 void StartCount()
 {
     // 카운트를 세는 함수
-    Server2ClientCountdownPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+    RecvExpasion(sock, (char*)&socks.m_cntPack, sizeof(socks.m_cntPack), MSG_WAITALL);
 
-    packet.count; // Count
+    socks.m_cntPack.count; // Count ??
 }
 void WaitStart()
 {
@@ -137,8 +130,7 @@ void GameStart()
 
 void InitPlayerInfo()
 {
-    Server2ClientPlayerInfoPacket packet;
-    RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+    RecvExpasion(sock, (char*)&socks.m_playerPack, sizeof(socks.m_playerPack), MSG_WAITALL);
 }
 void InitObjectInfo()
 {
@@ -148,10 +140,11 @@ void InitObstacleInfo()
 {
     //Server2ClientObstacleInfoPacket packet;
     //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
-
+    // help..
     Server2ClientMapInfoPacket packet;
+    socks.m_mapPack;
     int retval;
-    int ret = RecvExpasion(sock, (char*)&packet, BUFFERSIZE, MSG_WAITALL);
+    int ret = RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
     char buf[BUFFERSIZE];
     if (ret >= 0)
     {
@@ -180,35 +173,31 @@ void InputKey()
 }
 void SendKey(int key)
 {
-    // 플레이어 받아오고 키도 따로 받아오는 방법으로 변경해야 할 듯.
-    Client2ServerKeyActionPacket packet{};
-    packet.ID = packet.ID; // this->ID ...
-    packet.type = Client2ServerKeyAction;
-    //packet.state = ;
-    packet.size = sizeof(Client2ServerKeyActionPacket);
+    socks.m_keyPack.ID = socks.m_keyPack.ID;
+    socks.m_keyPack.type = Client2ServerKeyAction;
+    socks.m_keyPack.size = sizeof(Client2ServerKeyActionPacket);
+    // 플레이어 어디선가 받아와야하는데 일단 나중ㅇ
     if (GetAsyncKeyState(VK_LEFT) & 0x8000) //왼쪽
-        packet.key = VK_LEFT;
+        socks.m_keyPack.key;
     if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //오른쪽
-        packet.key = VK_RIGHT;
+        socks.m_keyPack.key;
     if (GetAsyncKeyState(VK_UP) & 0x8000) //위
-        packet.key = VK_UP;
+        socks.m_keyPack.key;
     if (GetAsyncKeyState(VK_DOWN) & 0x8000) //아래
-        packet.key = VK_DOWN;
+        socks.m_keyPack.key;
     if (GetAsyncKeyState(0x41) & 0x8000)
-        packet.key = 0x41;
+        socks.m_keyPack.key;
     //packet.state = player.state;
 
-    SendExpansion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
+    SendExpansion(sock, (char*)&socks.m_keyPack, sizeof(socks.m_keyPack), MSG_WAITALL);
 }
 void RecvPlayerPos()
 {
-    // 이게맞 ????? 나 
-    Server2ClientPlayerInfoPacket packet;
     int buf = 0;
     RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
-    packet.x = buf;
+    socks.m_playerPack.x = buf;
     RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
-    packet.y = buf;
+    socks.m_playerPack.y = buf;
 }
 void RecvPlayerInfo()
 {

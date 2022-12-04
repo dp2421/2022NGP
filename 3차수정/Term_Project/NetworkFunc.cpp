@@ -170,7 +170,6 @@ void SendKey(int key)
 }
 void RecvPlayerPos()
 {
-    // 이게맞 ????? 나 
     Server2ClientPlayerInfoPacket packet;
     int buf = 0;
     RecvExpasion(sock,(char*)buf,sizeof(buf),0);
