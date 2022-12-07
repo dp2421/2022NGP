@@ -4,15 +4,14 @@
 class Bullet : Object
 {
 public:
-	bool isActive;
-	int direction;
-	int speed;
+	bool isActive = false;
+	int direction = 0;
 
 public:
 	Bullet();
 	~Bullet();
 
 	virtual void Update(float deltaTime) override;
-
-	void Shot();
+	void Shot(Vec2 vec, int dir);
+	void CollisionMonster();
 };

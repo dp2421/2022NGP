@@ -34,8 +34,10 @@ constexpr float  PLAYER_GRAVITY = 0.9f;
 
 constexpr float MonsterSpeed = 600;
 
+constexpr float BulletSpeed = 10;
+
 constexpr int BlockSize = 50;
 
-constexpr int BulletMaxDistance = 10000;
+constexpr int BulletMaxDistance = 20000;
 
 using namespace std;
