@@ -5,11 +5,7 @@
 
 Player::Player()
 {
-	this->state = (int)PlayerState::Idle;
-	this->isJump = false;
-	this->isGround = false;
-
-	this->HP = 5;
+	InitPlayer();
 }
 
 Player::~Player()
@@ -23,7 +19,18 @@ void Player::Update(float deltaTime)
 	{
 		this->velocity.y += PLAYER_GRAVITY;
 		this->pos.y += this->velocity.y * deltaTime;
+		if (this->pos.y > 900)
+		{
+			// 낙사
+		}
 	}
+
+	if ((this->state & (int)PlayerState::Attack) == (int)PlayerState::Attack)
+	{
+		Attack();
+	}
+
+	CollisionEnemy();
 	CollisionTile();
 }
 
@@ -63,8 +70,12 @@ void Player::ProccesInput(int key, bool pressed)
 		}
 	}
 		break;
-	case VK_SPACE: // 점프
-			this->state |= (int)PlayerState::Jump;
+		// 점프
+	case VK_SPACE:
+		if (pressed)
+		{
+			Jump();
+		}
 		break;
 		// 공격
 	case 'a':
@@ -81,24 +92,73 @@ void Player::ProccesInput(int key, bool pressed)
 		// 상호작용
 	case 'x':
 	case 'X':
-		Interaction();
+		if (pressed)
+		{
+			Interaction();
+		}
 		break;
 	}
+}
+
+void Player::InitPlayer()
+{
+	this->state = (int)PlayerState::Idle;
+	this->isJump = false;
+	this->isGround = false;
+
+	this->HP = 5;
 }
 
 void Player::Jump()
 {
 	// 점프
+	if (this->isGround)
+	{
+		this->state |= (int)PlayerState::Jump;
+		this->isGround = false;
+		this->velocity.y = -13.25f;
+	}
 }
 
 void Player::Attack()
 {
+	if (this->AttackCooltimeCount > 0)
+	{
+		AttackCooltimeCount--;
+		return;
+	}
+
 	// 공격
+	auto& bullets = GameManager::GetInstance().bullets;
+	for (auto& bullet : bullets)
+	{
+		if (!reinterpret_cast<Bullet*>(bullet)->isActive)
+		{
+			reinterpret_cast<Bullet*>(bullet)->Shot(this->pos, velocity.x / playerSpeed);
+			AttackCooltimeCount = 10;
+			break;
+		}
+	}
 }
 
 void Player::Interaction()
 {
 	// 상호작용
+	// 레버 
+}
+
+void Player::Damaged()
+{
+	HP--;
+	if (HP == 0)
+	{
+		// 죽음
+		return;
+	}
+	else
+	{
+		invincibleCount = 10;
+	}
 }
 
 void Player::SetHorizontalVelocity(int state)
@@ -124,32 +184,51 @@ void Player::CollisionTile()
 	// 타일 충돌
 	for (int i = 0; i < MAPHEIGHT * MAPWIDTH; ++i)
 	{
-		auto& tile = map[i / 200][i % 200];
+		int y = i / 200;
+		int x = i % 200;
+		auto& tile = map[y][x];
 		if (tile != 0)
 		{
-			if (this->isCollision(Vec2((i % 200) * BlockSize, (i / 200) * BlockSize), blockRect))
+			if (this->isCollision(Vec2(x, y), blockRect))
 			{
-				//if (w_rect[i].top > player.collisionBox.bottom - 10 && player.velY >= 0)
-				//{
-				//	if (player.state == STATE::JUMP || player.state == STATE::FALL) {
-				//		player.ChangeState(STATE::IDLE);
-				//	}
-				//	player.y = w_rect[i].top - 32;
-				//	player.velY = 0;
-				//	player.accY = 0;
-				//	player.isRanding = true;
-				//}
+				if (y * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+				{
+					if (this->isGround == false)
+						state &= ~(int)PlayerState::Jump;
+					this->pos.y = y * BlockSize - 32;
+					this->velocity.y = 0;
+					this->isGround = true;
+				}
 			}
 		}
 	}
 }
 
-void Player::CollisionMonster()
+void Player::CollisionEnemy()
 {
-	//
-}
+	if (this->invincibleCount > 0)
+	{
+		invincibleCount--;
+		return;
+	}
 
-void Player::CollisionObstacle()
-{
+	auto& monsters = GameManager::GetInstance().monsters;
+	for (auto& monster : monsters)
+	{
+		if (this->isCollision(monster))
+		{
+			Damaged();
+			return;
+		}
+	}
 
+	auto& obstacles = GameManager::GetInstance().obstacles;
+	for (auto& obstacle : obstacles)
+	{
+		if (this->isCollision(obstacle))
+		{
+			Damaged();
+			return;
+		}
+	}
 }
