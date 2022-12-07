@@ -14,7 +14,7 @@ void Bullet::Update(float deltaTime)
 
 }
 
-void Shot()
+void Bullet::Shot(Vec2 vec, int dir)
 {
 
 }

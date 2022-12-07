@@ -14,5 +14,5 @@ public:
 
 	virtual void Update(float deltaTime) override;
 
-	void Shot();
+	void Shot(Vec2 vec, int dir);
 };

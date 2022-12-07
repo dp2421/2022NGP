@@ -5,10 +5,13 @@ class Player : public Object
 {
 public:
 	int state;
+
 	bool isJump;
 	bool isGround;
 
 	int HP;
+	int invincibleCount = 0;
+	int AttackCooltimeCount = 0;
 	Vec2 velocity;
 public:
 	Player();
@@ -18,11 +21,12 @@ public:
 
 	void ProccesInput(int key, bool pressed);
 
+	void InitPlayer();
 	void Jump();
 	void Attack();
 	void Interaction();
+	void Damaged();
 	void SetHorizontalVelocity(int state);
 	void CollisionTile();
-	void CollisionMonster();
-	void CollisionObstacle();
+	void CollisionEnemy();
 };
