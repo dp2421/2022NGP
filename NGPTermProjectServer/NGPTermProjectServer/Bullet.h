@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-class Bullet : Object
+class Bullet : public Object
 {
 public:
 	bool isActive = false;

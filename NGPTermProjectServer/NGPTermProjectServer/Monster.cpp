@@ -13,6 +13,8 @@ Monster::~Monster()
 
 void Monster::Update(float deltaTime)
 {
+    if (this->HP < 1) return;
+
     this->moveCount++;
     if (this->moveCount == 10) {
         this->moveCount = 0;

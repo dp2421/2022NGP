@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Bullet.h"
 #include "GameManager.h"
+#include "Monster.h"
 
 Bullet::Bullet()
 {
@@ -35,9 +36,9 @@ void Bullet::CollisionMonster()
     auto& monsters = GameManager::GetInstance().monsters;
     for (auto& monster : monsters)
     {
-        if (this->isCollision(monster))
+        if (this->isCollision(monster)) 
         {
-            // 몬스터 대미지
+            reinterpret_cast<Monster*>(monster)->Damaged();
             this->isActive = false;
             return;
         }

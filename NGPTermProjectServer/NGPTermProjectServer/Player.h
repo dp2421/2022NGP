@@ -10,8 +10,6 @@ public:
 	bool isGround;
 
 	int HP;
-	int invincibleCount = 0;
-	int AttackCooltimeCount = 0;
 	Vec2 velocity;
 public:
 	Player();
@@ -29,4 +27,7 @@ public:
 	void SetHorizontalVelocity(int state);
 	void CollisionTile();
 	void CollisionEnemy();
+private:
+	int invincibleCount = 0;
+	int AttackCooltimeCount = 0;
 };

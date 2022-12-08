@@ -96,14 +96,13 @@ struct Server2ClientMonsterInfoPacket
 // 총알 정보
 struct Server2ClientBulletInfoPacket
 {
-	char	bulletSize;
-	float	x[MAXBULLET], y[MAXBULLET];
+	float	x, y;
 };
 
 // 장애물 정보
 struct Server2ClientObstacleInfoPacket
 {
-	char	obstacleType;
+	float	veloX, veloY;
 	float	x, y;
 };
 
