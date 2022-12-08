@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "global.h"
 #include "include.h"
 
@@ -122,14 +123,6 @@ void StartCountDown()
 		cl.SendGameStartPacket();
 }
 
-void InitializeGame()
-{
-	// InitalizeGame
-	// MAP 정보 전달
-	for (auto& se : GameManager::GetInstance().clients)
-		se.SendMapInfoPacket(GameManager::GetInstance().Map[0]);
-}
-
 void Update()
 {
 	Timer timer;
@@ -190,8 +183,9 @@ int main(int argc, char* argv[])
 				static_cast<LPVOID>(&i), 0, NULL);
 			if (hThread == NULL) { closesocket(client_sock); }
 			else 
-			{ 
+			{
 				CloseHandle(hThread);
+				GameManager::GetInstance().clients[i].SendMapInfoPacket();
 				++i;
 			}
 		}
@@ -200,7 +194,6 @@ int main(int argc, char* argv[])
 	StartCountDown();
 
 	auto startTime = chrono::high_resolution_clock::now();
-	InitializeGame();
 	Update();
 	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());
 

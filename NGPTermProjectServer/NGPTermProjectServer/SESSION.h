@@ -11,19 +11,20 @@ class SESSION
 public:
 	int ID;
 	SOCKET socket;
-	sockaddr_in sockAddr;
-	char addr[INET_ADDRSTRLEN];
 
 	Player player;
 
 public:
+	SESSION() {}
+	~SESSION() {}
+
 	void DoSend(InfoOfPacket* info, void* packet);
 	void DoRevc();
 
 	void SendLoginPacket();
 	void SendCountdownPacket(char cnt);
 	void SendGameStartPacket();
-	void SendMapInfoPacket(char* map);
+	void SendMapInfoPacket();
 	void SendTileInfoPacket();
 	void SendPlayerInfoPacket(SESSION& player);
 	void SendMonsterInfoPacket(Monster* monster);

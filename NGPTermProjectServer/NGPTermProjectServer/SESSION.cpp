@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SESSION.h"
+#include "GameManager.h"
 
 void SESSION::DoSend(InfoOfPacket* info, void* packet)
 {
@@ -46,7 +47,7 @@ void SESSION::SendGameStartPacket()
 	this->DoSend(&info, NULL);
 }
 
-void SESSION::SendMapInfoPacket(char* map)
+void SESSION::SendMapInfoPacket()
 {
 	Server2ClientMapInfoPacket p;
 	InfoOfPacket info;
@@ -55,7 +56,7 @@ void SESSION::SendMapInfoPacket(char* map)
 	info.type = Server2ClientMapInfo;
 	p.width = MAPWIDTH;
 	p.height = MAPHEIGHT;
-	memcpy(p.mapInfo, map, sizeof(map));
+	memcpy(p.mapInfo, GameManager::GetInstance().Map, sizeof(GameManager::GetInstance().Map));
 
 	this->DoSend(&info, &p);
 }
@@ -120,7 +121,7 @@ void SESSION::SendObstacleInfoPacket(Obstacle* obstacle)
 	info.type = Server2ClientObstacleInfo;
 
 	p.veloX = obstacle->velocity.x;
-	p.veloY = obstacle->velocity.y
+	p.veloY = obstacle->velocity.y;
 	p.x = obstacle->pos.x;
 	p.y = obstacle->pos.y;
 
