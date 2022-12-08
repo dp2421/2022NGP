@@ -28,7 +28,8 @@
 using namespace std;
 
 static Player p_player(300, 670, Manager::GetInstance().frog_idle);
-Sockets socks;
+static Sockets socks;
+
 static void err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;

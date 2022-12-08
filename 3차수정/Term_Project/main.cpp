@@ -228,7 +228,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         for (int i = 0; i < RAW; ++i) {
             for (int j = 0; j < COLUMN; ++j) {
-                if (Map[i][j] == WALL)
+                if (socks.m_mapPack.mapInfo[i][j] == WALL)
                 {
                     w_rect[w_rect_count].left = Board[i][j].left;
                     w_rect[w_rect_count].right = Board[i][j].right;
@@ -439,12 +439,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         for (int i = 0; i < RAW; ++i) {
             for (int j = 0; j < COLUMN; ++j) {
                 if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
-                    if (Map[i][j] == WALL)
+                    if (socks.m_mapPack.mapInfo[i][j] == WALL)
                     {
                         Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
 
-                    if (Map[i][j] == MAGMA)
+                    if (socks.m_mapPack.mapInfo[i][j] == MAGMA)
                     {
                         Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
