@@ -112,10 +112,11 @@ void Player::InitPlayer()
 void Player::Jump()
 {
 	// มกวม
-	if (this->isGround)
+	if (!this->isJump)
 	{
 		this->state |= (int)PlayerState::Jump;
 		this->isGround = false;
+		this->isJump = true;
 		this->velocity.y = -13.25f;
 	}
 }

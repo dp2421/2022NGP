@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-class Obstacle : Object
+class Obstacle : public Object
 {
 public:
 	int Speed;

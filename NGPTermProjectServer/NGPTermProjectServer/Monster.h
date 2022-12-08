@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-class Monster : Object
+class Monster : public Object
 {
 public:
 	int HP;

@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Protocol.h"
+#include "Monster.h"
+#include "Bullet.h"
+#include "Obstacle.h"
 
 class SESSION
 {
@@ -23,10 +26,10 @@ public:
 	void SendMapInfoPacket(char* map);
 	void SendTileInfoPacket();
 	void SendPlayerInfoPacket(SESSION& player);
-	void SendMonsterInfoPacket();
-	void SendBulletInfoPakcet();	
-	void SendObstacleInfoPacket();
-	void SendGameClearPacket();
+	void SendMonsterInfoPacket(Monster* monster);
+	void SendBulletInfoPakcet(Bullet* bullet);	
+	void SendObstacleInfoPacket(Obstacle* obstacle);
+	void SendGameClearPacket(chrono::seconds time);
 };
 
 int RecvExpasion(SOCKET sock, char* buf, int len, int flage);

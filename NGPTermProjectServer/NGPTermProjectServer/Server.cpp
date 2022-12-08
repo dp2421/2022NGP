@@ -29,11 +29,27 @@ void SendPacket()
 		for(auto& se : GameManager::GetInstance().clients)
 			cl.SendPlayerInfoPacket(se);
 		// 몬스터 정보
-		cl.SendMonsterInfoPacket();
+		for (auto& obj : GameManager::GetInstance().monsters)
+		{
+			auto monster = reinterpret_cast<Monster*>(obj);
+			if(monster->HP > 0)
+				cl.SendMonsterInfoPacket(reinterpret_cast<Monster*>(monster));
+		}
 		// 총알 정보
-		cl.SendBulletInfoPakcet();
+		for (auto& obj : GameManager::GetInstance().bullets)
+		{
+			auto bullet = reinterpret_cast<Bullet*>(obj);
+			if (bullet->isActive)
+				cl.SendBulletInfoPakcet(bullet);
+		}
 		// 장애물 정보
-		cl.SendObstacleInfoPacket();
+
+		for (auto& obj : GameManager::GetInstance().obstacles)
+		{
+			auto obstacle = reinterpret_cast<Obstacle*>(obj);
+			//if (obstacle->isActive)
+			//cl.SendObstacleInfoPacket();
+		}
 	}
 }
 
@@ -183,8 +199,13 @@ int main(int argc, char* argv[])
 
 	StartCountDown();
 
+	auto startTime = chrono::high_resolution_clock::now();
 	InitializeGame();
 	Update();
+	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());
+
+	for (auto& cl : GameManager::GetInstance().clients)
+		cl.SendGameClearPacket(endTime);
 
 	closesocket(listen_sock);
 	DeleteCriticalSection(&cs);

@@ -82,7 +82,7 @@ void SESSION::SendPlayerInfoPacket(SESSION& player)
 	this->DoSend(&info, &p);
 }
 
-void SESSION::SendMonsterInfoPacket()
+void SESSION::SendMonsterInfoPacket(Monster* monster)
 {
 	Server2ClientMonsterInfoPacket p;
 	InfoOfPacket info;
@@ -90,24 +90,49 @@ void SESSION::SendMonsterInfoPacket()
 	info.size = sizeof(Server2ClientMonsterInfoPacket);
 	info.type = Server2ClientMonsterInfo;
 
-	p.HP = this->player.HP;
-	p.x = this->player.pos.x;
-	p.y = this->player.pos.y;
+	p.HP = monster->HP;
+	p.x = monster->pos.x;
+	p.y = monster->pos.y;
+
+	this->DoSend(&info, &p);
 }
 
-void SESSION::SendBulletInfoPakcet()
+void SESSION::SendBulletInfoPakcet(Bullet* bullet)
 {
+	Server2ClientBulletInfoPacket p;
+	InfoOfPacket info;
 
+	info.size = sizeof(Server2ClientBulletInfoPacket);
+	info.type = Server2ClientBulletInfo;
+
+	p.x = bullet->pos.x;
+	p.y = bullet->pos.y;
+
+	this->DoSend(&info, &p);
 }
 
-void SESSION::SendObstacleInfoPacket()
+void SESSION::SendObstacleInfoPacket(Obstacle* obstacle)
 {
+	Server2ClientObstacleInfoPacket p;
+	InfoOfPacket info;
 
+	info.size = sizeof(Server2ClientObstacleInfoPacket);
+	info.type = Server2ClientObstacleInfo;
+
+	p.veloX = obstacle->velocity.x;
+	p.veloY = obstacle->velocity.y
+	p.x = obstacle->pos.x;
+	p.y = obstacle->pos.y;
+
+	this->DoSend(&info, &p);
 }
 
-void SESSION::SendGameClearPacket()
+void SESSION::SendGameClearPacket(chrono::seconds time)
 {
+	Server2ClientGameClearPacket p;
+	InfoOfPacket info;
 
+	p.second = static_cast<int>(time.count());
 }
 
 int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
