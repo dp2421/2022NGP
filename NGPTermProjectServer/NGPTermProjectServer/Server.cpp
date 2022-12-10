@@ -78,23 +78,24 @@ void InitServer(SOCKET& target)
 DWORD WINAPI InputThread(LPVOID arg)
 { 
 	int retval;
-	int index = *(int*)arg;
+	int index = *reinterpret_cast<int*>(arg);
 
-	SOCKET& sock = GameManager::GetInstance().clients[index].socket;
+	auto& client = GameManager::GetInstance().clients[index];
 
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;
-	if (RecvExpasion(sock, (char*)&login, sizeof(Client2ServerLoginPacket), MSG_WAITALL) == -1)
+	if (RecvExpasion(client.socket, (char*)&login, sizeof(Client2ServerLoginPacket), MSG_WAITALL) == -1)
 		return 0;
 
-	for(int i = 0; i <= index; ++i)
-		GameManager::GetInstance().clients[index].SendLoginPacket();
+	client.SendLoginPacket();
+
+	client.SendMapInfoPacket();
 
 	while (true)
 	{
 		// 키 입력 리시브
 		Client2ServerKeyActionPacket packet;
-		retval = RecvExpasion(sock, (char*)&packet, sizeof(Client2ServerKeyActionPacket), MSG_WAITALL);
+		retval = RecvExpasion(client.socket, (char*)&packet, sizeof(Client2ServerKeyActionPacket), MSG_WAITALL);
 
 		EnterCriticalSection(&cs);
 		messageQueue.push(packet);
@@ -169,6 +170,7 @@ int main(int argc, char* argv[])
 	struct sockaddr_in clientaddr;
 	int addrlen;
 	HANDLE hThread;
+	int index;
 
 	for (int i = 0; i < 3;)
 	{
@@ -177,15 +179,15 @@ int main(int argc, char* argv[])
 		if (client_sock == INVALID_SOCKET) { err_display("accept()"); break; }
 		else
 		{
-			GameManager::GetInstance().clients[i].socket = client_sock;
+			index = i;
+			GameManager::GetInstance().clients[index].socket = client_sock;
 				
 			hThread = CreateThread(NULL, 0, InputThread,
-				static_cast<LPVOID>(&i), 0, NULL);
+				reinterpret_cast<LPVOID>(&index), 0, NULL);
 			if (hThread == NULL) { closesocket(client_sock); }
 			else 
 			{
 				CloseHandle(hThread);
-				GameManager::GetInstance().clients[i].SendMapInfoPacket();
 				++i;
 			}
 		}

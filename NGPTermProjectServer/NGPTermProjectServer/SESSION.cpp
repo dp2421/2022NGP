@@ -150,7 +150,7 @@ void SendExpansion(SOCKET sock, char* buf, int len, int flage)
 {
 	if (len > BUFFERSIZE)
 	{
-		while (len != 0)
+		while (len > 0)
 		{
 			int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
 			int retval = send(sock, (char*)&buf, sendSize, flage);
@@ -158,7 +158,7 @@ void SendExpansion(SOCKET sock, char* buf, int len, int flage)
 				err_display("send()");
 			}
 
-			len -= BUFFERSIZE;
+			len -= sendSize;
 		}
 	}
 	else

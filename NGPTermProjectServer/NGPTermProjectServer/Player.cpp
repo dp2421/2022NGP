@@ -125,7 +125,7 @@ void Player::Attack()
 {
 	if (this->AttackCooltimeCount > 0)
 	{
-		AttackCooltimeCount--;
+		this->AttackCooltimeCount--;
 		return;
 	}
 
@@ -136,7 +136,7 @@ void Player::Attack()
 		if (!reinterpret_cast<Bullet*>(bullet)->isActive)
 		{
 			reinterpret_cast<Bullet*>(bullet)->Shot(this->pos, velocity.x / playerSpeed);
-			AttackCooltimeCount = 10;
+			this->AttackCooltimeCount = 10;
 			break;
 		}
 	}
@@ -158,7 +158,7 @@ void Player::Damaged()
 	}
 	else
 	{
-		invincibleCount = 10;
+		this->invincibleCount = 10;
 	}
 }
 
@@ -209,7 +209,7 @@ void Player::CollisionEnemy()
 {
 	if (this->invincibleCount > 0)
 	{
-		invincibleCount--;
+		this->invincibleCount--;
 		return;
 	}
 
