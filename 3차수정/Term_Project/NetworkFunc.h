@@ -6,10 +6,19 @@
 #define SERVERIP "127.0.0.1"
 SOCKET sock;
 void ProcessPacket(int size, int type);
+char sendBuffer[5000];
+
+enum class KeyState : int
+{
+
+};
+
+int ID;
+int KeyInputBuffer;
 
 int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 {
-    int retval = recv(sock, (char*)&buf, len, flage);
+    int retval = recv(sock, buf, len, flage);
     if (retval == SOCKET_ERROR) {
         err_display("send()");
         return -1;
@@ -19,7 +28,9 @@ int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 
 void SendExpansion(SOCKET sock, char* buf, int len, int flage)
 {
-    int retval = send(sock, (char*)&buf, len, flage);
+    ZeroMemory(sendBuffer, sizeof(sendBuffer));
+    memcpy(sendBuffer, buf, len);
+    int retval = send(sock, sendBuffer, len, flage);
     if (retval == SOCKET_ERROR) {
         err_display("send()");
     }
@@ -29,9 +40,9 @@ void Login()
 {
     socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
     socks.m_loginPack.type = Client2ServerLogin;
-    SendExpansion(sock, (char*)&socks.m_loginPack, socks.m_loginPack.size, 0);
+    SendExpansion(sock, reinterpret_cast<char*>(&socks.m_loginPack), socks.m_loginPack.size, 0);
 
-    RecvExpasion(sock, (char*)&socks.m_serverloginPack, sizeof(Server2ClientLoginPacket), MSG_WAITALL);
+    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_serverloginPack), sizeof(Server2ClientLoginPacket), MSG_WAITALL);
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)
@@ -44,7 +55,7 @@ DWORD WINAPI NetworkThread(LPVOID arg)
     // 서버에서 보내는 주기가 일정해서 계속 받아도 됨..아마
     while (true)
     {
-        RecvExpasion(sock, (char*)&socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
+        RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_infoPack), sizeof(socks.m_infoPack), MSG_WAITALL);
         ProcessPacket(socks.m_infoPack.size, socks.m_infoPack.type);
     }
 }
@@ -72,8 +83,7 @@ void InitClient()
 
     HANDLE hThread;
 
-    hThread = CreateThread(NULL, 0, NetworkThread,
-        NULL, 0, NULL);
+    hThread = CreateThread(NULL, 0, NetworkThread, NULL, 0, NULL);
     if (hThread == NULL) { closesocket(sock); }
     else { CloseHandle(hThread); }
 }
@@ -83,20 +93,22 @@ void InitMapInfo(int size)
     Server2ClientMapInfoPacket packet;
     int retval;
     char buf[BUFFERSIZE];
-    int ret = RecvExpasion(sock, (char*)&packet, BUFFERSIZE, MSG_WAITALL);
-    if (ret >= 0)
+    int ret = RecvExpasion(sock, reinterpret_cast<char*>(&packet), size, MSG_WAITALL);
+    if (ret > 0)
     {
-        retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
-        retval = RecvExpasion(sock, buf, ret, 0);
-        if (ret == 0)
-        {
-            cout << "MapInfo Recv Success";
-            return;
-        }
-        else
-        {
-            // 뭔가의 처리
-        }
+        //retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
+        //retval = RecvExpasion(sock, buf, ret, 0);
+        //if (ret == 0)
+        //{
+        //    cout << "MapInfo Recv Success";
+        //    return;
+        //}
+        //else
+        //{
+        //    // 뭔가의 처리
+        //}
+
+        memcpy(Board, packet.mapInfo, packet.width * packet.height);
     }
     else
     {
@@ -112,7 +124,7 @@ void SendConnect()
 void StartCount()
 {
     // 카운트를 세는 함수
-    RecvExpasion(sock, (char*)&socks.m_cntPack, sizeof(socks.m_cntPack), MSG_WAITALL);
+    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_cntPack), sizeof(socks.m_cntPack), MSG_WAITALL);
 
     socks.m_cntPack.count; // Count ??
 }
@@ -124,13 +136,15 @@ void RecvReady()
 {
 
 }
+
 void GameStart()
 {
+
 }
 
 void InitPlayerInfo()
 {
-    RecvExpasion(sock, (char*)&socks.m_playerPack, sizeof(socks.m_playerPack), MSG_WAITALL);
+    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_playerPack), sizeof(socks.m_playerPack), MSG_WAITALL);
 }
 void InitObjectInfo()
 {
@@ -141,31 +155,30 @@ void InitObstacleInfo()
     //Server2ClientObstacleInfoPacket packet;
     //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
     // help..
-    Server2ClientMapInfoPacket packet;
-    socks.m_mapPack;
-    int retval;
-    int ret = RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
-    char buf[BUFFERSIZE];
-    if (ret >= 0)
-    {
-        retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
-        retval = RecvExpasion(sock, buf, ret, 0);
-
-        if (ret == 0)
-        {
-            cout << "Obstacle Recv Success";
-            return;
-        }
-        else
-        {
-            // 뭔가의 처리
-        }
-    }
-    else
-    {
-        cout << "MapInfo Recv Fail";
-        return;
-    }
+    //Server2ClientMapInfoPacket packet;
+    //socks.m_mapPack;
+    //int retval;
+    //int ret = RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
+    //if (ret >= 0)
+    //{
+    //    retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
+    //    retval = RecvExpasion(sock, buf, ret, 0);
+    //
+    //    if (ret == 0)
+    //    {
+    //        cout << "Obstacle Recv Success";
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        // 뭔가의 처리
+    //    }
+    //}
+    //else
+    //{
+    //    cout << "MapInfo Recv Fail";
+    //    return;
+    //}
 }
 void InputKey()
 {
@@ -189,14 +202,14 @@ void SendKey(int key)
         socks.m_keyPack.key;
     //packet.state = player.state;
 
-    SendExpansion(sock, (char*)&socks.m_keyPack, sizeof(socks.m_keyPack), MSG_WAITALL);
+    SendExpansion(sock, reinterpret_cast<char*>(&socks.m_keyPack), sizeof(socks.m_keyPack), MSG_WAITALL);
 }
 void RecvPlayerPos()
 {
     int buf = 0;
-    RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
+    RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
     socks.m_playerPack.x = buf;
-    RecvExpasion(sock, (char*)buf, sizeof(buf), 0);
+    RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
     socks.m_playerPack.y = buf;
 }
 void RecvPlayerInfo()
@@ -254,6 +267,7 @@ void ProcessPacket(int size, int type)
     case Server2ClientGameClear:
         break;
     default:
+        cout << "Invalid Type : " << type << endl;
         break;
     }
 }

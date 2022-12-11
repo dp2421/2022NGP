@@ -4,14 +4,21 @@
 
 void SESSION::DoSend(InfoOfPacket* info, void* packet)
 {
-	SendExpansion(this->socket, (char*)info, sizeof(info), 0);
+	SendExpansion(this->socket, reinterpret_cast<char*>(info), sizeof(info), 0);
 	if(packet != NULL)
-		SendExpansion(this->socket, (char*)packet, info->size, 0);
+		SendExpansion(this->socket, reinterpret_cast<char*>(packet), info->size, 0);
 }
 
-void SESSION::DoRevc()
+int SESSION::DoRevc(void* packet, int size)
 {
-
+	ZeroMemory(buffer, sizeof(buffer));
+	auto retval = RecvExpasion(this->socket, buffer, size, MSG_WAITALL);
+	if (retval == -1)
+	{
+		return retval;
+	}
+	memcpy(packet, buffer, size);
+	return retval;
 }
 
 void SESSION::SendLoginPacket()
@@ -138,7 +145,7 @@ void SESSION::SendGameClearPacket(chrono::seconds time)
 
 int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 {
-	int retval = recv(sock, (char*)&buf, len, flage);
+	int retval = recv(sock, buf, len, flage);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 		return -1;
@@ -148,27 +155,31 @@ int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 
 void SendExpansion(SOCKET sock, char* buf, int len, int flage)
 {
-	if (len > BUFFERSIZE)
-	{
-		while (len > 0)
-		{
-			int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
-			int retval = send(sock, (char*)&buf, sendSize, flage);
-			if (retval == SOCKET_ERROR) {
-				err_display("send()");
-			}
-
-			len -= sendSize;
-		}
+	int retval = send(sock, buf, len, flage);
+	if (retval == SOCKET_ERROR) {
+		err_display("send()");
 	}
-	else
-	{
-		int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
-		int retval = send(sock, (char*)&buf, len, flage);
-		if (retval == SOCKET_ERROR) {
-			err_display("send()");
-		}
-	}
+	//if (len > BUFFERSIZE)
+	//{
+	//	while (len > 0)
+	//	{
+	//		int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
+	//		int retval = send(sock, (char*)&buf, sendSize, flage);
+	//		if (retval == SOCKET_ERROR) {
+	//			err_display("send()");
+	//		}
+	//
+	//		len -= sendSize;
+	//	}
+	//}
+	//else
+	//{
+	//	int sendSize = len > BUFFERSIZE ? BUFFERSIZE : len;
+	//	int retval = send(sock, (char*)&buf, len, flage);
+	//	if (retval == SOCKET_ERROR) {
+	//		err_display("send()");
+	//	}
+	//}
 }
 
 // 소켓 함수 오류 출력 후 종료

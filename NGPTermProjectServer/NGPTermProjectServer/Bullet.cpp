@@ -5,6 +5,9 @@
 
 Bullet::Bullet()
 {
+    this->isActive = false;
+    this->direction = 0;
+
     this->size.left = 10;
     this->size.right = 26;
     this->size.top = 0;

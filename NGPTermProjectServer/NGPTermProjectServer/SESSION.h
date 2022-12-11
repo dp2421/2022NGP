@@ -14,12 +14,13 @@ public:
 
 	Player player;
 
+	char buffer[5000];
 public:
 	SESSION() {}
 	~SESSION() {}
 
 	void DoSend(InfoOfPacket* info, void* packet);
-	void DoRevc();
+	int DoRevc(void* packet, int size);
 
 	void SendLoginPacket();
 	void SendCountdownPacket(char cnt);

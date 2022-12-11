@@ -29,6 +29,7 @@ public:
 	CImage portal_img;
 	CImage FailGame;
 	CImage SuccessGame;
+
 public:
 	static Manager& GetInstance()
 	{

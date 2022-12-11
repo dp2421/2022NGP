@@ -27,6 +27,9 @@ enum class TileType : int
 	End
 };
 
+constexpr int maxBulletCount = 100;
+constexpr int maxObstacleCount = 5;
+
 constexpr int startCountdownTime = 5000;
 
 constexpr float playerSpeed = 300;

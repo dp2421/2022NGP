@@ -16,9 +16,7 @@ void ProcessPacket()
 
 		GameManager::GetInstance().clients[message.ID].player.ProccesInput(message.key, message.state);
 
-		EnterCriticalSection(&cs);
 		messageQueue.pop();
-		LeaveCriticalSection(&cs);
 	}
 }
 
@@ -81,14 +79,17 @@ DWORD WINAPI InputThread(LPVOID arg)
 	int index = *reinterpret_cast<int*>(arg);
 
 	auto& client = GameManager::GetInstance().clients[index];
+	client.ID = index + 1;
 
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;
-	if (RecvExpasion(client.socket, (char*)&login, sizeof(Client2ServerLoginPacket), MSG_WAITALL) == -1)
+	if (client.DoRevc(&login, sizeof(Client2ServerLoginPacket)) == -1)
+	{
+		cout << "Login Fail" << endl;
 		return 0;
+	}
 
 	client.SendLoginPacket();
-
 	client.SendMapInfoPacket();
 
 	while (true)
@@ -122,6 +123,16 @@ void StartCountDown()
 
 	for (auto& cl : GameManager::GetInstance().clients)
 		cl.SendGameStartPacket();
+}
+
+void Initialize()
+{
+
+
+	for (int i = 0; i < maxBulletCount; ++i)
+	{
+		GameManager::GetInstance().bullets.emplace_back();
+	}
 }
 
 void Update()

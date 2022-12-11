@@ -4,8 +4,8 @@
 class Bullet : public Object
 {
 public:
-	bool isActive = false;
-	int direction = 0;
+	bool isActive;
+	int direction;
 
 public:
 	Bullet();
