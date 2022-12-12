@@ -5,6 +5,10 @@ Monster::Monster()
 {
     this->HP = 5;
     this->moveCount = 0;
+    this->size.left = 8;
+    this->size.right = 25;
+    this->size.top = 5;
+    this->size.bottom = 32;
 }
 
 Monster::~Monster()

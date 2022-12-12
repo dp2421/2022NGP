@@ -40,7 +40,7 @@ struct Client2ServerKeyActionPacket
 	char	type;
 	char	ID;
 	char	key;
-	char	state;
+	bool	state;
 };
 
 struct InfoOfPacket

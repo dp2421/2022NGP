@@ -232,14 +232,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       //  }
 
 
-      //  for (int i = 0; i < RAW; ++i) {
-      //      for (int j = 0; j < COLUMN; ++j) {
-      //          Board[i][j].left = 0 + j * BLOCK_SIZE;
-      //          Board[i][j].right = 50 + j * BLOCK_SIZE;
-      //          Board[i][j].top = 0 + i * BLOCK_SIZE;
-      //          Board[i][j].bottom = 50 + i * BLOCK_SIZE;
-      //      }
-      //  }
+       for (int i = 0; i < RAW; ++i) {
+           for (int j = 0; j < COLUMN; ++j) {
+               Board[i][j].left = 0 + j * BLOCK_SIZE;
+               Board[i][j].right = 50 + j * BLOCK_SIZE;
+               Board[i][j].top = 0 + i * BLOCK_SIZE;
+               Board[i][j].bottom = 50 + i * BLOCK_SIZE;
+           }
+       }
 
       //  for (int i = 0; i < RAW; ++i) {
       //      for (int j = 0; j < COLUMN; ++j) {
@@ -288,7 +288,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// 2. 발판 그리기
 			for (int i = 0; i < RAW; ++i) {
 				for (int j = 0; j < COLUMN; ++j) {
-					if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
+					if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) 
+                    {
 						if (Map[i][j] == WALL)
 						{
 							Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
@@ -446,4 +447,3 @@ bool CollisionHelper(RECT r1, RECT r2)
 
     return true;
 }
-

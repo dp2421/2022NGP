@@ -76,7 +76,6 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.player.ID = index;
 
 	// 로그인 패킷 리시브
-	client.SendLoginPacket();
 
 	Client2ServerLoginPacket login;
 	if (client.DoRevc(&login, sizeof(Client2ServerLoginPacket)) == -1)
@@ -84,7 +83,8 @@ DWORD WINAPI InputThread(LPVOID arg)
 		cout << "Login Fail" << endl;
 		return 0;
 	}
-	
+
+	client.SendLoginPacket();
 	client.SendPlayerInfoPacket(client);
 	client.SendMapInfoPacket();
 
@@ -201,6 +201,7 @@ void Update()
 		}
 
 		SendPacket();
+		cout << timer.GetDeltaTimeMilli() << endl;
 	}
 }
 
@@ -234,7 +235,7 @@ int main(int argc, char* argv[])
 				
 			hThread = CreateThread(NULL, 0, InputThread,
 				reinterpret_cast<LPVOID>(&index), 0, NULL);
-			if (hThread == NULL) { closesocket(client_sock); }
+			if (hThread == NULL) {  }
 			else 
 			{
 				CloseHandle(hThread);

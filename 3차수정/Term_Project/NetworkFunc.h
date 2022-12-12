@@ -51,6 +51,10 @@ void SendExpansion(SOCKET sock, void* buf, int len, int flage)
 
 void Login()
 {
+    socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
+    socks.m_loginPack.type = Client2ServerLogin;
+    SendExpansion(sock, &socks.m_loginPack, socks.m_loginPack.size, 0);
+
     ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
     RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
     if (socks.m_infoPack.type != Server2ClientLogin) cout << "sival : " << (int)socks.m_infoPack.type << endl;
@@ -58,10 +62,6 @@ void Login()
     RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
     ID = socks.m_serverloginPack.ID;
     cout << ID;
-
-    socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
-    socks.m_loginPack.type = Client2ServerLogin;
-    SendExpansion(sock, &socks.m_loginPack, socks.m_loginPack.size, 0);
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)
@@ -188,20 +188,21 @@ void InitObstacleInfo()
 
 void ProccesKey(int key, KeyState state)
 {
+    ZeroMemory(&socks.m_keyPack, sizeof(socks.m_keyPack));
     socks.m_keyPack.key = key;
     if ((GetAsyncKeyState(key) & 0x8000) && !((KeyInputBuffer & (int)state) == (int)state))
     {
         KeyInputBuffer |= (int)state;
         socks.m_keyPack.state = true;
     }
-    else if (KeyInputBuffer & (int)state)
+    else if ((KeyInputBuffer & (int)state) == (int)state)
     {
         KeyInputBuffer &= ~(int)state;
         socks.m_keyPack.state = false;
     }
     else return;
 
-    SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), MSG_WAITALL);
+    SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), 0);
 }
 
 void InputKey()
@@ -209,12 +210,6 @@ void InputKey()
     socks.m_keyPack.ID = ID;
     socks.m_keyPack.type = Client2ServerKeyAction;
     socks.m_keyPack.size = sizeof(Client2ServerKeyActionPacket);
-
-    //ProccesKey(VK_LEFT, (int)KeyState::LEFT);
-    //ProccesKey(VK_RIGHT, (int)KeyState::RIGHT);
-    //ProccesKey(VK_SPACE, (int)KeyState::JUMP);
-    //ProccesKey(attackKey, (int)KeyState::ATTACK);
-    //ProccesKey(InteractionKey, (int)KeyState::INTERACTION);
 
     ProccesKey(VK_LEFT, KeyState::LEFT);
     ProccesKey(VK_RIGHT, KeyState::RIGHT);

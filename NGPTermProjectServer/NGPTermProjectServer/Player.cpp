@@ -105,7 +105,7 @@ void Player::ProccesInput(int key, bool pressed)
 
 void Player::InitPlayer()
 {
-	this->pos = Vec2(300, 420);
+	this->pos = Vec2(230, 650);
 	this->state = (int)PlayerState::Idle;
 	this->isJump = false;
 	this->isGround = false;
@@ -188,22 +188,44 @@ void Player::CollisionTile()
 	blockRect.top = 0;
 	blockRect.bottom = 50;
 	// 타일 충돌
-	for (int i = 0; i < MAPHEIGHT * MAPWIDTH; ++i)
+	//for (int i = 0; i < MAPHEIGHT * MAPWIDTH; ++i)
+	//{
+	//	int y = i / 200;
+	//	int x = i % 200;
+	//	auto& tile = map[y][x];
+	//	if (tile != 0)
+	//	{
+	//		if (this->isCollision(Vec2(x, y), blockRect))
+	//		{
+	//			if (y * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+	//			{
+	//				if (this->isGround == false)
+	//					state &= ~(int)PlayerState::Jump;
+	//				this->pos.y = y * BlockSize - 32;
+	//				this->velocity.y = 0;
+	//				this->isGround = true;
+	//			}
+	//		}
+	//	}
+	//}
+
+	for (int i = 0; i < MAPHEIGHT; ++i)
 	{
-		int y = i / 200;
-		int x = i % 200;
-		auto& tile = map[y][x];
-		if (tile != 0)
+		for (int j = 0; j < MAPWIDTH; ++j)
 		{
-			if (this->isCollision(Vec2(x, y), blockRect))
+			auto& tile = map[i][j];
+			if (tile != 0)
 			{
-				if (y * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+				if (this->isCollision(Vec2(j * blockRect.right, i * blockRect.bottom), blockRect))
 				{
-					if (this->isGround == false)
-						state &= ~(int)PlayerState::Jump;
-					this->pos.y = y * BlockSize - 32;
-					this->velocity.y = 0;
-					this->isGround = true;
+					if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+					{
+						if (this->isGround == false)
+							state &= ~(int)PlayerState::Jump;
+						this->pos.y = i * BlockSize - 32;
+						this->velocity.y = 0;
+						this->isGround = true;
+					}
 				}
 			}
 		}
