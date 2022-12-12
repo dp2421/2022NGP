@@ -7,7 +7,7 @@ CRITICAL_SECTION cs;
 
 queue<Client2ServerKeyActionPacket> messageQueue;
 
-bool loginCount = 0;
+int loginCount = 0;
 
 void ProcessPacket()
 {
@@ -75,9 +75,6 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.ID = index;
 	client.player.ID = index;
 
-	cout << client.socket << endl;
-	cout << index << " " << (int)client.ID << endl;
-
 	// 로그인 패킷 리시브
 	client.SendLoginPacket();
 
@@ -87,11 +84,12 @@ DWORD WINAPI InputThread(LPVOID arg)
 		cout << "Login Fail" << endl;
 		return 0;
 	}
-
+	
+	client.SendPlayerInfoPacket(client);
 	client.SendMapInfoPacket();
 
 	EnterCriticalSection(&cs);
-	++loginCount;
+	loginCount++;
 	LeaveCriticalSection(&cs);
 
 	while (true)
@@ -177,12 +175,14 @@ void Update()
 	while (true)
 	{
 		timer.Update();
+		if (loginCount < 3) continue;
 
 		auto limit = std::chrono::high_resolution_clock::now() +
 			chrono::duration_cast<chrono::nanoseconds>(chrono::milliseconds(16));
-		while (std::chrono::high_resolution_clock::now() > limit) {}
-
-		if (loginCount < 3) continue;
+		while (std::chrono::high_resolution_clock::now() > limit) 
+		{
+			cout << (limit - std::chrono::high_resolution_clock::now()).count() << endl;
+		}
 
 		// packet 처리
 		ProcessPacket();
@@ -201,6 +201,8 @@ void Update()
 		}
 
 		SendPacket();
+
+		cout << "update" << endl;
 	}
 }
 
@@ -241,11 +243,6 @@ int main(int argc, char* argv[])
 				++i;
 			}
 		}
-	}
-
-	while(true) 
-	{
-		if (loginCount == 3) break;
 	}
 
 	cout << "start";

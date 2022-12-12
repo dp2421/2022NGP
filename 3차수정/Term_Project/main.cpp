@@ -258,177 +258,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_TIMER:
+        InputKey();
+
         InvalidateRect(hWnd, NULL, true);
-        //switch (wParam) {
-
-        //case 1:
-        //    player.accY = PLAYER_GRAVITY;
-        //    player.accX = player.dx;
-        //    player.velY += player.accY;
-
-
-        //    // 0번 기능 - 키보드 입력에 따른 기능
-        //    if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-        //    {
-        //        player.accY = PLAYER_GRAVITY;
-        //        if (player.state != STATE::JUMP) {
-        //            player.ChangeState(STATE::MOVE);
-        //        }
-
-        //        player.dir = P_DIR_LEFT;
-        //        player.x -= (300 * 0.016f);
-        //    }
-
-        //    if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-        //    {
-        //        player.accY = PLAYER_GRAVITY;
-        //        if (player.state != STATE::JUMP) {
-        //            player.ChangeState(STATE::MOVE);
-        //        }
-        //        player.dir = P_DIR_RIGHT;
-        //        player.x += (300 * 0.016f);
-        //    }
-
-        //    if (GetAsyncKeyState(VK_SPACE) & 0x8000 && player.isRanding)
-        //    {
-        //        player.isJump = true;
-        //        player.isRanding = false;
-        //        player.velY = -13.25f;
-        //        player.ChangeState(STATE::JUMP);
-        //    }
-
-
-        //    if (player.y > 900) {
-        //        player.y = 900;
-        //        player.velY = 0;
-        //        player.isJump = false;
-        //        player.ChangeState(STATE::IDLE);
-        //        player.Init();
-
-        //    }
-        //    else {
-        //        player.y += player.velY + player.accY * 0.016f;
-
-        //    }
-
-        //    player.UpdateCollisionBox();
-        //    player.UpdateBullet();
-
-
-        //    //monster - player 충돌
-        //    for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-        //        //플레이어 화면 범위 안에 있는 몬스터
-        //        if (monsters[i].x - 20 > player.x - 500 && monsters[i].x +20 < player.x + 800 && !monsters[i].isDead) {
-
-        //            if (CollisionHelper(monsters[i].collisionBox, player.collisionBox)) {
-        //                player.Damaged();
-        //            }
-
-        //            // monster - bullet 충돌
-        //            for (int j = 0; j < 10; ++j) {
-        //                if (player.bullet[j].isAttack) {
-        //                    if (CollisionHelper(player.bullet[j].collisionBox, monsters[i].collisionBox)) {
-        //                        player.bullet[j].isAttack = false;
-        //                        monsters[i].Damaged();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-
-
-
-        //    for (int i = 0; i < 12; ++i) {
-        //        if (CollisionHelper(button[i].collisionBox, player.collisionBox)) {
-
-        //            if (button[i].collisionBox.top > player.collisionBox.bottom - 10 && player.velY >= 0)
-        //            {
-        //                if (player.state == STATE::JUMP || player.state == STATE::FALL) {
-        //                    player.ChangeState(STATE::IDLE);
-        //                }
-        //                button[i].Collsion();
-        //                player.y = button[i].collisionBox.top - 32;
-        //                player.velY = 0;
-        //                player.accY = 0;
-        //                player.isRanding = true;
-        //            }
-        //        }
-        //        else {
-        //            button[i].SetImage();
-        //        }
-        //    }
-
-
-
-        //    for (int i = 0; i < w_rect_count; ++i) {
-        //        if (w_rect[i].right > player.x - 500 && w_rect[i].left < player.x + 800) {
-        //            if (CollisionHelper(w_rect[i], player.collisionBox)) {
-        //                //아래 충돌
-        //                if (w_rect[i].top > player.collisionBox.bottom - 10 && player.velY >=0)
-        //                {
-        //                    if (player.state == STATE::JUMP || player.state == STATE::FALL) {
-        //                        player.ChangeState(STATE::IDLE);
-        //                    }
-        //                    player.y = w_rect[i].top - 32;
-        //                    player.velY = 0;
-        //                    player.accY = 0;
-        //                    player.isRanding = true;
-        //                }
-        //            }
-        //        }
-        //    }
-
-
-        //    for (int i = 0; i < 3; ++i) {
-        //        rever[i].Update();
-        //    }
-
-        //    for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-        //        monsters[i].Move();
-        //        monsters[i].UpdateCollisionBox();
-        //        monsters[i].UpdateAnimation();
-        //    }
-        //    player.UpdateAnimation();
-
-        //    break;
-        //}
-
         break;
-
-    case WM_CHAR:
-    /*    switch (wParam)
-        {
-        case 'a':
-        case 'A':
-            player.Shoot();
-            break;
-        case 'x':
-        case 'X':
-            for (int i = 0; i < 3; ++i) {
-                if (CollisionHelper(rever[i].collisionBox, player.collisionBox)) {
-                    rever[i].Collsion();
-                }
-            }
-            break;
-        }
-        break;
-
-    case WM_KEYDOWN:
-        switch (wParam)
-        {
-        case VK_SHIFT:
-            break;
-        }
-        break;
-    case WM_KEYUP:
-        if (player.state != STATE::JUMP) {
-            player.ChangeState(STATE::IDLE);
-        }
-        if (wParam == 'a' || wParam == 'A') {
-            player.SetShoot(false);
-        }
-        break;*/
 
     case WM_PAINT:
         if (ID == -1) break;
@@ -443,7 +276,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         if (ID > -1)
 		{
-            cout << ID;
             auto& player = players[ID];
 			if (player.x >= 200) {
 				Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
@@ -488,10 +320,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + 0, 20, 45, 46, 0, 0, 45, 46);
                 }
             }
-        }
-        else
-        {
-            cout << "sibal" << endl;
         }
 
         
