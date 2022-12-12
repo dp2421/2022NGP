@@ -7,7 +7,7 @@ CRITICAL_SECTION cs;
 
 queue<Client2ServerKeyActionPacket> messageQueue;
 
-bool isStart = false;
+int loginCount = 0;
 
 void ProcessPacket()
 {
@@ -75,9 +75,11 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.ID = index;
 	client.player.ID = index;
 
-	cout << index;
+	cout << index << " " << (int)client.ID << endl;
 
 	// 로그인 패킷 리시브
+	client.SendLoginPacket();
+
 	Client2ServerLoginPacket login;
 	if (client.DoRevc(&login, sizeof(Client2ServerLoginPacket)) == -1)
 	{
@@ -85,13 +87,12 @@ DWORD WINAPI InputThread(LPVOID arg)
 		return 0;
 	}
 
-	client.SendLoginPacket();
 	client.SendMapInfoPacket();
 
-	if (index == 2)
-	{
-		isStart = true;
-	}
+
+	EnterCriticalSection(&cs);
+	++loginCount;
+	LeaveCriticalSection(&cs);
 
 	while (true)
 	{
@@ -221,6 +222,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < 3;)
 	{
 		addrlen = sizeof(clientaddr);
+		ZeroMemory(&client_sock, sizeof(client_sock));
 		client_sock = accept(listen_sock, (struct sockaddr*)&clientaddr, &addrlen);
 		if (client_sock == INVALID_SOCKET) { err_display("accept()"); break; }
 		else
@@ -237,9 +239,15 @@ int main(int argc, char* argv[])
 				++i;
 			}
 		}
+		cout << client_sock << endl;
 	}
 
-	while (!isStart) {}
+	while(true) 
+	{
+		if (loginCount == 3) break;
+	}
+
+	cout << "start";
 
 	//StartCountDown();
 

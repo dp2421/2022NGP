@@ -51,15 +51,17 @@ void SendExpansion(SOCKET sock, void* buf, int len, int flage)
 
 void Login()
 {
-    socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
-    socks.m_loginPack.type = Client2ServerLogin;
-    SendExpansion(sock, &socks.m_loginPack, socks.m_loginPack.size, 0);
-
     ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
     RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
+    if (socks.m_infoPack.type != Server2ClientLogin) cout << "sival : " << (int)socks.m_infoPack.type << endl;
+
     RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
     ID = socks.m_serverloginPack.ID;
     cout << ID;
+
+    socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
+    socks.m_loginPack.type = Client2ServerLogin;
+    SendExpansion(sock, &socks.m_loginPack, socks.m_loginPack.size, 0);
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)

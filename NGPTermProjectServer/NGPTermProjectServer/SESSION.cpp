@@ -30,6 +30,8 @@ void SESSION::SendLoginPacket()
 	info.type = Server2ClientLogin;
 	p.ID = this->ID;
 
+	cout << "IN Packet : " << (int)p.ID << endl;
+
 	this->DoSend(&info, &p);
 }
 

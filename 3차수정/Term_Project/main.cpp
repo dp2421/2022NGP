@@ -510,11 +510,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             if (player.isDamaged) {
                 if (player.Damaged_count % 2 == 0) {
-                    player.draw_image.Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
+                    player.getDrawImageByState().Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
                 }
             }
             else {
-                player.draw_image.Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
+                player.getDrawImageByState().Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
             }
         }
         
