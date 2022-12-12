@@ -4,7 +4,7 @@
 class Monster : public Object
 {
 public:
-	int HP;
+	int HP = 5;
 	int direction = 1;
 public:
 	Monster();

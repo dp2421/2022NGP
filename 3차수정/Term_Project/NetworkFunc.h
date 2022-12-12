@@ -12,6 +12,8 @@ const char attackKey = 'A';
 const char InteractionKey = 'X';
 
 Player players[3];
+unordered_map<int, Monster> monsters;
+unordered_map<int, Bullet> bullets;
 
 enum class KeyState : int
 {
@@ -251,12 +253,21 @@ void RecvPlayerInfo()
 
 void RecvMonsterInfo()
 {
+    auto& info = socks.m_monsterPack;
+    RecvExpasion(sock, &info, sizeof(info), 0);
 
+    monsters[info.ID].x = info.x;
+    monsters[info.ID].y = info.y;
+    monsters[info.ID].life = info.HP;
 }
 
 void RecvBulletInfo()
 {
+    auto& info = socks.m_bulletPack;
+    RecvExpasion(sock, &info, sizeof(info), 0);
 
+    bullets[info.ID].x = info.x;
+    bullets[info.ID].y = info.y;
 }
 
 void MonsterDead()
@@ -298,9 +309,11 @@ void ProcessPacket(int size, int type)
         // 플레이어 정보
         RecvPlayerInfo();
         break;
-    case Server2ClientMonsterInfo:
+    case Server2ClientMonsterInfo: // 몬스터 정보
+        RecvMonsterInfo();
         break;
-    case Server2ClientBulletInfo:
+    case Server2ClientBulletInfo: // 총알 정보
+        RecvBulletInfo();
         break;
     case Server2ClientObstacleInfo:
         InitObstacleInfo();

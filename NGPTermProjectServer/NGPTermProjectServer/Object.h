@@ -4,6 +4,8 @@
 class Object
 {
 public:
+	int ID;
+
 	Vec2 pos;
 	RECT size;
 public:

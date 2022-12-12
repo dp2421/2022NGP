@@ -11,6 +11,7 @@
 #include <time.h>
 #include <atlimage.h>
 #include <string.h>
+#include <unordered_map>
 
 #include "Image.h"
 #include "Map.h"

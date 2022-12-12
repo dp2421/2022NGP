@@ -89,6 +89,7 @@ struct Server2ClientPlayerInfoPacket
 // 몬스터 정보
 struct Server2ClientMonsterInfoPacket
 {
+	char	ID;
 	char	HP;
 	float	x, y;
 };
@@ -96,12 +97,14 @@ struct Server2ClientMonsterInfoPacket
 // 총알 정보
 struct Server2ClientBulletInfoPacket
 {
+	char	ID;
 	float	x, y;
 };
 
 // 장애물 정보
 struct Server2ClientObstacleInfoPacket
 {
+	char	ID;
 	float	veloX, veloY;
 	float	x, y;
 };

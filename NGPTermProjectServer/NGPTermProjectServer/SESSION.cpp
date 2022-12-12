@@ -98,6 +98,7 @@ void SESSION::SendMonsterInfoPacket(Monster* monster)
 	info.size = sizeof(Server2ClientMonsterInfoPacket);
 	info.type = Server2ClientMonsterInfo;
 
+	p.ID = monster->ID;
 	p.HP = monster->HP;
 	p.x = monster->pos.x;
 	p.y = monster->pos.y;
@@ -113,6 +114,7 @@ void SESSION::SendBulletInfoPakcet(Bullet* bullet)
 	info.size = sizeof(Server2ClientBulletInfoPacket);
 	info.type = Server2ClientBulletInfo;
 
+	p.ID = bullet->ID;
 	p.x = bullet->pos.x;
 	p.y = bullet->pos.y;
 

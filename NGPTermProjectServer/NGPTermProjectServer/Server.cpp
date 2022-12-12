@@ -80,6 +80,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 
 	auto& client = GameManager::GetInstance().clients[index];
 	client.ID = index;
+	client.player.ID = index;
 
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;
@@ -127,11 +128,31 @@ void StartCountDown()
 
 void Initialize()
 {
+	// 몬스터 초기화
+	POINT MonsterPos[] =
+	{
+		(630, 670), (700, 420), (400, 165), (970, 420), (1000, 670), (2300, 670), (2400, 420), (2400, 165), (2800, 165), 
+		(4300, 670), (4500, 165)
+		//, (4750, 420), (5400, 420), (5550, 420), (5850, 420), (6150, 420), (6900, 420), 
+		//(7050, 420), (7050, 165), (7050, 670), (7500, 420), (7500, 170), (7700, 670), (7800, 625), (7850, 420), 
+		//(8100, 170), (8100, 625), (8300, 420), (8700, 370), (8800, 270), (8800, 720), (8950, 320), (8900, 165)
+	};
 
+	auto& monsters = GameManager::GetInstance().monsters;
+
+	for (int i = 0; i < (sizeof(MonsterPos) / sizeof(POINT)); ++i)
+	{
+		monsters.emplace_back();
+		auto& monster = monsters.back();
+		monster->ID = i;
+		monster->pos.x = MonsterPos[i].x;
+		monster->pos.y = MonsterPos[i].y;
+	}
 
 	for (int i = 0; i < maxBulletCount; ++i)
 	{
 		GameManager::GetInstance().bullets.emplace_back();
+		GameManager::GetInstance().bullets.back()->ID = i;
 	}
 }
 

@@ -116,22 +116,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     static Monster monster[MONSTER_AMOUNT]{
     
         Monster(630, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(700, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(970, 420, Manager::GetInstance().monster_idle,  MONSTER_TYPE::MONSTER_MOVE), Monster(1000, 670, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(2300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2400, 420, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(2400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(2800, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(4300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(4500, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
-      , Monster(4750, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), Monster(5400, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(5550, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(5850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(6150, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(6900, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7050, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7050, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7050, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7500, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7500, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7700, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(7800, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(7850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8100, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8100, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8300, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8700, 370, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8800, 270, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8800, 720, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-      , Monster(8950, 320, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), Monster(8900, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(700, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(970, 420, Manager::GetInstance().monster_idle,  MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(1000, 670, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(2300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(2400, 420, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(2400, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(2800, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(4300, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(4500, 165, Manager::GetInstance().monster_idle,MONSTER_TYPE::MONSTER_MOVE)
+      , Monster(4750, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
+        Monster(5400, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(5550, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(5850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(6150, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(6900, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7050, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(7050, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7050, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(7500, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7500, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(7700, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(7800, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(7850, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8100, 170, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(8100, 625, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8300, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(8700, 370, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8800, 270, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(8800, 720, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
+      , Monster(8950, 320, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
+        Monster(8900, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
     };
 
     switch (uMsg) {
