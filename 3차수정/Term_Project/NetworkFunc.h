@@ -6,31 +6,40 @@
 #define SERVERIP "127.0.0.1"
 SOCKET sock;
 void ProcessPacket(int size, int type);
-char sendBuffer[5000];
+char buffer[5000];
+
+const char attackKey = 'A';
+const char InteractionKey = 'X';
+
+Player players[3];
 
 enum class KeyState : int
 {
-
+    LEFT        = 1 << 0,
+    RIGHT       = 1 << 1,
+    JUMP        = 1 << 2,
+    ATTACK      = 1 << 3,
+    INTERACTION = 1 << 4
 };
 
 int ID;
 int KeyInputBuffer;
 
-int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
+int RecvExpasion(SOCKET sock, void* packet, int len, int flage)
 {
-    int retval = recv(sock, buf, len, flage);
+    ZeroMemory(buffer, sizeof(buffer));
+    int retval = recv(sock, buffer, len, flage);
     if (retval == SOCKET_ERROR) {
         err_display("send()");
         return -1;
     }
-    else return retval;
+    memcpy(packet, buffer, len);
+    return retval;
 }
 
-void SendExpansion(SOCKET sock, char* buf, int len, int flage)
+void SendExpansion(SOCKET sock, void* buf, int len, int flage)
 {
-    ZeroMemory(sendBuffer, sizeof(sendBuffer));
-    memcpy(sendBuffer, buf, len);
-    int retval = send(sock, sendBuffer, len, flage);
+    int retval = send(sock, reinterpret_cast<char*>(buf), len, flage);
     if (retval == SOCKET_ERROR) {
         err_display("send()");
     }
@@ -40,9 +49,11 @@ void Login()
 {
     socks.m_loginPack.size = sizeof(Client2ServerLoginPacket);
     socks.m_loginPack.type = Client2ServerLogin;
-    SendExpansion(sock, reinterpret_cast<char*>(&socks.m_loginPack), socks.m_loginPack.size, 0);
+    SendExpansion(sock, &socks.m_loginPack, socks.m_loginPack.size, 0);
 
-    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_serverloginPack), sizeof(Server2ClientLoginPacket), MSG_WAITALL);
+    ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
+    RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
+    RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)
@@ -55,7 +66,8 @@ DWORD WINAPI NetworkThread(LPVOID arg)
     // 서버에서 보내는 주기가 일정해서 계속 받아도 됨..아마
     while (true)
     {
-        RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_infoPack), sizeof(socks.m_infoPack), MSG_WAITALL);
+        ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
+        RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
         ProcessPacket(socks.m_infoPack.size, socks.m_infoPack.type);
     }
 }
@@ -93,7 +105,7 @@ void InitMapInfo(int size)
     Server2ClientMapInfoPacket packet;
     int retval;
     char buf[BUFFERSIZE];
-    int ret = RecvExpasion(sock, reinterpret_cast<char*>(&packet), size, MSG_WAITALL);
+    int ret = RecvExpasion(sock, &packet, size, MSG_WAITALL);
     if (ret > 0)
     {
         //retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
@@ -107,8 +119,7 @@ void InitMapInfo(int size)
         //{
         //    // 뭔가의 처리
         //}
-
-        memcpy(Board, packet.mapInfo, packet.width * packet.height);
+        memcpy(Map, packet.mapInfo, packet.width * packet.height);
     }
     else
     {
@@ -121,17 +132,20 @@ void SendConnect()
 {
     // 접속되면 handle정보 보냄
 }
+
 void StartCount()
 {
     // 카운트를 세는 함수
-    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_cntPack), sizeof(socks.m_cntPack), MSG_WAITALL);
+    RecvExpasion(sock, &socks.m_cntPack, sizeof(socks.m_cntPack), MSG_WAITALL);
 
+    // 5 4 3 2 1 순으로 카운팅
     socks.m_cntPack.count; // Count ??
 }
 void WaitStart()
 {
     // 로딩중 띄워주면 됨
 }
+
 void RecvReady()
 {
 
@@ -144,12 +158,14 @@ void GameStart()
 
 void InitPlayerInfo()
 {
-    RecvExpasion(sock, reinterpret_cast<char*>(&socks.m_playerPack), sizeof(socks.m_playerPack), MSG_WAITALL);
+    RecvExpasion(sock, &socks.m_playerPack, sizeof(socks.m_playerPack), MSG_WAITALL);
 }
+
 void InitObjectInfo()
 {
 
 }
+
 void InitObstacleInfo()
 {
     //Server2ClientObstacleInfoPacket packet;
@@ -180,59 +196,83 @@ void InitObstacleInfo()
     //    return;
     //}
 }
+
+void ProccesKey(int key, KeyState state)
+{
+    socks.m_keyPack.key = key;
+    if ((GetAsyncKeyState(key) & 0x8000) && !((KeyInputBuffer & (int)state) == (int)state))
+    {
+        KeyInputBuffer |= (int)state;
+        socks.m_keyPack.state = true;
+    }
+    else if (KeyInputBuffer & (int)state)
+    {
+        KeyInputBuffer &= ~(int)state;
+        socks.m_keyPack.state = false;
+    }
+    else return;
+
+    SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), MSG_WAITALL);
+}
+
 void InputKey()
 {
-
-}
-void SendKey(int key)
-{
-    socks.m_keyPack.ID = socks.m_keyPack.ID;
+    socks.m_keyPack.ID = ID;
     socks.m_keyPack.type = Client2ServerKeyAction;
     socks.m_keyPack.size = sizeof(Client2ServerKeyActionPacket);
-    // 플레이어 어디선가 받아와야하는데 일단 나중ㅇ
-    if (GetAsyncKeyState(VK_LEFT) & 0x8000) //왼쪽
-        socks.m_keyPack.key;
-    if (GetAsyncKeyState(VK_RIGHT) & 0x8000) //오른쪽
-        socks.m_keyPack.key;
-    if (GetAsyncKeyState(VK_UP) & 0x8000) //위
-        socks.m_keyPack.key;
-    if (GetAsyncKeyState(VK_DOWN) & 0x8000) //아래
-        socks.m_keyPack.key;
-    if (GetAsyncKeyState(0x41) & 0x8000)
-        socks.m_keyPack.key;
-    //packet.state = player.state;
 
-    SendExpansion(sock, reinterpret_cast<char*>(&socks.m_keyPack), sizeof(socks.m_keyPack), MSG_WAITALL);
+    ProccesKey(VK_LEFT, (int)KeyState::LEFT);
+    ProccesKey(VK_RIGHT, (int)KeyState::RIGHT);
+    ProccesKey(VK_SPACE, (int)KeyState::JUMP);
+    ProccesKey(attackKey, (int)KeyState::ATTACK);
+    ProccesKey(InteractionKey, (int)KeyState::INTERACTION);
 }
+
 void RecvPlayerPos()
 {
-    int buf = 0;
-    RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
-    socks.m_playerPack.x = buf;
-    RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
-    socks.m_playerPack.y = buf;
+    //int buf = 0;
+    //RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
+    //socks.m_playerPack.x = buf;
+    //RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
+    //socks.m_playerPack.y = buf;
 }
+
 void RecvPlayerInfo()
+{
+    auto& info = socks.m_playerPack;
+    RecvExpasion(sock, &info, sizeof(info), 0);
+    auto& player = players[info.ID];
+
+    player.x = info.x;
+    player.y = info.y;
+    player.life = info.HP;
+    player.state = (STATE)info.state;
+}
+
+void RecvMonsterInfo()
 {
 
 }
+
 void RecvBulletInfo()
 {
 
 }
+
 void MonsterDead()
 {
 
 }
+
 void ArrowDraw()
 {
 
 }
+
 void Render()
 {
 
 }
-
 
 // 수신 패킷 처리
 void ProcessPacket(int size, int type)
@@ -256,6 +296,7 @@ void ProcessPacket(int size, int type)
         break;
     case Server2ClientPlayerInfo:
         // 플레이어 정보
+        RecvPlayerInfo();
         break;
     case Server2ClientMonsterInfo:
         break;

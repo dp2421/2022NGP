@@ -5,6 +5,7 @@ class Player : public Object
 {
 public:
 	int state;
+	char aniState;
 
 	bool isJump;
 	bool isGround;
@@ -27,6 +28,7 @@ public:
 	void SetHorizontalVelocity(int state);
 	void CollisionTile();
 	void CollisionEnemy();
+	void SetAniState();
 private:
 	int invincibleCount = 0;
 	int AttackCooltimeCount = 0;

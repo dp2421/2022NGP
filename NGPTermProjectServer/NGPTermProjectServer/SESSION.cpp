@@ -4,9 +4,9 @@
 
 void SESSION::DoSend(InfoOfPacket* info, void* packet)
 {
-	SendExpansion(this->socket, reinterpret_cast<char*>(info), sizeof(info), 0);
+	SendExpansion(this->socket, info, sizeof(InfoOfPacket), 0);
 	if(packet != NULL)
-		SendExpansion(this->socket, reinterpret_cast<char*>(packet), info->size, 0);
+		SendExpansion(this->socket, packet, info->size, 0);
 }
 
 int SESSION::DoRevc(void* packet, int size)
@@ -82,7 +82,7 @@ void SESSION::SendPlayerInfoPacket(SESSION& player)
 	info.type = Server2ClientPlayerInfo;
 
 	p.ID = player.ID;
-	p.state = player.player.state;
+	p.state = player.player.aniState;
 	p.HP = player.player.HP;
 	p.x = player.player.pos.x;
 	p.y = player.player.pos.y;
@@ -143,9 +143,9 @@ void SESSION::SendGameClearPacket(chrono::seconds time)
 	p.second = static_cast<int>(time.count());
 }
 
-int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
+int RecvExpasion(SOCKET sock, void* buf, int len, int flage)
 {
-	int retval = recv(sock, buf, len, flage);
+	int retval = recv(sock, reinterpret_cast<char*>(buf), len, flage);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 		return -1;
@@ -153,9 +153,9 @@ int RecvExpasion(SOCKET sock, char* buf, int len, int flage)
 	else return retval;
 }
 
-void SendExpansion(SOCKET sock, char* buf, int len, int flage)
+void SendExpansion(SOCKET sock, void* buf, int len, int flage)
 {
-	int retval = send(sock, buf, len, flage);
+	int retval = send(sock, reinterpret_cast<char*>(buf), len, flage);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 	}

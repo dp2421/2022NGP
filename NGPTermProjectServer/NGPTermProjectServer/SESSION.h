@@ -34,9 +34,9 @@ public:
 	void SendGameClearPacket(chrono::seconds time);
 };
 
-int RecvExpasion(SOCKET sock, char* buf, int len, int flage);
+int RecvExpasion(SOCKET sock, void* buf, int len, int flage);
 
-void SendExpansion(SOCKET sock, char* buf, int len, int flage);
+void SendExpansion(SOCKET sock, void* buf, int len, int flage);
 
 void err_quit(const char* msg);
 

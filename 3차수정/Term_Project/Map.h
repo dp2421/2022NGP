@@ -16,6 +16,8 @@ struct RectF {
 
 static RECT Board[20][200];
 
+static char Map[20][200];
+
 //static RECT Board[20][40];
 
 //static int Map[20][200] = {

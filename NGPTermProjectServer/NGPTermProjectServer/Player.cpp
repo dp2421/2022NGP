@@ -32,6 +32,8 @@ void Player::Update(float deltaTime)
 
 	CollisionEnemy();
 	CollisionTile();
+
+	SetAniState();
 }
 
 void Player::ProccesInput(int key, bool pressed)
@@ -231,5 +233,26 @@ void Player::CollisionEnemy()
 			Damaged();
 			return;
 		}
+	}
+}
+
+void Player::SetAniState()
+{
+	if ((this->state & (int)PlayerState::Attack) == (int)PlayerState::Attack)
+	{
+		this->aniState = (char)STATE::ATTACK;
+	}
+	else if ((this->state & (int)PlayerState::Jump) == (int)PlayerState::Jump)
+	{
+		if (this->velocity.y > 0) this->aniState = (char)STATE::FALL;
+		else this->aniState = (char)STATE::JUMP;
+	}
+	else if (this->velocity.x != 0)
+	{
+		this->aniState = (char)STATE::MOVE;
+	}
+	else
+	{
+		this->aniState = (char)STATE::IDLE;
 	}
 }

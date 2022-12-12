@@ -31,14 +31,14 @@ void SendPacket()
 		for (auto& obj : GameManager::GetInstance().monsters)
 		{
 			auto monster = reinterpret_cast<Monster*>(obj);
-			if(monster->HP > 0)
-				cl.SendMonsterInfoPacket(reinterpret_cast<Monster*>(monster));
+			//if(monster->HP > 0)
+				cl.SendMonsterInfoPacket(monster);
 		}
 		// 총알 정보
 		for (auto& obj : GameManager::GetInstance().bullets)
 		{
 			auto bullet = reinterpret_cast<Bullet*>(obj);
-			if (bullet->isActive)
+			//if (bullet->isActive)
 				cl.SendBulletInfoPakcet(bullet);
 		}
 		// 장애물 정보
@@ -79,7 +79,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 	int index = *reinterpret_cast<int*>(arg);
 
 	auto& client = GameManager::GetInstance().clients[index];
-	client.ID = index + 1;
+	client.ID = index;
 
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;

@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
+enum class STATE { IDLE, MOVE, JUMP, FALL, ATTACK, DEAD };
+
 struct Vec2
 {
 	Vec2() { }
