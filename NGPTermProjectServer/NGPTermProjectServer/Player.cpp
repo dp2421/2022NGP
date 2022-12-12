@@ -22,6 +22,7 @@ void Player::Update(float deltaTime)
 		if (this->pos.y > 900)
 		{
 			// ³«»ç
+			InitPlayer();
 		}
 	}
 
@@ -104,6 +105,7 @@ void Player::ProccesInput(int key, bool pressed)
 
 void Player::InitPlayer()
 {
+	this->pos = Vec2(300, 420);
 	this->state = (int)PlayerState::Idle;
 	this->isJump = false;
 	this->isGround = false;
@@ -156,6 +158,7 @@ void Player::Damaged()
 	if (HP == 0)
 	{
 		// Á×À½
+		InitPlayer();
 		return;
 	}
 	else

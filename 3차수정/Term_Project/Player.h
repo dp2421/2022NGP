@@ -27,7 +27,7 @@ public:
 
     bool isShoot = false;
 public:
-    Player(int _x, int _y, CImage _draw_image);
+    Player(int _x, int _y, CImage _draw_image = Manager::GetInstance().frog_idle);
     Player() {};
     void UpdateCollisionBox();
     void UpdateAnimation();

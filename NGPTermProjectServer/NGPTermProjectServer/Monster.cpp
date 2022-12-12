@@ -3,7 +3,7 @@
 
 Monster::Monster()
 {
-    this->HP = 0;
+    this->HP = 5;
     this->moveCount = 0;
 }
 

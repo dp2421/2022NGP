@@ -7,6 +7,8 @@ CRITICAL_SECTION cs;
 
 queue<Client2ServerKeyActionPacket> messageQueue;
 
+bool isStart = false;
+
 void ProcessPacket()
 {
 	// 받은 모든 입력 처리
@@ -29,21 +31,11 @@ void SendPacket()
 		for(auto& se : GameManager::GetInstance().clients)
 			cl.SendPlayerInfoPacket(se);
 		// 몬스터 정보
-		for (auto& obj : GameManager::GetInstance().monsters)
-		{
-			auto monster = reinterpret_cast<Monster*>(obj);
-			//if(monster->HP > 0)
-				cl.SendMonsterInfoPacket(monster);
-		}
+		cl.SendMonsterInfoPacket();
 		// 총알 정보
-		for (auto& obj : GameManager::GetInstance().bullets)
-		{
-			auto bullet = reinterpret_cast<Bullet*>(obj);
-			//if (bullet->isActive)
-				cl.SendBulletInfoPakcet(bullet);
-		}
-		// 장애물 정보
+		cl.SendBulletInfoPakcet();
 
+		// 장애물 정보
 		for (auto& obj : GameManager::GetInstance().obstacles)
 		{
 			auto obstacle = reinterpret_cast<Obstacle*>(obj);
@@ -83,6 +75,8 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.ID = index;
 	client.player.ID = index;
 
+	cout << index;
+
 	// 로그인 패킷 리시브
 	Client2ServerLoginPacket login;
 	if (client.DoRevc(&login, sizeof(Client2ServerLoginPacket)) == -1)
@@ -93,6 +87,11 @@ DWORD WINAPI InputThread(LPVOID arg)
 
 	client.SendLoginPacket();
 	client.SendMapInfoPacket();
+
+	if (index == 2)
+	{
+		isStart = true;
+	}
 
 	while (true)
 	{
@@ -130,10 +129,19 @@ void StartCountDown()
 void Initialize()
 {
 	// 몬스터 초기화
-	POINT MonsterPos[] =
+	Vec2 MonsterPos[] =
 	{
-		(630, 670), (700, 420), (400, 165), (970, 420), (1000, 670), (2300, 670), (2400, 420), (2400, 165), (2800, 165), 
-		(4300, 670), (4500, 165)
+		Vec2(630, 670), 
+		Vec2(700, 420),
+		Vec2(400, 165), 
+		Vec2(970, 420), 
+		Vec2(1000, 670), 
+		Vec2(2300, 670), 
+		Vec2(2400, 420), 
+		Vec2(2400, 165), 
+		Vec2(2800, 165), 
+		Vec2(4300, 670), 
+		Vec2(4500, 165)
 		//, (4750, 420), (5400, 420), (5550, 420), (5850, 420), (6150, 420), (6900, 420), 
 		//(7050, 420), (7050, 165), (7050, 670), (7500, 420), (7500, 170), (7700, 670), (7800, 625), (7850, 420), 
 		//(8100, 170), (8100, 625), (8300, 420), (8700, 370), (8800, 270), (8800, 720), (8950, 320), (8900, 165)
@@ -145,15 +153,20 @@ void Initialize()
 	{
 		monsters.emplace_back();
 		auto& monster = monsters.back();
+		monster = new Monster();
 		monster->ID = i;
 		monster->pos.x = MonsterPos[i].x;
 		monster->pos.y = MonsterPos[i].y;
 	}
 
+	auto& bullets = GameManager::GetInstance().bullets;
+
 	for (int i = 0; i < maxBulletCount; ++i)
 	{
-		GameManager::GetInstance().bullets.emplace_back();
-		GameManager::GetInstance().bullets.back()->ID = i;
+		bullets.emplace_back();
+		auto& bullet = bullets.back();
+		bullet = new Bullet();
+		bullet->ID = i;
 	}
 }
 
@@ -226,11 +239,16 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	while (!isStart) {}
+
 	//StartCountDown();
 
 	auto startTime = chrono::high_resolution_clock::now();
 
 	Initialize();
+
+	//StartCountDown();
+
 	Update();
 	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());
 

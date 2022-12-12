@@ -110,10 +110,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     static Interaction_Object portal;
 
 
-    static Player player(300, 420, Manager::GetInstance().frog_idle);
+    //static Player player(300, 420, Manager::GetInstance().frog_idle);
 
 
-    static Monster monster[MONSTER_AMOUNT]{
+    /*static Monster monster[MONSTER_AMOUNT]{
     
         Monster(630, 670, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE)
       , Monster(700, 420, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE), 
@@ -148,258 +148,256 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         Monster(8800, 720, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
       , Monster(8950, 320, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE), 
         Monster(8900, 165, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_PEACE)
-    };
+    };*/
 
     switch (uMsg) {
 
     case WM_CREATE:
         LoadImage();
-
-        //레버 초기화
-        rever[0].x = 9525;
-        rever[0].y = 700;
-        rever[0].draw_image = Manager::GetInstance().rever_nomal;
-
-        rever[1].x = 9525;
-        rever[1].y = 400;
-        rever[1].draw_image = Manager::GetInstance().rever_nomal;
-
-        rever[2].x = 9525;
-        rever[2].y = 150;
-        rever[2].draw_image = Manager::GetInstance().rever_nomal;
-
-        rever[0].SetCollsionBox();
-        rever[1].SetCollsionBox();
-        rever[2].SetCollsionBox();
-
-
-        rever[0].type = INTER_OBJ::REVER;
-        rever[1].type = INTER_OBJ::REVER;
-        rever[2].type = INTER_OBJ::REVER;
-
-
-
-        //레버 초기화
-        button[0].x = 2420;
-        button[0].y = 670;
-        button[0].draw_image = Manager::GetInstance().button_normal;
-
-        button[1].x = 2420;
-        button[1].y = 420;
-        button[1].draw_image = Manager::GetInstance().button_normal;
-
-        button[2].x = 2420;
-        button[2].y = 170;
-        button[2].draw_image = Manager::GetInstance().button_normal;
-
-       button[3].x = 8425;
-       button[3].y = 220;
-       button[3].draw_image = Manager::GetInstance().button_normal;
-       
-       button[4].x = 8425;
-       button[4].y = 420;
-       button[4].draw_image = Manager::GetInstance().button_normal;
-
-       button[5].x = 8425;
-       button[5].y = 670;
-       button[5].draw_image = Manager::GetInstance().button_normal;
-
-
-       button[0].SetCollsionBox();
-       button[1].SetCollsionBox();
-       button[2].SetCollsionBox();
-       button[3].SetCollsionBox();
-       button[4].SetCollsionBox();
-       button[5].SetCollsionBox();
-
-       button[0].type = INTER_OBJ::BUTTON;
-       button[1].type = INTER_OBJ::BUTTON;
-       button[2].type = INTER_OBJ::BUTTON;
-       button[3].type = INTER_OBJ::BUTTON;
-       button[4].type = INTER_OBJ::BUTTON;
-       button[5].type = INTER_OBJ::BUTTON;
-
-       portal.x = 9950;
-       portal.y = 390;
-       portal.draw_image = Manager::GetInstance().button_normal;
-       portal.SetCollsionBox();
-       portal.type = INTER_OBJ::PORTAL;
-
-      player.ChangeState(STATE::IDLE);
-
-        for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-            monsters[i].ChangeState(STATE::IDLE);
-        }
         SetTimer(hWnd, 1, 16, NULL);
+      //  //레버 초기화
+      //  rever[0].x = 9525;
+      //  rever[0].y = 700;
+      //  rever[0].draw_image = Manager::GetInstance().rever_nomal;
+
+      //  rever[1].x = 9525;
+      //  rever[1].y = 400;
+      //  rever[1].draw_image = Manager::GetInstance().rever_nomal;
+
+      //  rever[2].x = 9525;
+      //  rever[2].y = 150;
+      //  rever[2].draw_image = Manager::GetInstance().rever_nomal;
+
+      //  rever[0].SetCollsionBox();
+      //  rever[1].SetCollsionBox();
+      //  rever[2].SetCollsionBox();
 
 
-        for (int i = 0; i < RAW; ++i) {
-            for (int j = 0; j < COLUMN; ++j) {
-                Board[i][j].left = 0 + j * BLOCK_SIZE;
-                Board[i][j].right = 50 + j * BLOCK_SIZE;
-                Board[i][j].top = 0 + i * BLOCK_SIZE;
-                Board[i][j].bottom = 50 + i * BLOCK_SIZE;
-            }
-        }
+      //  rever[0].type = INTER_OBJ::REVER;
+      //  rever[1].type = INTER_OBJ::REVER;
+      //  rever[2].type = INTER_OBJ::REVER;
 
-        for (int i = 0; i < RAW; ++i) {
-            for (int j = 0; j < COLUMN; ++j) {
-                if (Map[i][j] == WALL)
-                {
-                    w_rect[w_rect_count].left = Board[i][j].left;
-                    w_rect[w_rect_count].right = Board[i][j].right;
-                    w_rect[w_rect_count].top = Board[i][j].top;
-                    w_rect[w_rect_count].bottom = Board[i][j].bottom-25;
 
-                    w_rect_count++;
-                }
-            }
-        }
 
+      //  //레버 초기화
+      //  button[0].x = 2420;
+      //  button[0].y = 670;
+      //  button[0].draw_image = Manager::GetInstance().button_normal;
+
+      //  button[1].x = 2420;
+      //  button[1].y = 420;
+      //  button[1].draw_image = Manager::GetInstance().button_normal;
+
+      //  button[2].x = 2420;
+      //  button[2].y = 170;
+      //  button[2].draw_image = Manager::GetInstance().button_normal;
+
+      // button[3].x = 8425;
+      // button[3].y = 220;
+      // button[3].draw_image = Manager::GetInstance().button_normal;
+      // 
+      // button[4].x = 8425;
+      // button[4].y = 420;
+      // button[4].draw_image = Manager::GetInstance().button_normal;
+
+      // button[5].x = 8425;
+      // button[5].y = 670;
+      // button[5].draw_image = Manager::GetInstance().button_normal;
+
+
+      // button[0].SetCollsionBox();
+      // button[1].SetCollsionBox();
+      // button[2].SetCollsionBox();
+      // button[3].SetCollsionBox();
+      // button[4].SetCollsionBox();
+      // button[5].SetCollsionBox();
+
+      // button[0].type = INTER_OBJ::BUTTON;
+      // button[1].type = INTER_OBJ::BUTTON;
+      // button[2].type = INTER_OBJ::BUTTON;
+      // button[3].type = INTER_OBJ::BUTTON;
+      // button[4].type = INTER_OBJ::BUTTON;
+      // button[5].type = INTER_OBJ::BUTTON;
+
+      // portal.x = 9950;
+      // portal.y = 390;
+      // portal.draw_image = Manager::GetInstance().button_normal;
+      // portal.SetCollsionBox();
+      // portal.type = INTER_OBJ::PORTAL;
+
+      //player.ChangeState(STATE::IDLE);
+
+      //  for (int i = 0; i < MONSTER_AMOUNT; ++i) {
+      //      monsters[i].ChangeState(STATE::IDLE);
+      //  }
+
+
+      //  for (int i = 0; i < RAW; ++i) {
+      //      for (int j = 0; j < COLUMN; ++j) {
+      //          Board[i][j].left = 0 + j * BLOCK_SIZE;
+      //          Board[i][j].right = 50 + j * BLOCK_SIZE;
+      //          Board[i][j].top = 0 + i * BLOCK_SIZE;
+      //          Board[i][j].bottom = 50 + i * BLOCK_SIZE;
+      //      }
+      //  }
+
+      //  for (int i = 0; i < RAW; ++i) {
+      //      for (int j = 0; j < COLUMN; ++j) {
+      //          if (Map[i][j] == WALL)
+      //          {
+      //              w_rect[w_rect_count].left = Board[i][j].left;
+      //              w_rect[w_rect_count].right = Board[i][j].right;
+      //              w_rect[w_rect_count].top = Board[i][j].top;
+      //              w_rect[w_rect_count].bottom = Board[i][j].bottom-25;
+
+      //              w_rect_count++;
+      //          }
+      //      }
+      //  }
 
         break;
 
     case WM_TIMER:
-        switch (wParam) {
+        InvalidateRect(hWnd, NULL, true);
+        //switch (wParam) {
 
-        case 1:
-            player.accY = PLAYER_GRAVITY;
-            player.accX = player.dx;
-            player.velY += player.accY;
-
-
-            // 0번 기능 - 키보드 입력에 따른 기능
-            if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-            {
-                player.accY = PLAYER_GRAVITY;
-                if (player.state != STATE::JUMP) {
-                    player.ChangeState(STATE::MOVE);
-                }
-
-                player.dir = P_DIR_LEFT;
-                player.x -= (300 * 0.016f);
-            }
-
-            if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-            {
-                player.accY = PLAYER_GRAVITY;
-                if (player.state != STATE::JUMP) {
-                    player.ChangeState(STATE::MOVE);
-                }
-                player.dir = P_DIR_RIGHT;
-                player.x += (300 * 0.016f);
-            }
-
-            if (GetAsyncKeyState(VK_SPACE) & 0x8000 && player.isRanding)
-            {
-                player.isJump = true;
-                player.isRanding = false;
-                player.velY = -13.25f;
-                player.ChangeState(STATE::JUMP);
-            }
+        //case 1:
+        //    player.accY = PLAYER_GRAVITY;
+        //    player.accX = player.dx;
+        //    player.velY += player.accY;
 
 
-            if (player.y > 900) {
-                player.y = 900;
-                player.velY = 0;
-                player.isJump = false;
-                player.ChangeState(STATE::IDLE);
-                player.Init();
+        //    // 0번 기능 - 키보드 입력에 따른 기능
+        //    if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+        //    {
+        //        player.accY = PLAYER_GRAVITY;
+        //        if (player.state != STATE::JUMP) {
+        //            player.ChangeState(STATE::MOVE);
+        //        }
 
-            }
-            else {
-                player.y += player.velY + player.accY * 0.016f;
+        //        player.dir = P_DIR_LEFT;
+        //        player.x -= (300 * 0.016f);
+        //    }
 
-            }
+        //    if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+        //    {
+        //        player.accY = PLAYER_GRAVITY;
+        //        if (player.state != STATE::JUMP) {
+        //            player.ChangeState(STATE::MOVE);
+        //        }
+        //        player.dir = P_DIR_RIGHT;
+        //        player.x += (300 * 0.016f);
+        //    }
 
-            player.UpdateCollisionBox();
-            player.UpdateBullet();
-
-
-            //monster - player 충돌
-            for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-                //플레이어 화면 범위 안에 있는 몬스터
-                if (monsters[i].x - 20 > player.x - 500 && monsters[i].x +20 < player.x + 800 && !monsters[i].isDead) {
-
-                    if (CollisionHelper(monsters[i].collisionBox, player.collisionBox)) {
-                        player.Damaged();
-                    }
-
-                    // monster - bullet 충돌
-                    for (int j = 0; j < 10; ++j) {
-                        if (player.bullet[j].isAttack) {
-                            if (CollisionHelper(player.bullet[j].collisionBox, monsters[i].collisionBox)) {
-                                player.bullet[j].isAttack = false;
-                                monsters[i].Damaged();
-                            }
-                        }
-                    }
-                }
-            }
+        //    if (GetAsyncKeyState(VK_SPACE) & 0x8000 && player.isRanding)
+        //    {
+        //        player.isJump = true;
+        //        player.isRanding = false;
+        //        player.velY = -13.25f;
+        //        player.ChangeState(STATE::JUMP);
+        //    }
 
 
+        //    if (player.y > 900) {
+        //        player.y = 900;
+        //        player.velY = 0;
+        //        player.isJump = false;
+        //        player.ChangeState(STATE::IDLE);
+        //        player.Init();
+
+        //    }
+        //    else {
+        //        player.y += player.velY + player.accY * 0.016f;
+
+        //    }
+
+        //    player.UpdateCollisionBox();
+        //    player.UpdateBullet();
 
 
-            for (int i = 0; i < 12; ++i) {
-                if (CollisionHelper(button[i].collisionBox, player.collisionBox)) {
+        //    //monster - player 충돌
+        //    for (int i = 0; i < MONSTER_AMOUNT; ++i) {
+        //        //플레이어 화면 범위 안에 있는 몬스터
+        //        if (monsters[i].x - 20 > player.x - 500 && monsters[i].x +20 < player.x + 800 && !monsters[i].isDead) {
 
-                    if (button[i].collisionBox.top > player.collisionBox.bottom - 10 && player.velY >= 0)
-                    {
-                        if (player.state == STATE::JUMP || player.state == STATE::FALL) {
-                            player.ChangeState(STATE::IDLE);
-                        }
-                        button[i].Collsion();
-                        player.y = button[i].collisionBox.top - 32;
-                        player.velY = 0;
-                        player.accY = 0;
-                        player.isRanding = true;
-                    }
-                }
-                else {
-                    button[i].SetImage();
-                }
-            }
+        //            if (CollisionHelper(monsters[i].collisionBox, player.collisionBox)) {
+        //                player.Damaged();
+        //            }
+
+        //            // monster - bullet 충돌
+        //            for (int j = 0; j < 10; ++j) {
+        //                if (player.bullet[j].isAttack) {
+        //                    if (CollisionHelper(player.bullet[j].collisionBox, monsters[i].collisionBox)) {
+        //                        player.bullet[j].isAttack = false;
+        //                        monsters[i].Damaged();
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
 
 
 
-            for (int i = 0; i < w_rect_count; ++i) {
-                if (w_rect[i].right > player.x - 500 && w_rect[i].left < player.x + 800) {
-                    if (CollisionHelper(w_rect[i], player.collisionBox)) {
-                        //아래 충돌
-                        if (w_rect[i].top > player.collisionBox.bottom - 10 && player.velY >=0)
-                        {
-                            if (player.state == STATE::JUMP || player.state == STATE::FALL) {
-                                player.ChangeState(STATE::IDLE);
-                            }
-                            player.y = w_rect[i].top - 32;
-                            player.velY = 0;
-                            player.accY = 0;
-                            player.isRanding = true;
-                        }
-                    }
-                }
-            }
+
+        //    for (int i = 0; i < 12; ++i) {
+        //        if (CollisionHelper(button[i].collisionBox, player.collisionBox)) {
+
+        //            if (button[i].collisionBox.top > player.collisionBox.bottom - 10 && player.velY >= 0)
+        //            {
+        //                if (player.state == STATE::JUMP || player.state == STATE::FALL) {
+        //                    player.ChangeState(STATE::IDLE);
+        //                }
+        //                button[i].Collsion();
+        //                player.y = button[i].collisionBox.top - 32;
+        //                player.velY = 0;
+        //                player.accY = 0;
+        //                player.isRanding = true;
+        //            }
+        //        }
+        //        else {
+        //            button[i].SetImage();
+        //        }
+        //    }
 
 
-            for (int i = 0; i < 3; ++i) {
-                rever[i].Update();
-            }
 
-            for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-                monsters[i].Move();
-                monsters[i].UpdateCollisionBox();
-                monsters[i].UpdateAnimation();
-            }
-            player.UpdateAnimation();
+        //    for (int i = 0; i < w_rect_count; ++i) {
+        //        if (w_rect[i].right > player.x - 500 && w_rect[i].left < player.x + 800) {
+        //            if (CollisionHelper(w_rect[i], player.collisionBox)) {
+        //                //아래 충돌
+        //                if (w_rect[i].top > player.collisionBox.bottom - 10 && player.velY >=0)
+        //                {
+        //                    if (player.state == STATE::JUMP || player.state == STATE::FALL) {
+        //                        player.ChangeState(STATE::IDLE);
+        //                    }
+        //                    player.y = w_rect[i].top - 32;
+        //                    player.velY = 0;
+        //                    player.accY = 0;
+        //                    player.isRanding = true;
+        //                }
+        //            }
+        //        }
+        //    }
 
-            break;
-        }
 
-        InvalidateRect(hWnd, NULL, false);
+        //    for (int i = 0; i < 3; ++i) {
+        //        rever[i].Update();
+        //    }
+
+        //    for (int i = 0; i < MONSTER_AMOUNT; ++i) {
+        //        monsters[i].Move();
+        //        monsters[i].UpdateCollisionBox();
+        //        monsters[i].UpdateAnimation();
+        //    }
+        //    player.UpdateAnimation();
+
+        //    break;
+        //}
+
         break;
 
     case WM_CHAR:
-        switch (wParam)
+    /*    switch (wParam)
         {
         case 'a':
         case 'A':
@@ -430,9 +428,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (wParam == 'a' || wParam == 'A') {
             player.SetShoot(false);
         }
-        break;
+        break;*/
 
     case WM_PAINT:
+        if (ID == -1) break;
 
         hdc = BeginPaint(hWnd, &ps);
 
@@ -442,80 +441,92 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         // 1. 배경 그리기
 
-        if (player.x >= 200) {
-            Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-            Manager::GetInstance().bg.Draw(memdc1, scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-        }
-        else {
-            Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-            Manager::GetInstance().bg.Draw(memdc1, scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
-        }
+        if (ID > -1)
+		{
+            cout << ID;
+            auto& player = players[ID];
+			if (player.x >= 200) {
+				Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+				Manager::GetInstance().bg.Draw(memdc1, scroll_x + player.x - 200, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+			}
+			else {
+				Manager::GetInstance().bg.Draw(memdc1, -Window_Size_X + scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+				Manager::GetInstance().bg.Draw(memdc1, scroll_x, 0, Window_Size_X, Window_Size_Y, 0, 0, bg_width, bg_height);
+			}
 
-        // 2. 발판 그리기
-        for (int i = 0; i < RAW; ++i) {
-            for (int j = 0; j < COLUMN; ++j) {
-                if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
-                    if (Map[i][j] == WALL)
-                    {
-                        Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
-                    }
+			// 2. 발판 그리기
+			for (int i = 0; i < RAW; ++i) {
+				for (int j = 0; j < COLUMN; ++j) {
+					if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
+						if (Map[i][j] == WALL)
+						{
+							Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
+						}
 
-                    if (Map[i][j] == MAGMA)
-                    {
-                        Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
-                    }
+						if (Map[i][j] == MAGMA)
+						{
+							Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < MONSTER_AMOUNT; ++i) {
+				if (monsters[i].collisionBox.right > player.x - 500 && monsters[i].collisionBox.left < player.x + 800) {
+					if (!monsters[i].isDead) {
+
+						monsters[i].draw_image.Draw(memdc1, monsters[i].x, monsters[i].y, 32, 32, monsters[i].anim, 32 * (int)monsters[i].m_type, 32, 32);
+					}
+				}
+			}
+
+            for (int i = 0; i < player.life; ++i) {
+                if (player.x > 200) {
+                    Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + player.x - 200, 20, 45, 46, 0, 0, 45, 46);
+                }
+                else {
+                    Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + 0, 20, 45, 46, 0, 0, 45, 46);
                 }
             }
         }
-
-        for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-            if (monsters[i].collisionBox.right > player.x - 500 && monsters[i].collisionBox.left < player.x + 800) {
-                if (!monsters[i].isDead) {
-
-                    monsters[i].draw_image.Draw(memdc1, monsters[i].x, monsters[i].y, 32, 32, monsters[i].anim,  32 *(int)monsters[i].m_type, 32, 32);
-                }
-            }
+        else
+        {
+            cout << "sibal" << endl;
         }
 
         
-        for (int i = 0; i < 3; ++i) {
-            rever[i].draw_image.Draw(memdc1, rever[i].x -25, rever[i].y, 50, 50);
-        }
-
-        for (int i = 0; i < 6; ++i) {
-            button[i].draw_image.Draw(memdc1, button[i].x - 25, button[i].y, 50, 25);
-        }
+        //for (int i = 0; i < 3; ++i) {
+        //    rever[i].draw_image.Draw(memdc1, rever[i].x -25, rever[i].y, 50, 50);
+        //}
+        //
+        //for (int i = 0; i < 6; ++i) {
+        //    button[i].draw_image.Draw(memdc1, button[i].x - 25, button[i].y, 50, 25);
+        //}
 
 
 
         // Player
-        if (player.isDamaged) {
-            if (player.Damaged_count % 2 == 0) {
+        for (auto& player : players)
+        {
+            if (player.isDamaged) {
+                if (player.Damaged_count % 2 == 0) {
+                    player.draw_image.Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
+                }
+            }
+            else {
                 player.draw_image.Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
             }
         }
-        else {
-            player.draw_image.Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
+        
+        for (auto& bullet : bullets) {
+            if (bullet.second.isAttack) {
+                //Rectangle(memdc1, player.bullet[i].collisionBox.left, player.bullet[i].collisionBox.top, player.bullet[i].collisionBox.right, player.bullet[i].collisionBox.bottom);
+                Manager::GetInstance().bullet.Draw(memdc1, bullet.second.x, bullet.second.y,32,16);
+            }
         }
         
-        for (int i = 0; i < 10; ++i) {
-            if (player.bullet[i].isAttack) {
-                //Rectangle(memdc1, player.bullet[i].collisionBox.left, player.bullet[i].collisionBox.top, player.bullet[i].collisionBox.right, player.bullet[i].collisionBox.bottom);
-                Manager::GetInstance().bullet.Draw(memdc1,player.bullet[i].x, player.bullet[i].y,32,16);
-            }
-        }
-        //
-
 
         // 9. Heart 그리기
-        for (int i = 0; i < player.life; ++i) {
-            if (player.x > 200) {
-                Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + player.x - 200, 20, 45, 46, 0, 0, 45, 46);
-            }
-            else {
-                Manager::GetInstance().My_heart.Draw(memdc1, 30 + 45 * i + 0, 20, 45, 46, 0, 0, 45, 46);
-            }
-        }
 
         // 10. 최종 Portal 그리기
         Manager::GetInstance().portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
@@ -557,12 +568,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         // --- RECT 테스트 ---
 
-        if (player.x > 200) {
-            BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, player.x - 200, 0, SRCCOPY);
-        }
-        else {
-            BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, 0, 0, SRCCOPY);
-        }
+        //if (player.x > 200) {
+        //    BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, player.x - 200, 0, SRCCOPY);
+        //}
+        //else {
+        //    BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, 0, 0, SRCCOPY);
+        //}
         DeleteObject(SelectObject(memdc1, hBitmap1));
         DeleteDC(memdc1);
         EndPaint(hWnd, &ps);

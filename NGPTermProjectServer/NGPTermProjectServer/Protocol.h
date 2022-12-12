@@ -98,6 +98,7 @@ struct Server2ClientMonsterInfoPacket
 struct Server2ClientBulletInfoPacket
 {
 	char	ID;
+	bool	state;
 	float	x, y;
 };
 

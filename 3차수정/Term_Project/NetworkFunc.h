@@ -26,7 +26,7 @@ enum class KeyState : int
     INTERACTION = 1 << 4
 };
 
-int ID;
+int ID = -1;
 int KeyInputBuffer;
 
 int RecvExpasion(SOCKET sock, void* packet, int len, int flage)
@@ -58,6 +58,8 @@ void Login()
     ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
     RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
     RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
+    ID = socks.m_serverloginPack.ID;
+    cout << ID;
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)
@@ -99,6 +101,8 @@ void InitClient()
 
     HANDLE hThread;
 
+    ZeroMemory(&socks, sizeof(socks));
+
     hThread = CreateThread(NULL, 0, NetworkThread, NULL, 0, NULL);
     if (hThread == NULL) { closesocket(sock); }
     else { CloseHandle(hThread); }
@@ -109,7 +113,6 @@ void InitMapInfo(int size)
     Server2ClientMapInfoPacket packet;
     RecvExpasion(sock, &packet, size, MSG_WAITALL);
     memcpy(Map, packet.mapInfo, packet.width * packet.height);
-
 }
 
 void SendConnect()
@@ -239,23 +242,43 @@ void RecvPlayerInfo()
     player.state = (STATE)info.state;
 }
 
-void RecvMonsterInfo()
+void RecvMonsterInfo(int size)
 {
-    auto& info = socks.m_monsterPack;
-    RecvExpasion(sock, &info, sizeof(info), 0);
+    char monsterbuffer[BUFFERSIZE];
+    RecvExpasion(sock, &monsterbuffer, size, 0);
 
-    monsters[info.ID].x = info.x;
-    monsters[info.ID].y = info.y;
-    monsters[info.ID].life = info.HP;
+    Server2ClientMonsterInfoPacket* info = reinterpret_cast<Server2ClientMonsterInfoPacket*>(monsterbuffer);
+    for (int i = 0; i < size / sizeof(Server2ClientMonsterInfoPacket); ++i)
+    {
+        if (monsters.count(info[i].ID))
+        {
+            monsters[info[i].ID].x = info[i].x;
+            monsters[info[i].ID].y = info[i].y;
+            monsters[info[i].ID].life = info[i].HP;
+        }
+        else
+        {
+            monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
+        }
+    }
 }
 
-void RecvBulletInfo()
+void RecvBulletInfo(int size)
 {
-    auto& info = socks.m_bulletPack;
-    RecvExpasion(sock, &info, sizeof(info), 0);
+    char bulletbuffer[BUFFERSIZE];
+    RecvExpasion(sock, &bulletbuffer, sizeof(size), 0);
 
-    bullets[info.ID].x = info.x;
-    bullets[info.ID].y = info.y;
+    Server2ClientBulletInfoPacket* info = reinterpret_cast<Server2ClientBulletInfoPacket*>(bulletbuffer);
+    for (int i = 0; i < size / sizeof(Server2ClientBulletInfoPacket); ++i)
+    {
+        if (!bullets.count(info[i].ID))
+        {
+            bullets[info[i].ID] = Bullet();
+        }
+        bullets[info[i].ID].x = info[i].x;
+        bullets[info[i].ID].y = info[i].y;
+        bullets[info[i].ID].isAttack = info[i].state;
+    }
 }
 
 void MonsterDead()
@@ -298,10 +321,10 @@ void ProcessPacket(int size, int type)
         RecvPlayerInfo();
         break;
     case Server2ClientMonsterInfo: // 몬스터 정보
-        RecvMonsterInfo();
+        RecvMonsterInfo(size);
         break;
     case Server2ClientBulletInfo: // 총알 정보
-        RecvBulletInfo();
+        RecvBulletInfo(size);
         break;
     case Server2ClientObstacleInfo:
         InitObstacleInfo();
@@ -309,7 +332,7 @@ void ProcessPacket(int size, int type)
     case Server2ClientGameClear:
         break;
     default:
-        cout << "Invalid Type : " << type << endl;
+        //cout << "Invalid Type : " << type << endl;
         break;
     }
 }

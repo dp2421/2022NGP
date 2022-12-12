@@ -37,7 +37,7 @@ constexpr int startCountdownTime = 5000;
 constexpr float playerSpeed = 300;
 constexpr float  PLAYER_GRAVITY = 0.9f;
 
-constexpr float MonsterSpeed = 600;
+constexpr float MonsterSpeed = 100;
 
 constexpr float BulletSpeed = 10;
 

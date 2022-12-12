@@ -11,13 +11,13 @@ void SESSION::DoSend(InfoOfPacket* info, void* packet)
 
 int SESSION::DoRevc(void* packet, int size)
 {
-	ZeroMemory(buffer, sizeof(buffer));
-	auto retval = RecvExpasion(this->socket, buffer, size, MSG_WAITALL);
+	ZeroMemory(this->buffer, sizeof(this->buffer));
+	auto retval = RecvExpasion(this->socket, this->buffer, size, MSG_WAITALL);
 	if (retval == -1)
 	{
 		return retval;
 	}
-	memcpy(packet, buffer, size);
+	memcpy(packet, this->buffer, size);
 	return retval;
 }
 
@@ -90,38 +90,58 @@ void SESSION::SendPlayerInfoPacket(SESSION& player)
 	this->DoSend(&info, &p);
 }
 
-void SESSION::SendMonsterInfoPacket(Monster* monster)
+void SESSION::SendMonsterInfoPacket()
 {
+	ZeroMemory(this->sendBuffer, BUFFERSIZE);
 	Server2ClientMonsterInfoPacket p;
 	InfoOfPacket info;
 
-	info.size = sizeof(Server2ClientMonsterInfoPacket);
+	info.size = GameManager::GetInstance().monsters.size() * sizeof(Server2ClientMonsterInfoPacket);
 	info.type = Server2ClientMonsterInfo;
 
-	p.ID = monster->ID;
-	p.HP = monster->HP;
-	p.x = monster->pos.x;
-	p.y = monster->pos.y;
+	auto target = this->sendBuffer;
+	for (auto& obj : GameManager::GetInstance().monsters)
+	{
+		auto monster = reinterpret_cast<Monster*>(obj);
+		p.ID = monster->ID;
+		p.HP = monster->HP;
+		p.x = monster->pos.x;
+		p.y = monster->pos.y;
 
-	this->DoSend(&info, &p);
+		memcpy(target, &p, sizeof(p));
+		target += sizeof(p);
+	}
+
+	this->DoSend(&info, this->sendBuffer);
 }
 
-void SESSION::SendBulletInfoPakcet(Bullet* bullet)
+void SESSION::SendBulletInfoPakcet()
 {
+	ZeroMemory(this->sendBuffer, BUFFERSIZE);
 	Server2ClientBulletInfoPacket p;
 	InfoOfPacket info;
 
-	info.size = sizeof(Server2ClientBulletInfoPacket);
+	info.size = GameManager::GetInstance().bullets.size() * sizeof(Server2ClientBulletInfoPacket);
 	info.type = Server2ClientBulletInfo;
 
-	p.ID = bullet->ID;
-	p.x = bullet->pos.x;
-	p.y = bullet->pos.y;
+	auto target = this->sendBuffer;
+	for (auto& obj : GameManager::GetInstance().bullets)
+	{
+		auto bullet = reinterpret_cast<Bullet*>(obj);
 
-	this->DoSend(&info, &p);
+		p.ID = bullet->ID;
+		p.state = bullet->isActive;
+		p.x = bullet->pos.x;
+		p.y = bullet->pos.y;
+
+		memcpy(target, &p, sizeof(p));
+		target += sizeof(p);
+	}
+
+	this->DoSend(&info, this->sendBuffer);
 }
 
-void SESSION::SendObstacleInfoPacket(Obstacle* obstacle)
+void SESSION::SendObstacleInfoPacket()
 {
 	Server2ClientObstacleInfoPacket p;
 	InfoOfPacket info;
@@ -129,10 +149,10 @@ void SESSION::SendObstacleInfoPacket(Obstacle* obstacle)
 	info.size = sizeof(Server2ClientObstacleInfoPacket);
 	info.type = Server2ClientObstacleInfo;
 
-	p.veloX = obstacle->velocity.x;
-	p.veloY = obstacle->velocity.y;
-	p.x = obstacle->pos.x;
-	p.y = obstacle->pos.y;
+	//p.veloX = obstacle->velocity.x;
+	//p.veloY = obstacle->velocity.y;
+	//p.x = obstacle->pos.x;
+	//p.y = obstacle->pos.y;
 
 	this->DoSend(&info, &p);
 }
