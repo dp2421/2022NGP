@@ -7,7 +7,7 @@ CRITICAL_SECTION cs;
 
 queue<Client2ServerKeyActionPacket> messageQueue;
 
-int loginCount = 0;
+bool loginCount = 0;
 
 void ProcessPacket()
 {
@@ -75,6 +75,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.ID = index;
 	client.player.ID = index;
 
+	cout << client.socket << endl;
 	cout << index << " " << (int)client.ID << endl;
 
 	// 로그인 패킷 리시브
@@ -88,7 +89,6 @@ DWORD WINAPI InputThread(LPVOID arg)
 	}
 
 	client.SendMapInfoPacket();
-
 
 	EnterCriticalSection(&cs);
 	++loginCount;
@@ -182,6 +182,8 @@ void Update()
 			chrono::duration_cast<chrono::nanoseconds>(chrono::milliseconds(16));
 		while (std::chrono::high_resolution_clock::now() > limit) {}
 
+		if (loginCount < 3) continue;
+
 		// packet 처리
 		ProcessPacket();
 		
@@ -239,7 +241,6 @@ int main(int argc, char* argv[])
 				++i;
 			}
 		}
-		cout << client_sock << endl;
 	}
 
 	while(true) 
