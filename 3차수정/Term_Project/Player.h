@@ -28,6 +28,7 @@ public:
     bool isShoot = false;
 public:
     Player(int _x, int _y, CImage _draw_image);
+    Player() {};
     void UpdateCollisionBox();
     void UpdateAnimation();
 

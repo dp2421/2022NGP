@@ -28,6 +28,7 @@ public:
 public:
 
     Monster(int _x, int _y, CImage _draw_image, MONSTER_TYPE _type);
+    Monster() {};
 
     void UpdateCollisionBox();
     void UpdateAnimation();

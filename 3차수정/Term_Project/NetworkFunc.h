@@ -12,6 +12,8 @@ const char attackKey = 'A';
 const char InteractionKey = 'X';
 
 Player players[3];
+//Player player(300, 420, Manager::GetInstance().frog_idle);
+
 unordered_map<int, Monster> monsters;
 unordered_map<int, Bullet> bullets;
 
@@ -105,29 +107,9 @@ void InitClient()
 void InitMapInfo(int size)
 {
     Server2ClientMapInfoPacket packet;
-    int retval;
-    char buf[BUFFERSIZE];
-    int ret = RecvExpasion(sock, &packet, size, MSG_WAITALL);
-    if (ret > 0)
-    {
-        //retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
-        //retval = RecvExpasion(sock, buf, ret, 0);
-        //if (ret == 0)
-        //{
-        //    cout << "MapInfo Recv Success";
-        //    return;
-        //}
-        //else
-        //{
-        //    // ¹º°¡ÀÇ Ã³¸®
-        //}
-        memcpy(Map, packet.mapInfo, packet.width * packet.height);
-    }
-    else
-    {
-        cout << "MapInfo Recv Fail";
-        return;
-    }
+    RecvExpasion(sock, &packet, size, MSG_WAITALL);
+    memcpy(Map, packet.mapInfo, packet.width * packet.height);
+
 }
 
 void SendConnect()
@@ -223,11 +205,17 @@ void InputKey()
     socks.m_keyPack.type = Client2ServerKeyAction;
     socks.m_keyPack.size = sizeof(Client2ServerKeyActionPacket);
 
-    ProccesKey(VK_LEFT, (int)KeyState::LEFT);
-    ProccesKey(VK_RIGHT, (int)KeyState::RIGHT);
-    ProccesKey(VK_SPACE, (int)KeyState::JUMP);
-    ProccesKey(attackKey, (int)KeyState::ATTACK);
-    ProccesKey(InteractionKey, (int)KeyState::INTERACTION);
+    //ProccesKey(VK_LEFT, (int)KeyState::LEFT);
+    //ProccesKey(VK_RIGHT, (int)KeyState::RIGHT);
+    //ProccesKey(VK_SPACE, (int)KeyState::JUMP);
+    //ProccesKey(attackKey, (int)KeyState::ATTACK);
+    //ProccesKey(InteractionKey, (int)KeyState::INTERACTION);
+
+    ProccesKey(VK_LEFT, KeyState::LEFT);
+    ProccesKey(VK_RIGHT, KeyState::RIGHT);
+    ProccesKey(VK_SPACE, KeyState::JUMP);
+    ProccesKey(attackKey, KeyState::ATTACK);
+    ProccesKey(InteractionKey, KeyState::INTERACTION);
 }
 
 void RecvPlayerPos()

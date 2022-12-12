@@ -22,6 +22,7 @@ void ProcessPacket()
 
 void SendPacket()
 {
+
 	for (auto& cl : GameManager::GetInstance().clients)
 	{
 		// 플레이어 정보
@@ -225,9 +226,11 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	StartCountDown();
+	//StartCountDown();
 
 	auto startTime = chrono::high_resolution_clock::now();
+
+	Initialize();
 	Update();
 	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());
 

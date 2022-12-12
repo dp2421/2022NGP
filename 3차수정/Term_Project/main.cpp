@@ -228,7 +228,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       player.ChangeState(STATE::IDLE);
 
         for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-            monster[i].ChangeState(STATE::IDLE);
+            monsters[i].ChangeState(STATE::IDLE);
         }
         SetTimer(hWnd, 1, 16, NULL);
 
@@ -244,7 +244,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         for (int i = 0; i < RAW; ++i) {
             for (int j = 0; j < COLUMN; ++j) {
-                if (socks.m_mapPack.mapInfo[i][j] == WALL)
+                if (Map[i][j] == WALL)
                 {
                     w_rect[w_rect_count].left = Board[i][j].left;
                     w_rect[w_rect_count].right = Board[i][j].right;
@@ -319,18 +319,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             //monster - player 충돌
             for (int i = 0; i < MONSTER_AMOUNT; ++i) {
                 //플레이어 화면 범위 안에 있는 몬스터
-                if (monster[i].x - 20 > player.x - 500 && monster[i].x +20 < player.x + 800 && !monster[i].isDead) {
+                if (monsters[i].x - 20 > player.x - 500 && monsters[i].x +20 < player.x + 800 && !monsters[i].isDead) {
 
-                    if (CollisionHelper(monster[i].collisionBox, player.collisionBox)) {
+                    if (CollisionHelper(monsters[i].collisionBox, player.collisionBox)) {
                         player.Damaged();
                     }
 
                     // monster - bullet 충돌
                     for (int j = 0; j < 10; ++j) {
                         if (player.bullet[j].isAttack) {
-                            if (CollisionHelper(player.bullet[j].collisionBox, monster[i].collisionBox)) {
+                            if (CollisionHelper(player.bullet[j].collisionBox, monsters[i].collisionBox)) {
                                 player.bullet[j].isAttack = false;
-                                monster[i].Damaged();
+                                monsters[i].Damaged();
                             }
                         }
                     }
@@ -386,9 +386,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
             for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-                monster[i].Move();
-                monster[i].UpdateCollisionBox();
-                monster[i].UpdateAnimation();
+                monsters[i].Move();
+                monsters[i].UpdateCollisionBox();
+                monsters[i].UpdateAnimation();
             }
             player.UpdateAnimation();
 
@@ -455,12 +455,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         for (int i = 0; i < RAW; ++i) {
             for (int j = 0; j < COLUMN; ++j) {
                 if (Board[i][j].right > player.x - 500 && Board[i][j].left < player.x + 800) {
-                    if (socks.m_mapPack.mapInfo[i][j] == WALL)
+                    if (Map[i][j] == WALL)
                     {
                         Manager::GetInstance().wall.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
 
-                    if (socks.m_mapPack.mapInfo[i][j] == MAGMA)
+                    if (Map[i][j] == MAGMA)
                     {
                         Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
                     }
@@ -469,10 +469,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         for (int i = 0; i < MONSTER_AMOUNT; ++i) {
-            if (monster[i].collisionBox.right > player.x - 500 && monster[i].collisionBox.left < player.x + 800) {
-                if (!monster[i].isDead) {
+            if (monsters[i].collisionBox.right > player.x - 500 && monsters[i].collisionBox.left < player.x + 800) {
+                if (!monsters[i].isDead) {
 
-                    monster[i].draw_image.Draw(memdc1, monster[i].x, monster[i].y, 32, 32, monster[i].anim,  32 *(int)monster[i].m_type, 32, 32);
+                    monsters[i].draw_image.Draw(memdc1, monsters[i].x, monsters[i].y, 32, 32, monsters[i].anim,  32 *(int)monsters[i].m_type, 32, 32);
                 }
             }
         }
