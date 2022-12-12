@@ -178,7 +178,7 @@ void Update()
 		if (loginCount < 3) continue;
 
 		auto limit = std::chrono::high_resolution_clock::now() +
-			chrono::duration_cast<chrono::nanoseconds>(chrono::milliseconds(16));
+			chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(34));
 		while (std::chrono::high_resolution_clock::now() > limit) 
 		{
 			cout << (limit - std::chrono::high_resolution_clock::now()).count() << endl;
@@ -201,8 +201,6 @@ void Update()
 		}
 
 		SendPacket();
-
-		cout << "update" << endl;
 	}
 }
 

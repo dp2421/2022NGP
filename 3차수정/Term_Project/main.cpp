@@ -260,11 +260,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
         InputKey();
 
-        InvalidateRect(hWnd, NULL, true);
+        InvalidateRect(hWnd, NULL, false);
         break;
 
     case WM_PAINT:
-        if (ID == -1) break;
+        if (ID == -1) break;    
 
         hdc = BeginPaint(hWnd, &ps);
 
@@ -273,7 +273,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         SelectObject(memdc1, hBitmap1);
 
         // 1. 배경 그리기
-
         if (ID > -1)
 		{
             auto& player = players[ID];
@@ -321,8 +320,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
         }
-
-        
         //for (int i = 0; i < 3; ++i) {
         //    rever[i].draw_image.Draw(memdc1, rever[i].x -25, rever[i].y, 50, 50);
         //}
@@ -330,10 +327,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         //for (int i = 0; i < 6; ++i) {
         //    button[i].draw_image.Draw(memdc1, button[i].x - 25, button[i].y, 50, 25);
         //}
-
-
-
         // Player
+
         for (auto& player : players)
         {
             if (player.isDamaged) {
@@ -352,24 +347,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 Manager::GetInstance().bullet.Draw(memdc1, bullet.second.x, bullet.second.y,32,16);
             }
         }
-        
 
         // 9. Heart 그리기
-
         // 10. 최종 Portal 그리기
         Manager::GetInstance().portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
-
-
-
-
-
-
-
-
-
-
-
-
 
         // --- RECT 테스트 ---
 
@@ -396,12 +377,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         // --- RECT 테스트 ---
 
-        //if (player.x > 200) {
-        //    BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, player.x - 200, 0, SRCCOPY);
-        //}
-        //else {
-        //    BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, 0, 0, SRCCOPY);
-        //}
+        if (players[ID].x > 200) {
+            BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, players[ID].x - 200, 0, SRCCOPY);
+        }
+        else {
+            BitBlt(hdc, 0, 0, Window_Size_X, Window_Size_Y, memdc1, 0, 0, SRCCOPY);
+        }
+
         DeleteObject(SelectObject(memdc1, hBitmap1));
         DeleteDC(memdc1);
         EndPaint(hWnd, &ps);
