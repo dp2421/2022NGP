@@ -144,18 +144,29 @@ void SESSION::SendBulletInfoPakcet()
 
 void SESSION::SendObstacleInfoPacket()
 {
+	ZeroMemory(this->sendBuffer, BUFFERSIZE);
 	Server2ClientObstacleInfoPacket p;
 	InfoOfPacket info;
 
-	info.size = sizeof(Server2ClientObstacleInfoPacket);
+	info.size = GameManager::GetInstance().obstacles.size() * sizeof(Server2ClientObstacleInfoPacket);
 	info.type = Server2ClientObstacleInfo;
 
-	//p.veloX = obstacle->velocity.x;
-	//p.veloY = obstacle->velocity.y;
-	//p.x = obstacle->pos.x;
-	//p.y = obstacle->pos.y;
+	auto target = this->sendBuffer;
+	for (auto& obj : GameManager::GetInstance().obstacles)
+	{
+		auto obstacle = reinterpret_cast<Obstacle*>(obj);
 
-	this->DoSend(&info, &p);
+		p.ID = obstacle->ID;
+		p.x = obstacle->pos.x;
+		p.y = obstacle->pos.y;
+		p.veloX = obstacle->velocity.x;
+		p.veloY = obstacle->velocity.y;
+
+		memcpy(target, &p, sizeof(p));
+		target += sizeof(p);
+	}
+
+	this->DoSend(&info, this->sendBuffer);
 }
 
 void SESSION::SendGameClearPacket(chrono::seconds time)

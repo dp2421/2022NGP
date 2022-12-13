@@ -35,6 +35,7 @@ void SendPacket()
 		// 총알 정보
 		cl.SendBulletInfoPakcet();
 
+		cl.SendObstacleInfoPacket();
 		// 장애물 정보
 		for (auto& obj : GameManager::GetInstance().obstacles)
 		{
@@ -87,6 +88,7 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.SendLoginPacket();
 	client.SendPlayerInfoPacket(client);
 	client.SendMapInfoPacket();
+
 
 	EnterCriticalSection(&cs);
 	loginCount++;
@@ -166,6 +168,16 @@ void Initialize()
 		auto& bullet = bullets.back();
 		bullet = new Bullet();
 		bullet->ID = i;
+	}
+
+	auto& obstacles = GameManager::GetInstance().obstacles;
+
+	for (int i = 0; i < maxObstacleCount; ++i)
+	{
+		obstacles.emplace_back();
+		auto& obstacle = obstacles.back();
+		obstacle = new Obstacle();
+		obstacle->ID = i;
 	}
 }
 

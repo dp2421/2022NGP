@@ -12,3 +12,12 @@ struct Bullet {
     bool isAttack = false;
     CImage draw_image;
 };
+
+struct Obstacle {
+	int x;
+	int y;
+	int velocity_x;
+	int velocity_y;
+	RECT collisionBox;
+	CImage draw_image;
+};
