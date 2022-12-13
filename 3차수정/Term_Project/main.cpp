@@ -358,6 +358,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
+		for (auto& obstacle : obstacles)
+		{
+			Manager::GetInstance().garo.Draw(memdc1, obstacle.second.x, obstacle.second.y, 32, 16);
+		}
 		// 9. Heart 그리기
 		// 10. 최종 Portal 그리기
 		Manager::GetInstance().portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
