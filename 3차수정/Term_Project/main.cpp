@@ -309,14 +309,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 
-			for (auto element : monsters)
-			{
-				auto& monster = element.second;
-				//cout << monster.x << ", " << monster.y << " " << (int)monster.state << " Life : " << monster.life << endl;
-				if (monster.life > 0)
-					monster.draw_image.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 32 * (int)monster.m_type, 32, 32);
-			}
-
 			//for (int i = 0; i < MONSTER_AMOUNT; ++i) {
 			//	if (monsters[i].collisionBox.right > player.x - 500 && monsters[i].collisionBox.left < player.x + 800) {
 			//		if (!monsters[i].isDead) {
@@ -356,8 +348,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
+		for (auto element : monsters)
+		{
+			auto& monster = element.second;
+			//cout << monster.x << ", " << monster.y << " " << (int)monster.state << " Life : " << monster.life << endl;
+			if (monster.life > 0)
+				monster.draw_image.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 32 * (int)monster.m_type, 32, 32);
+		}
+
 		for (auto& bullet : bullets) {
 			if (bullet.second.isAttack) {
+				//cout << bullet.second.x << ", " << bullet.second.y << endl;
 				//Rectangle(memdc1, player.bullet[i].collisionBox.left, player.bullet[i].collisionBox.top, player.bullet[i].collisionBox.right, player.bullet[i].collisionBox.bottom);
 				Manager::GetInstance().bullet.Draw(memdc1, bullet.second.x, bullet.second.y, 32, 16);
 			}

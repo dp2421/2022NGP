@@ -86,6 +86,7 @@ void SESSION::SendPlayerInfoPacket(SESSION& player)
 	p.HP = player.player.HP;
 	p.x = player.player.pos.x;
 	p.y = player.player.pos.y;
+	p.direction = player.player.direction;
 
 	this->DoSend(&info, &p);
 }

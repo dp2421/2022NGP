@@ -4,7 +4,7 @@
 Monster::Monster(int _x, int _y, CImage _draw_image, MONSTER_TYPE _type)
 {
     life = 5;
-    draw_image = _draw_image;
+    draw_image = Manager::GetInstance().monster_idle;
     state = STATE::IDLE;
     m_type = _type;
     image_count = 11;

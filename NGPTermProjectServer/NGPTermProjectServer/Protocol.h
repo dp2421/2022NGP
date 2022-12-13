@@ -83,6 +83,7 @@ struct Server2ClientPlayerInfoPacket
 	char	ID;
 	char	state;
 	char	HP;
+	char	direction;
 	float	x, y;
 };
 

@@ -39,7 +39,7 @@ constexpr float  PLAYER_GRAVITY = 10.f;
 
 constexpr float MonsterSpeed = 100;
 
-constexpr float BulletSpeed = 10;
+constexpr float BulletSpeed = 300;
 
 constexpr int BlockSize = 50;
 

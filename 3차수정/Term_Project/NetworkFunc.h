@@ -197,7 +197,7 @@ void ProccesKey(int key, KeyState state)
     }
     else return;
 
-    cout << "Send Key : " << key << " state " << socks.m_keyPack.state << endl;
+    //cout << "Send Key : " << key << " state " << socks.m_keyPack.state << endl;
 
     SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), 0);
 }
@@ -234,6 +234,7 @@ void RecvPlayerInfo()
     player.y = info.y;
     player.life = info.HP;
     player.state = (STATE)info.state;
+    player.dir = info.direction;
 }
 
 void RecvMonsterInfo(int size)
@@ -244,17 +245,17 @@ void RecvMonsterInfo(int size)
     Server2ClientMonsterInfoPacket* info = reinterpret_cast<Server2ClientMonsterInfoPacket*>(monsterbuffer);
     for (int i = 0; i < size / sizeof(Server2ClientMonsterInfoPacket); ++i)
     {
-        if (monsters.count(info[i].ID))
-        {
-            monsters[info[i].ID].x = info[i].x;
-            monsters[info[i].ID].y = info[i].y;
-            monsters[info[i].ID].life = info[i].HP;
-        }
-        else
-        {
-            monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
-            monsters[info[i].ID].ChangeState(STATE::IDLE);
-        }
+        monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
+        monsters[info[i].ID].ChangeState(STATE::IDLE);
+        //if (monsters.count(info[i].ID))
+        //{
+        //    monsters[info[i].ID].x = info[i].x;
+        //    monsters[info[i].ID].y = info[i].y;
+        //    monsters[info[i].ID].life = info[i].HP;
+        //}
+        //else
+        //{
+        //}
     }
 }
 

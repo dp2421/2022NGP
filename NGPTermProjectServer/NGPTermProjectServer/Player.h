@@ -10,6 +10,7 @@ public:
 	bool isJump;
 	bool isGround;
 
+	int direction;
 	int HP;
 	Vec2 velocity;
 public:

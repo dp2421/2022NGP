@@ -31,6 +31,11 @@ void Player::Update(float deltaTime)
 		Attack();
 	}
 
+	if (this->AttackCooltimeCount > 0)
+	{
+		this->AttackCooltimeCount--;
+	}
+
 	CollisionEnemy();
 	CollisionTile();
 
@@ -106,6 +111,7 @@ void Player::ProccesInput(int key, bool pressed)
 void Player::InitPlayer()
 {
 	this->pos = Vec2(230, 650);
+	this->direction = 1;
 	this->state = (int)PlayerState::Idle;
 	this->isJump = false;
 	this->isGround = false;
@@ -129,7 +135,6 @@ void Player::Attack()
 {
 	if (this->AttackCooltimeCount > 0)
 	{
-		this->AttackCooltimeCount--;
 		return;
 	}
 
@@ -139,11 +144,11 @@ void Player::Attack()
 	{
 		if (!reinterpret_cast<Bullet*>(bullet)->isActive)
 		{
-			reinterpret_cast<Bullet*>(bullet)->Shot(this->pos, velocity.x / playerSpeed);
+			reinterpret_cast<Bullet*>(bullet)->Shot(this->pos, direction);
 			this->AttackCooltimeCount = 10;
 			break;
 		}
-	}
+	}	
 }
 
 void Player::Interaction()
@@ -172,10 +177,12 @@ void Player::SetHorizontalVelocity(int state)
 	if ((state & (int)PlayerState::Left) == (int)PlayerState::Left)
 	{
 		this->velocity.x = -playerSpeed;
+		direction = -1;
 	}
 	else
 	{
 		this->velocity.x = playerSpeed;
+		direction = 1;
 	}
 }
 
