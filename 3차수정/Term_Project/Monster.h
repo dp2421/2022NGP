@@ -66,6 +66,22 @@ public:
         }
     }
 
-
-
+    CImage& getDrawImageByState()
+    {
+        switch (this->state)
+        {
+        case STATE::IDLE:
+            return Manager::GetInstance().monster_idle;
+        case STATE::MOVE:
+            return Manager::GetInstance().frog_move;
+        case STATE::JUMP:
+            return Manager::GetInstance().frog_jump;
+        case STATE::FALL:
+            return Manager::GetInstance().frog_fall;
+        case STATE::ATTACK:
+            return Manager::GetInstance().frog_attack;
+        case STATE::DEAD:
+            return Manager::GetInstance().frog_attack;
+        }
+    }
 };

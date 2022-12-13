@@ -338,14 +338,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		for (auto& player : players)
 		{
-			if (player.isDamaged) {
-				if (player.Damaged_count % 2 == 0) {
-					player.getDrawImageByState().Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
-				}
-			}
-			else {
-				player.getDrawImageByState().Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir, 32, 32);
-			}
+			player.getDrawImageByState().Draw(memdc1, player.x, player.y, 32, 32, player.anim, player.dir == -1 ? 32 : 1, 32, 32);
 		}
 
 		for (auto element : monsters)
@@ -353,7 +346,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			auto& monster = element.second;
 			//cout << monster.x << ", " << monster.y << " " << (int)monster.state << " Life : " << monster.life << endl;
 			if (monster.life > 0)
-				monster.draw_image.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 32 * (int)monster.m_type, 32, 32);
+			{
+				monster.getDrawImageByState().Draw(memdc1, monster.x, monster.y, 32, 32, 0, 0, 32, 32);
+			}
 		}
 
 		for (auto& bullet : bullets) {

@@ -233,7 +233,7 @@ void RecvPlayerInfo()
     player.x = info.x;
     player.y = info.y;
     player.life = info.HP;
-    player.state = (STATE)info.state;
+    player.ChangeState((STATE)info.state);
     player.dir = info.direction;
 }
 

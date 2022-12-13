@@ -23,7 +23,7 @@ public:
 
     int bullet_count = 0;
     bool isDamaged = false;
-    int Damaged_count = 0;
+    int aniCount = 0;
 
     bool isShoot = false;
 public:
@@ -34,6 +34,10 @@ public:
 
     void ChangeState(STATE _state) // cpp 파일로 옮기면 버그남 .. 이미지 로드 관련
     {
+        if (state != _state)
+        {
+            anim = 0;
+        }
         state = _state;
         switch (state)
         {
@@ -70,16 +74,22 @@ public:
         switch (this->state)
         {
         case STATE::IDLE:
+            image_count = 11;
             return Manager::GetInstance().frog_idle;
         case STATE::MOVE:
+            image_count = 12;
             return Manager::GetInstance().frog_move;
         case STATE::JUMP:
+            image_count = 1;
             return Manager::GetInstance().frog_jump;
         case STATE::FALL:
+            image_count = 1;
             return Manager::GetInstance().frog_fall;
         case STATE::ATTACK:
-            return Manager::GetInstance().frog_attack;
+            image_count = 7;
+            return Manager::GetInstance().frog_move;
         case STATE::DEAD:
+            image_count = 6;
             return Manager::GetInstance().frog_attack;
         }
     }
@@ -89,6 +99,4 @@ public:
 
     void UpdateBullet();
     void Init();
-
-    void Damaged();
 };

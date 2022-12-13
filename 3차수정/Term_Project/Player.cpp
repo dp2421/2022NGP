@@ -38,21 +38,6 @@ Player::Player(int _x, int _y, CImage _draw_image)
     }
 }
 
-void Player::Damaged()
-{
-    if (life > 0) {
-        if (!isDamaged) {
-            life--;
-            Damaged_count = 10;
-            isDamaged = true;
-            ChangeState(STATE::DEAD);
-        }
-    }
-    else {
-        Init();
-    }
-}
-
 void Player::Init()
 {
     x = 230;
@@ -101,26 +86,19 @@ void Player::Shoot()
 
 void Player::UpdateAnimation()
 {
-    if (isDamaged) {
-
-        Damaged_count--;
-        if (Damaged_count < 0) {
-            isDamaged = false;
-        }
-    }
-
-
     if (velY > 0) {
         ChangeState(STATE::FALL);
     }
 
     anim += P_IMAGE_SIZE;
+
     if (anim >= P_IMAGE_SIZE * (image_count - 1)) {
         anim = 0;
         if (state == STATE::DEAD || state == STATE::ATTACK) {
             ChangeState(STATE::IDLE);
         }
     }
+
 }
 
 void Player::UpdateCollisionBox()
