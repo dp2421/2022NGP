@@ -65,7 +65,6 @@ void Login()
     RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
     RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
     ID = socks.m_serverloginPack.ID;
-    cout << ID;
 }
 
 DWORD WINAPI NetworkThread(LPVOID arg)

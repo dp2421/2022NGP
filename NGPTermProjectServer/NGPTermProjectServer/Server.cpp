@@ -271,9 +271,9 @@ void Initialize()
 		Vec2(8450, 650),
 		Vec2(8450, 200),
 		Vec2(8450, 400),
-		Vec2(9530, 700),
-		Vec2(9530, 400),
-		Vec2(9530, 110)
+		Vec2(9530, 710),
+		Vec2(9530, 410),
+		Vec2(9530, 150)
 	};
 
 	modify = interactionObjects.size();
@@ -432,10 +432,17 @@ int main(int argc, char* argv[])
 	cout << "start";
 
 	Update();
-	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());
+	auto endTime = chrono::duration_cast<chrono::seconds>(chrono::high_resolution_clock::now() - startTime);
 
 	for (auto& cl : GameManager::GetInstance().clients)
 		cl.SendGameClearPacket(endTime);
+
+	auto countdown = std::chrono::high_resolution_clock::now();
+	while (true)
+	{
+		int process = startCountdownTime - chrono::duration_cast<chrono::milliseconds>(std::chrono::high_resolution_clock::now() - countdown).count();
+		if (process / 1000 < 0) break;
+	}
 
 	closesocket(listen_sock);
 	DeleteCriticalSection(&cs);

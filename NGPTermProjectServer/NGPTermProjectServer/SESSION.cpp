@@ -195,7 +195,12 @@ void SESSION::SendGameClearPacket(chrono::seconds time)
 	Server2ClientGameClearPacket p;
 	InfoOfPacket info;
 
+	info.size = sizeof(Server2ClientGameClearPacket);
+	info.type = Server2ClientGameClear;
+
 	p.second = static_cast<int>(time.count());
+
+	this->DoSend(&info, &p);
 }
 
 int RecvExpasion(SOCKET sock, void* buf, int len, int flage)

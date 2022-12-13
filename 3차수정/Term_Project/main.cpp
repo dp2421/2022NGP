@@ -236,7 +236,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		if (isClearGame)
 		{
-			Manager::GetInstance().SuccessGame.Draw(memdc1, 0, 0);
+			Manager::GetInstance().SuccessGame.Draw(memdc1, players[ID].x - 200, 0);
 		}
 
 		if (players[ID].x > 200) {
