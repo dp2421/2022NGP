@@ -242,17 +242,17 @@ void RecvMonsterInfo(int size)
     Server2ClientMonsterInfoPacket* info = reinterpret_cast<Server2ClientMonsterInfoPacket*>(monsterbuffer);
     for (int i = 0; i < size / sizeof(Server2ClientMonsterInfoPacket); ++i)
     {
-        monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
-        monsters[info[i].ID].ChangeState(STATE::IDLE);
-        //if (monsters.count(info[i].ID))
-        //{
-        //    monsters[info[i].ID].x = info[i].x;
-        //    monsters[info[i].ID].y = info[i].y;
-        //    monsters[info[i].ID].life = info[i].HP;
-        //}
-        //else
-        //{
-        //}
+        if (monsters.count(info[i].ID))
+        {
+            monsters[info[i].ID].x = info[i].x;
+            monsters[info[i].ID].y = info[i].y;
+            monsters[info[i].ID].life = info[i].HP;
+        }
+        else
+        {
+            monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
+            monsters[info[i].ID].ChangeState(STATE::IDLE);
+        }
     }
 }
 

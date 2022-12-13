@@ -17,7 +17,7 @@ Monster::~Monster()
 
 void Monster::Update(float deltaTime)
 {
-    if (this->HP < 1) return;
+    if (this->HP <= 0) return;
 
     this->moveCount++;
     if (this->moveCount == 10) {
@@ -29,10 +29,8 @@ void Monster::Update(float deltaTime)
 
 void Monster::Damaged()
 {
-    if (this->HP > 1) {
-        this->HP--;
-    }
-    else {
+    this->HP--;
+    if(this->HP <= 0) {
         //Á×À½
     }
 }

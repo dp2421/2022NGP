@@ -5,6 +5,10 @@
 
 Player::Player()
 {
+	this->size.left = 8;
+	this->size.right = 25;
+	this->size.top = 5;
+	this->size.bottom = 32;
 	InitPlayer();
 }
 
@@ -34,6 +38,10 @@ void Player::Update(float deltaTime)
 	if (this->AttackCooltimeCount > 0)
 	{
 		this->AttackCooltimeCount--;
+	}
+	if (this->invincibleCount > 0)
+	{
+		this->invincibleCount--;
 	}
 
 	CollisionEnemy();
@@ -227,13 +235,13 @@ void Player::CollisionTile()
 				{
 					blockRect.bottom = 25;
 
-					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 30), blockRect))
+					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize), blockRect))
 					{
 						if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
 						{
 							if (this->isJump == true)
 								state &= ~(int)PlayerState::Jump;
-							this->pos.y = i * BlockSize - 30;
+							this->pos.y = i * BlockSize - 32;
 							this->velocity.y = 0;
 							this->isGround = true;
 							this->isJump = false;
@@ -251,7 +259,14 @@ void Player::CollisionTile()
 					blockRect.bottom = 50;
 					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize), blockRect))
 					{
-						
+						if (j * BlockSize > this->pos.x)
+						{
+							this->pos.x = j * BlockSize - this->size.right;
+						}
+						else
+						{
+							this->pos.x = j * BlockSize + BlockSize;
+						}
 					}
 				}
 			}
@@ -263,15 +278,14 @@ void Player::CollisionEnemy()
 {
 	if (this->invincibleCount > 0)
 	{
-		this->invincibleCount--;
 		return;
 	}
 
-	auto& monsters = GameManager::GetInstance().monsters;
-	for (auto& monster : monsters)
+	for (auto& monster : GameManager::GetInstance().monsters)
 	{
 		if (this->isCollision(monster))
 		{
+			cout << "coll" << endl;
 			Damaged();
 			return;
 		}
