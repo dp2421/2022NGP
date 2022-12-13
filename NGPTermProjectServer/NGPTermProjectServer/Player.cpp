@@ -259,7 +259,14 @@ void Player::CollisionTile()
 					blockRect.bottom = 50;
 					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize), blockRect))
 					{
-						
+						if (j * BlockSize > this->pos.x)
+						{
+							this->pos.x = j * BlockSize - this->size.right;
+						}
+						else
+						{
+							this->pos.x = j * BlockSize + BlockSize;
+						}
 					}
 				}
 			}
