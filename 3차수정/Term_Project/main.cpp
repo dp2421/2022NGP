@@ -198,7 +198,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				interactionObject.getDrawImageByState().Draw(memdc1, interactionObject.x, interactionObject.y, 50, 50, 0, interactionObject.state == true ? 100 : 0, 50, 50);
 				break;
 			case INTER_OBJ::REVER:
-				cout << interactionObject.x << ", " << interactionObject.y << endl;
 				interactionObject.getDrawImageByState().Draw(memdc1, interactionObject.x, interactionObject.y);
 				break;
 			case INTER_OBJ::PORTAL:
@@ -233,6 +232,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			default:
 				break;
 			}
+		}
+
+		if (ClearGame)
+		{
+			Manager::GetInstance().SuccessGame.Draw(memdc1, 0, 0);
 		}
 
 		if (players[ID].x > 200) {

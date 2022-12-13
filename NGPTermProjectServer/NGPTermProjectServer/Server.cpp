@@ -178,10 +178,10 @@ void Initialize()
 	}
 
 	RECT leverAndButton{};
-	leverAndButton.left = -25;
-	leverAndButton.right = 25;
+	leverAndButton.left = 0;
+	leverAndButton.right = 50;
 	leverAndButton.top = 0;
-	leverAndButton.bottom = 25;
+	leverAndButton.bottom = 50;
 
 	RECT doorRect{};
 	doorRect.left = 0;
@@ -210,9 +210,9 @@ void Initialize()
 
 	Vec2 leverPos[] =
 	{
-		Vec2(9525, 700),
-		Vec2(9525, 400),
-		Vec2(9525, 150)
+		Vec2(9500, 700),
+		Vec2(9500, 400),
+		Vec2(9500, 150)
 	};
 
 	int modify = interactionObjects.size();
@@ -239,9 +239,9 @@ void Initialize()
 		Vec2(2350, 685),
 		Vec2(2350, 435),
 		Vec2(2350, 185),
-		Vec2(8355, 685),
-		Vec2(8355, 235),
-		Vec2(8355, 435)
+		Vec2(8350, 685),
+		Vec2(8350, 235),
+		Vec2(8350, 435)
 	};
 
 	modify = interactionObjects.size();
@@ -268,12 +268,12 @@ void Initialize()
 		Vec2(2450, 650),
 		Vec2(2450, 400),
 		Vec2(2450, 150),
-		Vec2(8455, 650),
-		Vec2(8455, 200),
-		Vec2(8455, 400),
-		Vec2(9555, 680),
-		Vec2(9555, 380),
-		Vec2(9555, 130)
+		Vec2(8450, 650),
+		Vec2(8450, 200),
+		Vec2(8450, 400),
+		Vec2(9530, 700),
+		Vec2(9530, 400),
+		Vec2(9530, 110)
 	};
 
 	modify = interactionObjects.size();

@@ -20,6 +20,8 @@ unordered_map<int, Interaction_Object> interactionObjects;
 
 int countDown = -1;
 
+bool ClearGame = false;
+
 enum class KeyState : int
 {
     LEFT        = 1 << 0,
@@ -78,6 +80,8 @@ DWORD WINAPI NetworkThread(LPVOID arg)
         ZeroMemory(&socks, sizeof(socks));
         RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
         ProcessPacket(socks.m_infoPack.size, socks.m_infoPack.type);
+        if (socks.m_infoPack.type == Server2ClientGameClear)
+            break;
     }
 }
 
@@ -239,6 +243,15 @@ void RecvMonsterInfo(int size)
     }
 }
 
+void ClearGame()
+{
+    Server2ClientGameClearPacket packet;
+    RecvExpasion(sock, &packet, sizeof(Server2ClientGameClearPacket), 0);
+    cout << packet.second << "ÃÊ!" << endl;
+    ClearGame = true;
+    closesocket(sock);
+}
+
 void RecvBulletInfo(int size)
 {
     char bulletbuffer[BUFFERSIZE];
@@ -293,6 +306,7 @@ void ProcessPacket(int size, int type)
         InitObstacleInfo(size);
         break;
     case Server2ClientGameClear:
+        ClearGame();
         break;
     default:
         //cout << "Invalid Type : " << type << endl;
