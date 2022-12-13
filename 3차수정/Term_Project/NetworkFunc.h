@@ -20,7 +20,7 @@ unordered_map<int, Interaction_Object> interactionObjects;
 
 int countDown = -1;
 
-bool ClearGame = false;
+bool isClearGame = false;
 
 enum class KeyState : int
 {
@@ -248,7 +248,7 @@ void ClearGame()
     Server2ClientGameClearPacket packet;
     RecvExpasion(sock, &packet, sizeof(Server2ClientGameClearPacket), 0);
     cout << packet.second << "ÃÊ!" << endl;
-    ClearGame = true;
+    isClearGame = true;
     closesocket(sock);
 }
 

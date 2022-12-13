@@ -234,7 +234,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
-		if (ClearGame)
+		if (isClearGame)
 		{
 			Manager::GetInstance().SuccessGame.Draw(memdc1, 0, 0);
 		}
