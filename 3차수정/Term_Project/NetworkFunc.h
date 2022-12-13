@@ -33,7 +33,7 @@ int RecvExpasion(SOCKET sock, void* packet, int len, int flage)
 {
     ZeroMemory(buffer, sizeof(buffer));
     int retval = recv(sock, buffer, len, flage);
-    cout << " Sock : " << sock << " len : " << len << " Recved Len : " << retval << endl;
+    //cout << " Sock : " << sock << " len : " << len << " Recved Len : " << retval << endl;
     if (retval == SOCKET_ERROR) {
         err_display("send()");
         return -1;

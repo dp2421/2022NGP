@@ -313,8 +313,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				auto& monster = element.second;
 				//cout << monster.x << ", " << monster.y << " " << (int)monster.state << " Life : " << monster.life << endl;
-				if (monster.life > 0) {}
-					//monster.draw_image.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 32 * (int)monster.m_type, 32, 32);
+				if (monster.life > 0)
+					monster.draw_image.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 32 * (int)monster.m_type, 32, 32);
 			}
 
 			//for (int i = 0; i < MONSTER_AMOUNT; ++i) {
