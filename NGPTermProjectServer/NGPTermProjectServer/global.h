@@ -34,8 +34,8 @@ constexpr int maxObstacleCount = 5;
 
 constexpr int startCountdownTime = 5000;
 
-constexpr float playerSpeed = 300;
-constexpr float  PLAYER_GRAVITY = 5.0f;
+constexpr float playerSpeed = 150;
+constexpr float  PLAYER_GRAVITY = 10.f;
 
 constexpr float MonsterSpeed = 100;
 

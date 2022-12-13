@@ -15,7 +15,7 @@ Player::~Player()
 void Player::Update(float deltaTime)
 {
 	this->pos.x += this->velocity.x * deltaTime;
-	if (!this->isGround)
+	if (this->isGround == false)
 	{
 		this->velocity.y += PLAYER_GRAVITY;
 		this->pos.y += this->velocity.y * deltaTime;
@@ -121,7 +121,7 @@ void Player::Jump()
 		this->state |= (int)PlayerState::Jump;
 		this->isGround = false;
 		this->isJump = true;
-		this->velocity.y = -100;
+		this->velocity.y = -200;
 	}
 }
 
@@ -219,17 +219,23 @@ void Player::CollisionTile()
 				if (tile == (int)TileType::Wall) blockRect.bottom = 25;
 				else blockRect.bottom = 50;
 
-				if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 25), blockRect))
+				if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 30), blockRect))
 				{
 					if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
 					{
-						if (this->isGround == false)
+						if (this->isJump == true)
 							state &= ~(int)PlayerState::Jump;
-						this->pos.y = i * BlockSize - 32;
+						this->pos.y = i * BlockSize - 30;
 						this->velocity.y = 0;
 						this->isGround = true;
 						this->isJump = false;
+
+						return;
 					}
+				}
+				else
+				{
+					this->isGround = false;
 				}
 			}
 		}
