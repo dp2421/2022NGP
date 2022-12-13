@@ -36,3 +36,13 @@ static int garo_speed2 = 10;
 //		obs_sero[i].pos_x = (i / 3 * 1000) + (i % 3) * 200;
 //	}
 //}
+
+//class Obstacle {
+//	int x;
+//	int y;
+//	int velocity_x;
+//	int velocity_y;
+//	RECT collisionBox;
+//	CImage draw_image;
+//
+//};

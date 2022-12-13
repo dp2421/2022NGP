@@ -16,6 +16,7 @@ Player players[3];
 
 unordered_map<int, Monster> monsters;
 unordered_map<int, Bullet> bullets;
+unordered_map<int, Obstacle> obstacles;
 
 int countDown = -1;
 
@@ -151,35 +152,31 @@ void InitObjectInfo()
 
 }
 
-void InitObstacleInfo()
+void InitObstacleInfo(int size)
 {
     //Server2ClientObstacleInfoPacket packet;
     //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
-    // help..
     //Server2ClientMapInfoPacket packet;
     //socks.m_mapPack;
-    //int retval;
-    //int ret = RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
-    //if (ret >= 0)
-    //{
-    //    retval = RecvExpasion(sock, (char*)&ret, sizeof(int), 0);
-    //    retval = RecvExpasion(sock, buf, ret, 0);
-    //
-    //    if (ret == 0)
-    //    {
-    //        cout << "Obstacle Recv Success";
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        // ¹º°¡ÀÇ Ã³¸®
-    //    }
-    //}
-    //else
-    //{
-    //    cout << "MapInfo Recv Fail";
-    //    return;
-    //}
+
+    //RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
+
+    char obstaclebuffer[BUFFERSIZE];
+    RecvExpasion(sock, &obstaclebuffer, size, 0);
+
+    Server2ClientObstacleInfoPacket* info = reinterpret_cast<Server2ClientObstacleInfoPacket*>(obstaclebuffer);
+    for (int i = 0; i < size / sizeof(Server2ClientObstacleInfoPacket); ++i)
+    {
+        if (!obstacles.count(info[i].ID))
+        {
+            obstacles[info[i].ID] = Obstacle();
+        }
+        obstacles[info[i].ID].x = info[i].x;
+        obstacles[info[i].ID].y = info[i].y;
+        obstacles[info[i].ID].velocity_x = info[i].veloX;
+        obstacles[info[i].ID].velocity_y = info[i].veloY;
+    }
+
 }
 
 void ProccesKey(int key, KeyState state)
@@ -325,7 +322,7 @@ void ProcessPacket(int size, int type)
         RecvBulletInfo(size);
         break;
     case Server2ClientObstacleInfo:
-        InitObstacleInfo();
+        InitObstacleInfo(size);
         break;
     case Server2ClientGameClear:
         break;
