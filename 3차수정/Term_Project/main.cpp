@@ -347,13 +347,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			//cout << monster.x << ", " << monster.y << " " << (int)monster.state << " Life : " << monster.life << endl;
 			if (monster.life > 0)
 			{
-				monster.getDrawImageByState().Draw(memdc1, monster.x, monster.y, 32, 32, 0, 0, 32, 32);
+				Manager::GetInstance().monster.Draw(memdc1, monster.x, monster.y, 32, 32, monster.anim, 0, 32, 32);
 			}
 		}
 
 		for (auto& bullet : bullets) {
 			if (bullet.second.isAttack) {
-				//cout << bullet.second.x << ", " << bullet.second.y << endl;
 				//Rectangle(memdc1, player.bullet[i].collisionBox.left, player.bullet[i].collisionBox.top, player.bullet[i].collisionBox.right, player.bullet[i].collisionBox.bottom);
 				Manager::GetInstance().bullet.Draw(memdc1, bullet.second.x, bullet.second.y, 32, 16);
 			}
@@ -416,6 +415,7 @@ void LoadImage()
 
 	Manager::GetInstance().wall.Load(L"block_wall.png");
 
+	Manager::GetInstance().monster.Load(L"pacman.png");
 	Manager::GetInstance().monster_idle.Load(L"pacman.png");
 	Manager::GetInstance().monster_dead.Load(L"monster_dead.png");
 
