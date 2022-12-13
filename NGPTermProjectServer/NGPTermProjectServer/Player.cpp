@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "Protocol.h"
+#include "InteractionObject.h"
 
 Player::Player()
 {
@@ -18,6 +19,8 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
+	if (isPotal == true) return;
+
 	this->pos.x += this->velocity.x * deltaTime;
 	if (this->isGround == false)
 	{
@@ -42,6 +45,17 @@ void Player::Update(float deltaTime)
 	if (this->invincibleCount > 0)
 	{
 		this->invincibleCount--;
+	}
+
+	for (auto& object : GameManager::GetInstance().interactionObjects)
+	{
+		auto interactionObject = reinterpret_cast<InteractionObject*>(object);
+		if(interactionObject->type == ObjectType::Potal)
+			if (this->isCollision(interactionObject))
+			{
+				isPotal = true;
+				this->pos = interactionObject->pos;
+			}
 	}
 
 	CollisionEnemy();
@@ -118,7 +132,8 @@ void Player::ProccesInput(int key, bool pressed)
 
 void Player::InitPlayer()
 {
-	this->pos = Vec2(230, 650);
+	this->pos = Vec2(230, playerStartY[this->ID]);
+	this->velocity = Vec2(0, 0);
 	this->direction = 1;
 	this->state = (int)PlayerState::Idle;
 	this->isJump = false;
@@ -225,6 +240,8 @@ void Player::CollisionTile()
 	//	}
 	//}
 
+	bool collTile = false;
+
 	for (int i = 0; i < MAPHEIGHT; ++i)
 	{
 		for (int j = 0; j < MAPWIDTH; ++j)
@@ -246,13 +263,9 @@ void Player::CollisionTile()
 							this->velocity.y = 0;
 							this->isGround = true;
 							this->isJump = false;
-
-							return;
+							
+							collTile = true;
 						}
-					}
-					else
-					{
-						this->isGround = false;
 					}
 				}
 				else
@@ -270,6 +283,52 @@ void Player::CollisionTile()
 						}
 					}
 				}
+			}
+		}
+	}
+
+	if (!collTile) isGround = false;
+
+	for (auto& object : GameManager::GetInstance().interactionObjects)
+	{
+		auto interactionObject = reinterpret_cast<InteractionObject*>(object);
+		if (interactionObject->type == ObjectType::Door)
+		{
+			if (interactionObject->isInteraction == false)
+			{
+				if (this->isCollision(interactionObject))
+				{
+					if (interactionObject->pos.x > this->pos.x)
+					{
+						this->pos.x = interactionObject->pos.x - this->size.right;
+					}
+					else
+					{
+						this->pos.x = interactionObject->pos.x + interactionObject->size.right;
+					}
+				}
+			}
+		}
+		else if (interactionObject->type == ObjectType::Button)
+		{
+			if (this->isCollision(interactionObject))
+			{
+				if (interactionObject->pos.y > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+				{
+					if (this->isJump == true)
+						state &= ~(int)PlayerState::Jump;
+					this->pos.y = interactionObject->pos.y - 30;
+					this->velocity.y = 0;
+					this->isGround = true;
+					this->isJump = false;
+
+					interactionObject->Interaction();
+				}
+			}
+			else
+			{
+				if(interactionObject->isInteraction)
+					interactionObject->Interaction();
 			}
 		}
 	}
@@ -303,9 +362,23 @@ void Player::CollisionEnemy()
 	}
 }
 
-Object* Player::CollisionInteractionObejct()
+void Player::CollisionInteractionObejct()
 {
+	for (auto& object : GameManager::GetInstance().interactionObjects)
+	{
+		auto interactionObject = reinterpret_cast<InteractionObject*>(object);
+		if (interactionObject->type == ObjectType::Door || interactionObject->type == ObjectType::Potal) continue;
 
+		if (this->isCollision(object))
+		{
+			interactionObject->Interaction();
+		}
+		else
+		{
+			if (interactionObject->type == ObjectType::Button)
+				interactionObject->Interaction();
+		}
+	}
 }
 
 void Player::SetAniState()

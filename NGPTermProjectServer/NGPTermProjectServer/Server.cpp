@@ -37,6 +37,8 @@ void SendPacket()
 		cl.SendBulletInfoPakcet();
 		// 장애물 정보
 		cl.SendObstacleInfoPacket();
+		// 상호작용 물제 정보
+		cl.SendInteractionObjectInfoPacket();
 	}
 }
 
@@ -71,7 +73,6 @@ DWORD WINAPI InputThread(LPVOID arg)
 	client.player.ID = index;
 
 	// 로그인 패킷 리시브
-
 	Client2ServerLoginPacket login;
 	if (client.DoRevc(&login, sizeof(Client2ServerLoginPacket)) == -1)
 	{
@@ -80,9 +81,9 @@ DWORD WINAPI InputThread(LPVOID arg)
 	}
 
 	client.SendLoginPacket();
+	client.player.InitPlayer();
 	client.SendPlayerInfoPacket(client);
 	client.SendMapInfoPacket();
-
 
 	EnterCriticalSection(&cs);
 	loginCount++;
@@ -126,7 +127,7 @@ void StartCountDown()
 void Initialize()
 {
 	// 몬스터 초기화
-	Vec2 MonsterPos[] =
+	Vec2 monsterPos[] =
 	{
 		Vec2(630, 670), 
 		Vec2(700, 420),
@@ -146,14 +147,14 @@ void Initialize()
 
 	auto& monsters = GameManager::GetInstance().monsters;
 
-	for (int i = 0; i < (sizeof(MonsterPos) / sizeof(POINT)); ++i)
+	for (int i = 0; i < (sizeof(monsterPos) / sizeof(POINT)); ++i)
 	{
 		monsters.emplace_back();
 		auto& monster = monsters.back();
 		monster = new Monster();
 		monster->ID = i;
-		monster->pos.x = MonsterPos[i].x;
-		monster->pos.y = MonsterPos[i].y;
+		monster->pos.x = monsterPos[i].x;
+		monster->pos.y = monsterPos[i].y;
 	}
 
 	auto& bullets = GameManager::GetInstance().bullets;
@@ -175,11 +176,140 @@ void Initialize()
 		obstacle = new Obstacle();
 		obstacle->ID = i;
 	}
+
+	RECT leverAndButton{};
+	leverAndButton.left = -25;
+	leverAndButton.right = 25;
+	leverAndButton.top = 0;
+	leverAndButton.bottom = 25;
+
+	RECT doorRect{};
+	doorRect.left = 0;
+	doorRect.right = 50;
+	doorRect.top = 0;
+	doorRect.bottom = 50;
+
+	auto& interactionObjects = GameManager::GetInstance().interactionObjects;
+
+	Vec2 potalPos = Vec2(9950, 390);
+
+	interactionObjects.emplace_back();
+	auto& interactionObject = interactionObjects.back();
+	interactionObject = new InteractionObject();
+	interactionObject->ID = interactionObjects.size() - 1;
+
+	Vec2 leverPos[] =
+	{
+		Vec2(9525, 700),
+		Vec2(9525, 400),
+		Vec2(9525, 150)
+	};
+
+	int modify = interactionObjects.size();
+	for (int i = interactionObjects.size(); i < sizeof(leverPos) / sizeof(Vec2) + modify; ++i)
+	{
+		interactionObjects.emplace_back();
+		auto& interactionObject = interactionObjects.back();
+		interactionObject = 
+			new InteractionObject
+			(
+				leverPos[i - modify].x,
+				leverPos[i - modify].y,
+				leverAndButton.left,
+				leverAndButton.right,
+				leverAndButton.top,
+				leverAndButton.bottom,
+				ObjectType::Lever
+			);
+		interactionObject->ID = i;
+	}
+
+	Vec2 buttonPos[] =
+	{
+		Vec2(2350, 685),
+		Vec2(2350, 435),
+		Vec2(2350, 185),
+		Vec2(8355, 685),
+		Vec2(8355, 235),
+		Vec2(8355, 435)
+	};
+
+	modify = interactionObjects.size();
+	for (int i = interactionObjects.size(); i < sizeof(buttonPos) / sizeof(Vec2) + modify; ++i)
+	{
+		interactionObjects.emplace_back();
+		auto& interactionObject = interactionObjects.back();
+		interactionObject =
+			new InteractionObject
+			(
+				buttonPos[i - modify].x,
+				buttonPos[i - modify].y,
+				leverAndButton.left,
+				leverAndButton.right,
+				leverAndButton.top,
+				leverAndButton.bottom,
+				ObjectType::Button
+			);
+		interactionObject->ID = i;
+	}
+
+	Vec2 doorPos[] =
+	{
+		Vec2(2450, 650),
+		Vec2(2450, 400),
+		Vec2(2450, 150),
+		Vec2(8455, 650),
+		Vec2(8455, 200),
+		Vec2(8455, 400),
+		Vec2(9555, 680),
+		Vec2(9555, 380),
+		Vec2(9555, 130)
+	};
+
+	modify = interactionObjects.size();
+	for (int i = interactionObjects.size(); i < sizeof(doorPos) / sizeof(Vec2) + modify; ++i)
+	{
+		interactionObjects.emplace_back();
+		auto& interactionObject = interactionObjects.back();
+		interactionObject =
+			new InteractionObject
+			(
+				doorPos[i - modify].x,
+				doorPos[i - modify].y,
+				doorRect.left,
+				doorRect.right,
+				doorRect.top,
+				doorRect.bottom,
+				ObjectType::Door
+			);
+		interactionObject->ID = i;
+	}
+
+	for (auto& obj : interactionObjects)
+	{
+		auto interactionObject = reinterpret_cast<InteractionObject*>(obj);
+		if (interactionObject->type == ObjectType::Door)
+		{
+			for (auto& targetObj : interactionObjects)
+			{
+				auto targetIntaractionObj = reinterpret_cast<InteractionObject*>(targetObj);
+				if (targetIntaractionObj->type == ObjectType::Button || targetIntaractionObj->type == ObjectType::Lever)
+				{
+					if ((int)targetIntaractionObj->pos.x / 1000 == (int)interactionObject->pos.x / 1000)
+					{
+						interactionObject->linkedObjects.push_back(targetIntaractionObj);
+						targetIntaractionObj->linkedObjects.push_back(interactionObject);
+					}
+				}
+			}
+		}
+	}
 }
 
 void Update()
 {
 	Timer timer;
+	Timer ObstableTimer;
 	while (true)
 	{
 		auto limit = timer.preTime +
@@ -188,12 +318,32 @@ void Update()
 
 		timer.Update();
 
+		limit = ObstableTimer.preTime +
+			chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(5000));
+		if (std::chrono::high_resolution_clock::now() > limit)
+		{
+			for (auto& obj : GameManager::GetInstance().obstacles)
+			{
+				auto obstacle = reinterpret_cast<Obstacle*>(obj);
+				if (!obstacle->isActive)
+				{
+					obstacle->isActive = true;
+					obstacle->pos.x = 11000;
+					obstacle->pos.y = (rand() % 20) * BlockSize;
+					ObstableTimer.Update();
+					break;
+ 				}
+			}
+		}
+
 		// packet 처리
 		ProcessPacket();
-		
+
+		int potalCount = 0;
 		for (auto& cl : GameManager::GetInstance().clients)
 		{
 			cl.player.Update(timer.GetDelteTime());
+			if (cl.player.isPotal) potalCount++;
 		}
 		for (auto& obj : GameManager::GetInstance().monsters)
 		{
@@ -207,8 +357,15 @@ void Update()
 		{
 			obj->Update(timer.GetDelteTime());
 		}
+		for (auto& obj : GameManager::GetInstance().interactionObjects)
+		{
+			obj->Update(timer.GetDelteTime());
+		}
 
 		SendPacket();
+
+		if (potalCount == 3)
+			break;
 	}
 }
 
@@ -250,8 +407,6 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-
-	//StartCountDown();
 
 	auto startTime = chrono::high_resolution_clock::now();
 

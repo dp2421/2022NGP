@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "InteractionObejct.h"
+#include "InteractionObject.h"
 
-InteractionObejct::InteractionObejct()
+InteractionObject::InteractionObject()
 {
 
 }
 
-InteractionObejct::InteractionObejct(int x, int y, int left, int right, int top, int bottom, bool isinteraction)
+InteractionObject::InteractionObject(int x, int y, int left, int right, int top, int bottom, ObjectType type)
 {
 	this->pos.x = x;
 	this->pos.y = y;
@@ -14,15 +14,15 @@ InteractionObejct::InteractionObejct(int x, int y, int left, int right, int top,
 	this->size.right = right;
 	this->size.top = top;
 	this->size.bottom = bottom;
-	this->isInteraction = isinteraction;
+	this->type = type;
 }
 
-InteractionObejct::~InteractionObejct()
+InteractionObject::~InteractionObject()
 {
 
 }
 
-void InteractionObejct::Update(float deltaTime)
+void InteractionObject::Update(float deltaTime)
 {
 	switch (this->type)
 	{
@@ -47,30 +47,35 @@ void InteractionObejct::Update(float deltaTime)
 	}
 }
 
-void InteractionObejct::Interaction()
+void InteractionObject::Interaction()
 {
-	if (isInteraction) return;
-
 	switch (this->type)
 	{
 	case ObjectType::Lever:
-		for (auto& obj : linkedObjects)
-			reinterpret_cast<InteractionObejct*>(obj)->Interaction();
+		if (isInteraction) return;
+
+		this->isInteraction = true;
+		for (auto& obj : this->linkedObjects)
+			reinterpret_cast<InteractionObject*>(obj)->Interaction();
 
 		interactionTime = chrono::high_resolution_clock::now();
 		break;
 	case ObjectType::Door:
-		for (auto& obj : linkedObjects)
+		if (isInteraction) return;
+
+		for (auto& obj : this->linkedObjects)
 		{
-			if (!reinterpret_cast<InteractionObejct*>(obj)->isInteraction)
+			if (!reinterpret_cast<InteractionObject*>(obj)->isInteraction)
 				return;
 		}
-
+		
+		this->isInteraction = true;
 		// ¹®¿­±â
 		break;
 	case ObjectType::Button:
-		for (auto& obj : linkedObjects)
-			reinterpret_cast<InteractionObejct*>(obj)->Interaction();
+		this->isInteraction = !this->isInteraction;
+		for (auto& obj : this->linkedObjects)
+			reinterpret_cast<InteractionObject*>(obj)->Interaction();
 
 		break;
 	case ObjectType::Potal:

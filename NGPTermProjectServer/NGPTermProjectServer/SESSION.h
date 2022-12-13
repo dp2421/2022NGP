@@ -27,7 +27,7 @@ public:
 	void SendCountdownPacket(char cnt);
 	void SendGameStartPacket();
 	void SendMapInfoPacket();
-	void SendTileInfoPacket();
+	void SendInteractionObjectInfoPacket();
 	void SendPlayerInfoPacket(SESSION& player);
 	void SendMonsterInfoPacket();
 	void SendBulletInfoPakcet();	

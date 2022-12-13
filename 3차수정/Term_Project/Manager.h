@@ -15,6 +15,7 @@ public:
 	CImage rever_pull;
 	CImage button_normal;
 	CImage button_pull;
+	CImage door;
 	CImage bg;
 	CImage monster;
 	CImage monster_idle;

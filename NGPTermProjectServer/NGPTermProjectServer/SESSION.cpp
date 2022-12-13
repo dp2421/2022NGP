@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SESSION.h"
+#include "InteractionObject.h"
 #include "GameManager.h"
 
 void SESSION::DoSend(InfoOfPacket* info, void* packet)
@@ -68,9 +69,30 @@ void SESSION::SendMapInfoPacket()
 	this->DoSend(&info, &p);
 }
 
-void SESSION::SendTileInfoPacket()
+void SESSION::SendInteractionObjectInfoPacket()
 {
+	ZeroMemory(this->sendBuffer, BUFFERSIZE);
+	Server2ClientInteractionObjectInfoPacket p;
+	InfoOfPacket info;
 
+	info.size = GameManager::GetInstance().interactionObjects.size() * sizeof(Server2ClientInteractionObjectInfoPacket);
+	info.type = Server2ClientInteractionObjectInfo;
+
+	auto target = this->sendBuffer;
+	for (auto& obj : GameManager::GetInstance().interactionObjects)
+	{
+		auto interactionObj = reinterpret_cast<InteractionObject*>(obj);
+		p.ID = interactionObj->ID;
+		p.x = interactionObj->pos.x;
+		p.y = interactionObj->pos.y;
+		p.type = (int)interactionObj->type;
+		p.state = interactionObj->isInteraction;
+
+		memcpy(target, &p, sizeof(p));
+		target += sizeof(p);
+	}
+
+	this->DoSend(&info, this->sendBuffer);
 }
 
 void SESSION::SendPlayerInfoPacket(SESSION& player)
@@ -159,8 +181,7 @@ void SESSION::SendObstacleInfoPacket()
 		p.ID = obstacle->ID;
 		p.x = obstacle->pos.x;
 		p.y = obstacle->pos.y;
-		p.veloX = obstacle->velocity.x;
-		p.veloY = obstacle->velocity.y;
+		p.state = obstacle->isActive;
 
 		memcpy(target, &p, sizeof(p));
 		target += sizeof(p);

@@ -15,7 +15,7 @@ constexpr char Server2ClientLogin = 3;
 constexpr char Server2ClientCountdown = 4;
 constexpr char Server2ClientGameStart = 5;
 constexpr char Server2ClientMapInfo = 6;
-constexpr char Server2ClientTileInfo = 7;
+constexpr char Server2ClientInteractionObjectInfo = 7;
 constexpr char Server2ClientPlayerInfo = 8;
 constexpr char Server2ClientMonsterInfo = 9;
 constexpr char Server2ClientBulletInfo = 10;
@@ -70,11 +70,13 @@ struct Server2ClientMapInfoPacket
 	char	mapInfo[MAPHEIGHT][MAPWIDTH];
 };
 
-// 단일 타일 정보
-struct Server2ClientTileInfoPacket
+// 상호작용 물체 정보
+struct Server2ClientInteractionObjectInfoPacket
 {
+	char	ID;
 	short	x, y;
-	char	state;
+	char	type;
+	bool	state;
 };
 
 // 플레이어 정보
@@ -107,7 +109,7 @@ struct Server2ClientBulletInfoPacket
 struct Server2ClientObstacleInfoPacket
 {
 	char	ID;
-	float	veloX, veloY;
+	bool	state;
 	float	x, y;
 };
 

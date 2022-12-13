@@ -3,51 +3,22 @@
 
 Obstacle::Obstacle()
 {
-	this->Speed = 0;
-	this->velocity = Vec2(0, 0);
-	this->pos = Vec2(230, 650);
-	this->moveCount = 0;
+	this->size.left = -25;
+	this->size.right = +25;
+	this->size.top = -25;
+	this->size.bottom = 25;
+}
+
+Obstacle::~Obstacle()
+{
+
 }
 
 void Obstacle::Update(float deltaTime)
 {
-	this->moveCount++;
-	if (this->moveCount == 10) {
-		this->moveCount = 0;
-		this->pos = Vec2(230, 650);
-	}
-	//this->pos.x -= MonsterSpeed * this->direction * deltaTime;
-	this->pos.x -= Speed * deltaTime;
+	if (!this->isActive) return;
 
-}
+	this->pos.x -= ObstacleSpeed * deltaTime;
 
-
-void Obstacle::InitObstacle()
-{
-//	for (int i = 0; i < OBS_GARO_COUNT; ++i) {
-//		obs_garo[i].pos_x = (i / 2 + 1) * 1000 - 50;
-//
-//		if (i % 2 == 0)
-//			obs_garo[i].rand_num = 100;
-//		else if (i % 1 == 1)
-//			obs_garo[i].rand_num = 400;
-//	}
-//
-//	for (int i = 0; i < OBS_SERO_COUNT; ++i) {
-//		obs_sero[i].pos_x = (i / 3 * 1000) + (i % 3) * 200;
-//	}
-
-	for (int i = 0; i < OBS_GARO_COUNT; ++i) {
-		pos.x = (i / 2 + 1) * 1000 - 50;
-
-		if (i % 2 == 0)
-			obs_garo[i].rand_num = 100;
-		else if (i % 1 == 1)
-			obs_garo[i].rand_num = 400;
-	}
-
-	for (int i = 0; i < OBS_SERO_COUNT; ++i) {
-		pos.x = (i / 3 * 1000) + (i % 3) * 200;
-	}
-
+	if (this->pos.x < -100) this->isActive = false;
 }

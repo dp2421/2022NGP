@@ -8,7 +8,7 @@ public:
 	Server2ClientLoginPacket m_serverloginPack;
 	Server2ClientCountdownPacket m_cntPack;
 	Server2ClientMapInfoPacket m_mapPack;
-	Server2ClientTileInfoPacket m_tilePack;
+	Server2ClientInteractionObjectInfoPacket m_tilePack;
 	Server2ClientPlayerInfoPacket m_playerPack;
 	Server2ClientMonsterInfoPacket m_monsterPack;
 	Server2ClientBulletInfoPacket m_bulletPack;

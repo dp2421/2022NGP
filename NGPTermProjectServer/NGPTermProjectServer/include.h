@@ -6,7 +6,7 @@
 #include "Monster.h"
 #include "Bullet.h"
 #include "Obstacle.h"
-#include "Tile.h"
+#include "InteractionObject.h"
 #include "SESSION.h"
 #include "Timer.h"
 #include "GameManager.h"

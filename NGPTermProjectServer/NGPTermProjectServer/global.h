@@ -30,8 +30,10 @@ enum class TileType : int
 	End
 };
 
+constexpr int playerStartY[] = { 650, 400, 120 };
+
 constexpr int maxBulletCount = 100;
-constexpr int maxObstacleCount = 5;
+constexpr int maxObstacleCount = 50;
 
 constexpr int startCountdownTime = 5000;
 
@@ -41,6 +43,8 @@ constexpr float  PLAYER_GRAVITY = 10.f;
 constexpr float MonsterSpeed = 100;
 
 constexpr float BulletSpeed = 300;
+
+constexpr float ObstacleSpeed = 500;
 
 constexpr int BlockSize = 50;
 

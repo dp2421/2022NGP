@@ -71,9 +71,6 @@
     <ClCompile Include="Interaction_Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkFunc.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Obstacle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>

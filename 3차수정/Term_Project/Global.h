@@ -1,7 +1,7 @@
 #pragma once
 
 enum class STATE { IDLE, MOVE, JUMP, FALL, ATTACK, DEAD };
-enum class INTER_OBJ { REVER, BUTTON, PORTAL };
+enum class INTER_OBJ { REVER, DOOR, BUTTON, PORTAL };
 enum class MONSTER_TYPE { MONSTER_MOVE, MONSTER_PEACE };
 
 struct Bullet {
@@ -16,8 +16,6 @@ struct Bullet {
 struct Obstacle {
 	int x;
 	int y;
-	int velocity_x;
-	int velocity_y;
-	RECT collisionBox;
+    bool isActive;
 	CImage draw_image;
 };

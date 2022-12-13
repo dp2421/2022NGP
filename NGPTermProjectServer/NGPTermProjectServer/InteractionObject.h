@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-class InteractionObejct : public Object
+class InteractionObject : public Object
 {
 public:
 	chrono::steady_clock::time_point interactionTime;
@@ -10,9 +10,9 @@ public:
 
 	deque<Object*> linkedObjects;
 public:
-	InteractionObejct();
-	InteractionObejct(int x, int y, int left, int right, int top, int bottom, bool isinteraction);
-	~InteractionObejct();
+	InteractionObject();
+	InteractionObject(int x, int y, int left, int right, int top, int bottom, ObjectType type);
+	~InteractionObject();
 
 	virtual void Update(float deltaTime) override;
 

@@ -4,6 +4,8 @@
 class Player : public Object
 {
 public:
+	bool isPotal;
+
 	int state;
 	char aniState;
 
@@ -29,7 +31,7 @@ public:
 	void SetHorizontalVelocity(int state);
 	void CollisionTile();
 	void CollisionEnemy();
-	Object* CollisionInteractionObejct();
+	void CollisionInteractionObejct();
 	void SetAniState();
 private:
 	int invincibleCount = 0;

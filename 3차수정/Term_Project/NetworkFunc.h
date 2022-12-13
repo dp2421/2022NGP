@@ -12,11 +12,11 @@ const char attackKey = 'A';
 const char InteractionKey = 'X';
 
 Player players[3];
-//Player player(300, 420, Manager::GetInstance().frog_idle);
 
 unordered_map<int, Monster> monsters;
 unordered_map<int, Bullet> bullets;
 unordered_map<int, Obstacle> obstacles;
+unordered_map<int, Interaction_Object> interactionObjects;
 
 int countDown = -1;
 
@@ -94,10 +94,13 @@ void InitClient()
     if (sock == INVALID_SOCKET)
         err_quit("socket() ");
 
+    char ip[16] = {};
+    cin >> ip;
+
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
+    inet_pton(AF_INET, ip, &serveraddr.sin_addr);
     serveraddr.sin_port = htons(SERVERPORT);
     retval = connect(sock, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("connect()");
@@ -126,40 +129,13 @@ void StartCount()
     countDown = socks.m_cntPack.count; // Count ??
 }
 
-void WaitStart()
-{
-    // 로딩중 띄워주면 됨
-}
-
-void RecvReady()
-{
-
-}
-
 void GameStart()
 {
     countDown = -1;
 }
-
-void InitPlayerInfo()
-{
-    RecvExpasion(sock, &socks.m_playerPack, sizeof(socks.m_playerPack), MSG_WAITALL);
-}
-
-void InitObjectInfo()
-{
-
-}
-
+    
 void InitObstacleInfo(int size)
 {
-    //Server2ClientObstacleInfoPacket packet;
-    //RecvExpasion(sock, (char*)&packet, sizeof(packet), MSG_WAITALL);
-    //Server2ClientMapInfoPacket packet;
-    //socks.m_mapPack;
-
-    //RecvExpasion(sock, (char*)&socks.m_mapPack, BUFFERSIZE, MSG_WAITALL);
-
     char obstaclebuffer[BUFFERSIZE];
     RecvExpasion(sock, &obstaclebuffer, size, 0);
 
@@ -172,10 +148,28 @@ void InitObstacleInfo(int size)
         }
         obstacles[info[i].ID].x = info[i].x;
         obstacles[info[i].ID].y = info[i].y;
-        obstacles[info[i].ID].velocity_x = info[i].veloX;
-        obstacles[info[i].ID].velocity_y = info[i].veloY;
+        obstacles[info[i].ID].isActive = info[i].state;
     }
 
+}
+
+void RecvInteractionObjectInfo(int size)
+{
+    char InteractionObjectbuffer[BUFFERSIZE];
+    RecvExpasion(sock, &InteractionObjectbuffer, size, 0);
+
+    Server2ClientInteractionObjectInfoPacket* info = reinterpret_cast<Server2ClientInteractionObjectInfoPacket*>(InteractionObjectbuffer);
+    for (int i = 0; i < size / sizeof(Server2ClientInteractionObjectInfoPacket); ++i)
+    {
+        if (!interactionObjects.count(info[i].ID))
+        {
+            interactionObjects[info[i].ID] = Interaction_Object();
+        }
+        interactionObjects[info[i].ID].x = info[i].x;
+        interactionObjects[info[i].ID].y = info[i].y;
+        interactionObjects[info[i].ID].type = (INTER_OBJ)info[i].type;
+        interactionObjects[info[i].ID].state = info[i].state;
+    }
 }
 
 void ProccesKey(int key, KeyState state)
@@ -194,8 +188,6 @@ void ProccesKey(int key, KeyState state)
     }
     else return;
 
-    //cout << "Send Key : " << key << " state " << socks.m_keyPack.state << endl;
-
     SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), 0);
 }
 
@@ -210,15 +202,6 @@ void InputKey()
     ProccesKey(VK_SPACE, KeyState::JUMP);
     ProccesKey(attackKey, KeyState::ATTACK);
     ProccesKey(InteractionKey, KeyState::INTERACTION);
-}
-
-void RecvPlayerPos()
-{
-    //int buf = 0;
-    //RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
-    //socks.m_playerPack.x = buf;
-    //RecvExpasion(sock, reinterpret_cast<char*>(buf), sizeof(buf), 0);
-    //socks.m_playerPack.y = buf;
 }
 
 void RecvPlayerInfo()
@@ -274,21 +257,6 @@ void RecvBulletInfo(int size)
     }
 }
 
-void MonsterDead()
-{
-
-}
-
-void ArrowDraw()
-{
-
-}
-
-void Render()
-{
-
-}
-
 // 수신 패킷 처리
 void ProcessPacket(int size, int type)
 {
@@ -307,8 +275,9 @@ void ProcessPacket(int size, int type)
         // 맵 정보
         InitMapInfo(size);
         break;
-    case Server2ClientTileInfo:
-        // 타일 정보
+    case Server2ClientInteractionObjectInfo:
+        RecvInteractionObjectInfo(size);
+        // 상호작용 물체 정보
         break;
     case Server2ClientPlayerInfo:
         // 플레이어 정보
