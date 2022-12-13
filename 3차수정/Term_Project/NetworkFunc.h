@@ -17,6 +17,8 @@ Player players[3];
 unordered_map<int, Monster> monsters;
 unordered_map<int, Bullet> bullets;
 
+int countDown = -1;
+
 enum class KeyState : int
 {
     LEFT        = 1 << 0,
@@ -120,9 +122,8 @@ void StartCount()
 {
     // 카운트를 세는 함수
     RecvExpasion(sock, &socks.m_cntPack, sizeof(socks.m_cntPack), MSG_WAITALL);
-
     // 5 4 3 2 1 순으로 카운팅
-    socks.m_cntPack.count; // Count ??
+    countDown = socks.m_cntPack.count; // Count ??
 }
 
 void WaitStart()
@@ -137,7 +138,7 @@ void RecvReady()
 
 void GameStart()
 {
-
+    countDown = -1;
 }
 
 void InitPlayerInfo()

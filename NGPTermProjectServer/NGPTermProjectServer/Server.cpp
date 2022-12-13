@@ -112,10 +112,12 @@ void StartCountDown()
 	auto countdown = std::chrono::high_resolution_clock::now();
 	while (true)
 	{
-		int process = startCountdownTime - chrono::duration_cast<chrono::milliseconds>(countdown - std::chrono::high_resolution_clock::now()).count();
-		if (process % 1000 != timebuff)
+		int process = startCountdownTime - chrono::duration_cast<chrono::milliseconds>(std::chrono::high_resolution_clock::now() - countdown).count();
+		if (process / 1000 != timebuff)
 		{
-			timebuff = process;
+			timebuff = process / 1000;
+			if (timebuff < 0) break;
+
 			for(auto& cl : GameManager::GetInstance().clients)
 				cl.SendCountdownPacket(timebuff + 1);
 		}
@@ -174,7 +176,6 @@ void Update()
 	Timer timer;
 	while (true)
 	{
-		if (loginCount < 3) continue;
 		auto limit = timer.preTime +
 			chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(34));
 		while (std::chrono::high_resolution_clock::now() < limit) { Sleep(1); }
@@ -240,15 +241,20 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	cout << "start";
-
 	//StartCountDown();
 
 	auto startTime = chrono::high_resolution_clock::now();
 
 	Initialize();
 
-	//StartCountDown();
+	while (loginCount < 3)
+	{
+		Sleep(1);
+	}
+
+	StartCountDown();
+
+	cout << "start";
 
 	Update();
 	auto endTime = chrono::duration_cast<chrono::seconds>(startTime - chrono::high_resolution_clock::now());

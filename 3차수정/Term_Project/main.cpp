@@ -362,6 +362,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// 10. 최종 Portal 그리기
 		Manager::GetInstance().portal_img.Draw(memdc1, portal.x, portal.y, 52, 52, 0, 0, 52, 52);
 
+		POINT point;
+		point.x = 0;
+		point.y = 0;
+
+		if (countDown != -1)
+		{
+			switch (countDown)
+			{
+			case 5:
+				Manager::GetInstance().Number.Draw(memdc1, Window_Size_X / 2 - 50, Window_Size_Y / 2 - 50, 103, 103, 0, 103, 103, 103);
+				break;
+			case 4:
+				Manager::GetInstance().Number.Draw(memdc1, Window_Size_X / 2 - 50, Window_Size_Y / 2 - 50, 103, 103, 412, 0, 103, 103);
+				break;
+			case 3:
+				Manager::GetInstance().Number.Draw(memdc1, Window_Size_X / 2 - 50, Window_Size_Y / 2 - 50, 103, 103, 309, 0, 103, 103);
+				break;
+			case 2:
+				Manager::GetInstance().Number.Draw(memdc1, Window_Size_X / 2 - 50, Window_Size_Y / 2 - 50, 103, 103, 206, 0, 103, 103);
+				break;
+			case 1:
+				Manager::GetInstance().Number.Draw(memdc1, Window_Size_X / 2 - 50, Window_Size_Y / 2 - 50, 103, 103, 103, 0, 103, 103);
+				break;
+			default:
+				break;
+			}
+		}
+
 		// --- RECT 테스트 ---
 
 		//for (int i = 0; i < bullet_count; ++i) {
@@ -414,6 +442,7 @@ void LoadImage()
 	bg_height = Manager::GetInstance().bg.GetHeight();
 
 	Manager::GetInstance().wall.Load(L"block_wall.png");
+	Manager::GetInstance().Number.Load(L"CountDown.png");
 
 	Manager::GetInstance().monster.Load(L"pacman.png");
 	Manager::GetInstance().monster_idle.Load(L"pacman.png");
