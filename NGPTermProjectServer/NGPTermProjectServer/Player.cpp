@@ -132,7 +132,7 @@ void Player::ProccesInput(int key, bool pressed)
 
 void Player::InitPlayer()
 {
-	this->pos = Vec2(9500, playerStartY[this->ID]);
+	this->pos = Vec2(230, playerStartY[this->ID]);
 	this->velocity = Vec2(0, 0);
 	this->direction = 1;
 	this->state = (int)PlayerState::Idle;
