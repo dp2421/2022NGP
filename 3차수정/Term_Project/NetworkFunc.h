@@ -72,7 +72,7 @@ DWORD WINAPI NetworkThread(LPVOID arg)
     // 서버에서 보내는 주기가 일정해서 계속 받아도 됨..아마
     while (true)
     {
-        ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
+        ZeroMemory(&socks, sizeof(socks));
         RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
         ProcessPacket(socks.m_infoPack.size, socks.m_infoPack.type);
     }
