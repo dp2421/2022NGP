@@ -163,6 +163,7 @@ void Player::Interaction()
 {
 	// 상호작용
 	// 레버 
+	CollisionInteractionObejct();
 }
 
 void Player::Damaged()
@@ -283,9 +284,9 @@ void Player::CollisionEnemy()
 
 	for (auto& monster : GameManager::GetInstance().monsters)
 	{
+		if (reinterpret_cast<Monster*>(monster)->HP <= 0) continue;
 		if (this->isCollision(monster))
 		{
-			cout << "coll" << endl;
 			Damaged();
 			return;
 		}
@@ -300,6 +301,11 @@ void Player::CollisionEnemy()
 			return;
 		}
 	}
+}
+
+Object* Player::CollisionInteractionObejct()
+{
+
 }
 
 void Player::SetAniState()

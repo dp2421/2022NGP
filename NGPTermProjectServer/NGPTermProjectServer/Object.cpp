@@ -31,6 +31,11 @@ bool Object::isCollision(Vec2 pos, RECT size)
 	return true;
 }
 
+void Object::Interaction()
+{
+	
+}
+
 //if (r1.left > r2.right) return false;
 //if (r1.top > r2.bottom) return false;
 //if (r1.right < r2.left) return false;

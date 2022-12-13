@@ -10,6 +10,7 @@ Obstacle::Obstacle()
 
 void Obstacle::Update(float deltaTime)
 {
+
 }
 
 

@@ -29,6 +29,7 @@ public:
 	void SetHorizontalVelocity(int state);
 	void CollisionTile();
 	void CollisionEnemy();
+	Object* CollisionInteractionObejct();
 	void SetAniState();
 private:
 	int invincibleCount = 0;

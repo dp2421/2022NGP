@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 enum class STATE { IDLE, MOVE, JUMP, FALL, ATTACK, DEAD };
+enum class ObjectType {Lever, Door, Button, Potal};
 
 struct Vec2
 {
@@ -44,5 +45,7 @@ constexpr float BulletSpeed = 300;
 constexpr int BlockSize = 50;
 
 constexpr int BulletMaxDistance = 20000;
+
+constexpr int LeverResetTime = 3000;
 
 using namespace std;

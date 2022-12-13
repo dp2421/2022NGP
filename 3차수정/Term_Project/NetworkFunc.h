@@ -73,7 +73,6 @@ DWORD WINAPI NetworkThread(LPVOID arg)
     // 로그인 보내기
     Login();
 
-    // 서버에서 보내는 주기가 일정해서 계속 받아도 됨..아마
     while (true)
     {
         ZeroMemory(&socks, sizeof(socks));

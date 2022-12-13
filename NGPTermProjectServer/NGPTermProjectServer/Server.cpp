@@ -14,17 +14,18 @@ void ProcessPacket()
 	// 받은 모든 입력 처리
 	while (!messageQueue.empty())
 	{
+		EnterCriticalSection(&cs);
 		auto message = messageQueue.front();
 
 		GameManager::GetInstance().clients[message.ID].player.ProccesInput(message.key, message.state);
 
 		messageQueue.pop();
+		LeaveCriticalSection(&cs);
 	}
 }
 
 void SendPacket()
 {
-
 	for (auto& cl : GameManager::GetInstance().clients)
 	{
 		// 플레이어 정보
@@ -34,15 +35,8 @@ void SendPacket()
 		cl.SendMonsterInfoPacket();
 		// 총알 정보
 		cl.SendBulletInfoPakcet();
-
-		cl.SendObstacleInfoPacket();
 		// 장애물 정보
-		for (auto& obj : GameManager::GetInstance().obstacles)
-		{
-			auto obstacle = reinterpret_cast<Obstacle*>(obj);
-			//if (obstacle->isActive)
-			//cl.SendObstacleInfoPacket();
-		}
+		cl.SendObstacleInfoPacket();
 	}
 }
 
@@ -206,6 +200,10 @@ void Update()
 			obj->Update(timer.GetDelteTime());
 		}
 		for (auto& obj : GameManager::GetInstance().bullets)
+		{
+			obj->Update(timer.GetDelteTime());
+		}
+		for (auto& obj : GameManager::GetInstance().obstacles)
 		{
 			obj->Update(timer.GetDelteTime());
 		}
