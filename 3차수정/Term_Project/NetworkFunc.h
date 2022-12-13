@@ -57,8 +57,6 @@ void Login()
 
     ZeroMemory(&socks.m_infoPack, sizeof(socks.m_infoPack));
     RecvExpasion(sock, &socks.m_infoPack, sizeof(socks.m_infoPack), MSG_WAITALL);
-    if (socks.m_infoPack.type != Server2ClientLogin) cout << "sival : " << (int)socks.m_infoPack.type << endl;
-
     RecvExpasion(sock, &socks.m_serverloginPack, socks.m_infoPack.size, MSG_WAITALL);
     ID = socks.m_serverloginPack.ID;
     cout << ID;
@@ -299,6 +297,7 @@ void Render()
 // 수신 패킷 처리
 void ProcessPacket(int size, int type)
 {
+    //cout << "Type : " << type << endl;
     switch (type)
     {
     case Server2ClientCountdown:

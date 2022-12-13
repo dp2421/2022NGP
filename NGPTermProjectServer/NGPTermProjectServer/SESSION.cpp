@@ -177,6 +177,7 @@ int RecvExpasion(SOCKET sock, void* buf, int len, int flage)
 
 void SendExpansion(SOCKET sock, void* buf, int len, int flage)
 {
+	cout << "Sock " << sock << "Len : " << len << endl;
 	int retval = send(sock, reinterpret_cast<char*>(buf), len, flage);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
