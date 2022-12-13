@@ -27,6 +27,7 @@ class Obstacle : public Object
 public:
 	int Speed;
 	Vec2 velocity;
+	int moveCount;
 
 public:
 	Obstacle();

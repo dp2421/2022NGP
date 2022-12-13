@@ -6,10 +6,19 @@ Obstacle::Obstacle()
 	this->Speed = 0;
 	this->velocity = Vec2(0, 0);
 	this->pos = Vec2(230, 650);
+	this->moveCount = 0;
 }
 
 void Obstacle::Update(float deltaTime)
 {
+	this->moveCount++;
+	if (this->moveCount == 10) {
+		this->moveCount = 0;
+		this->pos = Vec2(230, 650);
+	}
+	//this->pos.x -= MonsterSpeed * this->direction * deltaTime;
+	this->pos.x -= Speed * deltaTime;
+
 }
 
 
