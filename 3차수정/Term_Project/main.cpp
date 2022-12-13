@@ -261,6 +261,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         InputKey();
         break;
     case WM_TIMER:
+        for (auto& player : players)
+            player.UpdateAnimation();
 
         InvalidateRect(hWnd, NULL, false);
         break;

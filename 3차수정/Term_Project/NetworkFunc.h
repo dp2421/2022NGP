@@ -189,8 +189,9 @@ void InitObstacleInfo()
 void ProccesKey(int key, KeyState state)
 {
     socks.m_keyPack.key = key;
-    if ((GetAsyncKeyState(key) & 0x8000) && !((KeyInputBuffer & (int)state) == (int)state))
+    if ((GetAsyncKeyState(key) & 0x8000))
     {
+        if ((KeyInputBuffer & (int)state) == (int)state) return;
         KeyInputBuffer |= (int)state;
         socks.m_keyPack.state = true;
     }
@@ -200,6 +201,8 @@ void ProccesKey(int key, KeyState state)
         socks.m_keyPack.state = false;
     }
     else return;
+
+    cout << "Send Key : " << key << " state " << socks.m_keyPack.state << endl;
 
     SendExpansion(sock, &socks.m_keyPack, sizeof(socks.m_keyPack), 0);
 }
