@@ -216,26 +216,36 @@ void Player::CollisionTile()
 			auto& tile = map[i][j];
 			if (tile != 0)
 			{
-				if (tile == (int)TileType::Wall) blockRect.bottom = 25;
-				else blockRect.bottom = 50;
-
-				if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 30), blockRect))
+				if (tile == (int)TileType::Wall)
 				{
-					if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
-					{
-						if (this->isJump == true)
-							state &= ~(int)PlayerState::Jump;
-						this->pos.y = i * BlockSize - 30;
-						this->velocity.y = 0;
-						this->isGround = true;
-						this->isJump = false;
+					blockRect.bottom = 25;
 
-						return;
+					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 30), blockRect))
+					{
+						if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
+						{
+							if (this->isJump == true)
+								state &= ~(int)PlayerState::Jump;
+							this->pos.y = i * BlockSize - 30;
+							this->velocity.y = 0;
+							this->isGround = true;
+							this->isJump = false;
+
+							return;
+						}
+					}
+					else
+					{
+						this->isGround = false;
 					}
 				}
 				else
 				{
-					this->isGround = false;
+					blockRect.bottom = 50;
+					if (this->isCollision(Vec2(j * BlockSize, i * BlockSize), blockRect))
+					{
+						
+					}
 				}
 			}
 		}

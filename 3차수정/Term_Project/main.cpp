@@ -303,7 +303,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 						if (Map[i][j] == MAGMA)
 						{
-							Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 25);
+							Manager::GetInstance().magma.Draw(memdc1, Board[i][j].left, Board[i][j].top, 50, 50);
 						}
 					}
 				}

@@ -33,6 +33,7 @@ int RecvExpasion(SOCKET sock, void* packet, int len, int flage)
 {
     ZeroMemory(buffer, sizeof(buffer));
     int retval = recv(sock, buffer, len, flage);
+    cout << " Sock : " << sock << " len : " << len << " Recved Len : " << retval << endl;
     if (retval == SOCKET_ERROR) {
         err_display("send()");
         return -1;
@@ -115,11 +116,6 @@ void InitMapInfo(int size)
     memcpy(Map, packet.mapInfo, packet.width * packet.height);
 }
 
-void SendConnect()
-{
-    // 접속되면 handle정보 보냄
-}
-
 void StartCount()
 {
     // 카운트를 세는 함수
@@ -128,6 +124,7 @@ void StartCount()
     // 5 4 3 2 1 순으로 카운팅
     socks.m_cntPack.count; // Count ??
 }
+
 void WaitStart()
 {
     // 로딩중 띄워주면 됨
@@ -264,7 +261,7 @@ void RecvMonsterInfo(int size)
 void RecvBulletInfo(int size)
 {
     char bulletbuffer[BUFFERSIZE];
-    RecvExpasion(sock, &bulletbuffer, sizeof(size), 0);
+    RecvExpasion(sock, &bulletbuffer, size, 0);
 
     Server2ClientBulletInfoPacket* info = reinterpret_cast<Server2ClientBulletInfoPacket*>(bulletbuffer);
     for (int i = 0; i < size / sizeof(Server2ClientBulletInfoPacket); ++i)
