@@ -56,7 +56,6 @@ void Player::ProccesInput(int key, bool pressed)
 			{
 				this->state &= ~reverse;
 			}
-
 			SetHorizontalVelocity(dir);
 		}
 		else
@@ -65,6 +64,7 @@ void Player::ProccesInput(int key, bool pressed)
 			if ((this->state & reverse) != reverse)
 			{
 				this->state |= (int)PlayerState::Idle;
+				this->velocity.x = 0;
 			}
 			else
 			{
@@ -121,7 +121,7 @@ void Player::Jump()
 		this->state |= (int)PlayerState::Jump;
 		this->isGround = false;
 		this->isJump = true;
-		this->velocity.y = -13.25f;
+		this->velocity.y = -100;
 	}
 }
 
@@ -216,7 +216,10 @@ void Player::CollisionTile()
 			auto& tile = map[i][j];
 			if (tile != 0)
 			{
-				if (this->isCollision(Vec2(j * blockRect.right, i * blockRect.bottom), blockRect))
+				if (tile == (int)TileType::Wall) blockRect.bottom = 25;
+				else blockRect.bottom = 50;
+
+				if (this->isCollision(Vec2(j * BlockSize, i * BlockSize - 25), blockRect))
 				{
 					if (i * BlockSize > this->pos.y + this->size.bottom - 10 && this->velocity.y >= 0)
 					{
@@ -225,6 +228,7 @@ void Player::CollisionTile()
 						this->pos.y = i * BlockSize - 32;
 						this->velocity.y = 0;
 						this->isGround = true;
+						this->isJump = false;
 					}
 				}
 			}

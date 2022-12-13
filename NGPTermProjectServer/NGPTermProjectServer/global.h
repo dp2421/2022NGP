@@ -24,7 +24,7 @@ enum class PlayerState : int
 
 enum class TileType : int
 {
-	Wall,
+	Wall = 1,
 	Magma,
 	End
 };
@@ -35,7 +35,7 @@ constexpr int maxObstacleCount = 5;
 constexpr int startCountdownTime = 5000;
 
 constexpr float playerSpeed = 300;
-constexpr float  PLAYER_GRAVITY = 0.9f;
+constexpr float  PLAYER_GRAVITY = 5.0f;
 
 constexpr float MonsterSpeed = 100;
 

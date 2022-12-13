@@ -154,7 +154,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_CREATE:
         LoadImage();
-        SetTimer(hWnd, 1, 16, NULL);
+        SetTimer(hWnd, 1, 34, NULL);
       //  //레버 초기화
       //  rever[0].x = 9525;
       //  rever[0].y = 700;
@@ -256,9 +256,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       //  }
 
         break;
-
-    case WM_TIMER:
+    case WM_KEYDOWN:
+    case WM_KEYUP:
         InputKey();
+        break;
+    case WM_TIMER:
 
         InvalidateRect(hWnd, NULL, false);
         break;

@@ -188,7 +188,6 @@ void InitObstacleInfo()
 
 void ProccesKey(int key, KeyState state)
 {
-    ZeroMemory(&socks.m_keyPack, sizeof(socks.m_keyPack));
     socks.m_keyPack.key = key;
     if ((GetAsyncKeyState(key) & 0x8000) && !((KeyInputBuffer & (int)state) == (int)state))
     {
@@ -256,6 +255,7 @@ void RecvMonsterInfo(int size)
         else
         {
             monsters[info[i].ID] = Monster(info[i].x, info[i].y, Manager::GetInstance().monster_idle, MONSTER_TYPE::MONSTER_MOVE);
+            monsters[info[i].ID].ChangeState(STATE::IDLE);
         }
     }
 }

@@ -174,15 +174,12 @@ void Update()
 	Timer timer;
 	while (true)
 	{
-		timer.Update();
 		if (loginCount < 3) continue;
-
-		auto limit = std::chrono::high_resolution_clock::now() +
+		auto limit = timer.preTime +
 			chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(34));
-		while (std::chrono::high_resolution_clock::now() > limit) 
-		{
-			cout << (limit - std::chrono::high_resolution_clock::now()).count() << endl;
-		}
+		while (std::chrono::high_resolution_clock::now() < limit) { Sleep(1); }
+
+		timer.Update();
 
 		// packet Ã³¸®
 		ProcessPacket();
@@ -201,7 +198,6 @@ void Update()
 		}
 
 		SendPacket();
-		cout << timer.GetDeltaTimeMilli() << endl;
 	}
 }
 
