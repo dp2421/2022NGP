@@ -83,6 +83,7 @@ DWORD WINAPI NetworkThread(LPVOID arg)
         if (socks.m_infoPack.type == Server2ClientGameClear)
             break;
     }
+    return 0;
 }
 
 void InitClient()
