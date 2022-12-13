@@ -321,13 +321,14 @@ void Player::CollisionTile()
 					this->velocity.y = 0;
 					this->isGround = true;
 					this->isJump = false;
+					interactionObject->collisionPlayer = this->ID;
 
 					interactionObject->Interaction();
 				}
 			}
 			else
 			{
-				if(interactionObject->isInteraction)
+				if(interactionObject->isInteraction && interactionObject->collisionPlayer == this->ID)
 					interactionObject->Interaction();
 			}
 		}

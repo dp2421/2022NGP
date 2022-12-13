@@ -93,7 +93,7 @@ void InitClient()
 
     if (sock == INVALID_SOCKET)
         err_quit("socket() ");
-
+        
     char ip[16] = {};
     cin >> ip;
 

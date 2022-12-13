@@ -8,6 +8,8 @@ public:
 	bool isInteraction = false;
 	ObjectType type;
 
+	int collisionPlayer = -1;
+
 	deque<Object*> linkedObjects;
 public:
 	InteractionObject();

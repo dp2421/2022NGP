@@ -195,7 +195,17 @@ void Initialize()
 
 	interactionObjects.emplace_back();
 	auto& interactionObject = interactionObjects.back();
-	interactionObject = new InteractionObject();
+	interactionObject =
+		new InteractionObject
+		(
+			potalPos.x,
+			potalPos.y,
+			doorRect.left,
+			doorRect.right,
+			doorRect.top,
+			doorRect.bottom,
+			ObjectType::Potal
+		);
 	interactionObject->ID = interactionObjects.size() - 1;
 
 	Vec2 leverPos[] =
